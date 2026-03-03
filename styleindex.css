@@ -1,0 +1,113 @@
+body {
+    background: linear-gradient(135deg, #6b46c1, #9f7aea); /* Màu tím giống ảnh mẫu */
+    font-family: 'Segoe UI', Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 850px;
+    text-align: center;
+    padding: 20px;
+}
+
+.header-text {
+    color: white;
+    margin-bottom: 30px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.header-text span {
+    text-decoration: underline;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.pricing-wrapper {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    width: 300px;
+    text-align: left;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card.highlight {
+    border: 3px solid #3b82f6;
+}
+
+.badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #2563eb;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.icon { font-size: 32px; margin-bottom: 10px; }
+
+h3 {
+    color: #1e40af;
+    margin: 10px 0;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+.subtitle { color: #666; font-size: 14px; margin-bottom: 20px; }
+
+.price {
+    font-size: 24px;
+    font-weight: 800;
+    color: #1f2937;
+    margin: 15px 0;
+}
+
+.price span {
+    font-size: 14px;
+    color: #9ca3af;
+    font-weight: normal;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0 30px 0;
+}
+
+.features li {
+    margin: 12px 0;
+    font-size: 14px;
+    color: #4b5563;
+}
+
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.btn:hover { transform: translateY(-2px); }
+
+.btn-blue { background: #2563eb; color: white; }
+.btn-gray { background: #f3f4f6; color: #4b5563; }

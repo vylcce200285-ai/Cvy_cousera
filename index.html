@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dịch Vụ Coursera - Lữ Chí Vỹ</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #6b46c1, #9f7aea);
+            font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 850px; /* Thu nhỏ lại để 2 bảng trông cân đối */
+            text-align: center;
+        }
+
+        .header-text h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 900;
+            text-shadow: 3px 6px 15px rgba(0, 0, 0, 0.4);
+            animation: fadeInDown 1s ease;
+        }
+
+        .header-text p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 40px;
+            font-style: italic;
+            opacity: 0.8;
+        }
+
+        .pricing-wrapper {
+            display: flex;
+            gap: 30px; /* Tăng khoảng cách giữa 2 bảng */
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px;
+            width: 320px; 
+            text-align: left;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+        }
+
+        .card.highlight {
+            border: 4px solid #3b82f6;
+            transform: scale(1.05);
+        }
+        
+        .card.highlight:hover {
+            transform: scale(1.05) translateY(-15px);
+        }
+
+        .badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #2563eb;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .icon { font-size: 40px; margin-bottom: 10px; }
+        h3 { color: #1e40af; margin: 15px 0 5px 0; font-size: 24px; text-transform: uppercase; }
+        .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; min-height: 40px; }
+        
+        .price { font-size: 26px; font-weight: 800; color: #1f2937; margin: 20px 0; }
+        .price span { font-size: 15px; color: #6b7280; font-weight: normal; }
+
+        .features { list-style: none; padding: 0; margin-bottom: 30px; flex-grow: 1; }
+        .features li { margin: 12px 0; font-size: 15px; display: flex; align-items: center; }
+        .features li::before { 
+            content: "✔"; 
+            background: #dcfce7; 
+            color: #16a34a; 
+            width: 22px; 
+            height: 22px; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            border-radius: 50%; 
+            margin-right: 10px; 
+            font-size: 12px; 
+            font-weight: bold;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+
+        .btn-blue { background: #2563eb; color: white; }
+        .btn-blue:hover { background: #1d4ed8; letter-spacing: 1px; }
+        .btn-purple { background: #9333ea; color: white; }
+        .btn-purple:hover { background: #7e22ce; letter-spacing: 1px; }
+
+        footer {
+            margin-top: 50px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1px;
+        }
+
+        footer strong {
+            color: white;
+            border-bottom: 1px solid white;
+            padding-bottom: 2px;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header-text">
+            <h1>Chuyên Cung Cấp Dịch Vụ Coursera</h1>
+            <p>Giải pháp học tập tối ưu dành riêng cho sinh viên FPT</p>
+        </div>
+
+        <div class="pricing-wrapper">
+            <div class="card highlight">
+                <div class="badge">PHỔ BIẾN NHẤT</div>
+                <div class="icon">💎</div>
+                <h3>THUÊ GÓI VIP</h3>
+                <p class="subtitle">Trải nghiệm dịch vụ cao cấp 😍</p>
+                <div class="price">65.000 VND <span>/ 1 Khóa Học</span></div>
+                <ul class="features">
+                    <li>Cam Kết + 1 BONUS 🔥</li>
+                    <li>Bảo Mật & An Toàn 🛡️</li>
+                    <li>Chống Check Đạo Văn 🤖</li>
+                    <li>Đúng cơi (Done khóa nhanh)</li>
+                </ul>
+                <a href="https://www.facebook.com/tau.hu.758" target="_blank" style="text-decoration: none;">
+                    <button class="btn btn-blue">ĐĂNG KÝ NGAY</button>
+                </a>
+            </div>
+
+            <div class="card">
+                <div class="icon">💻</div>
+                <h3>KHÓA SWE202c</h3>
+                <p class="subtitle">Chuyên biệt cho môn Software Engineering</p>
+                <div class="price">100.000 VND <span>/ Trọn gói khóa</span></div>
+                <ul class="features">
+                    <li> 06:30:41 Giờ học ⏰</li>
+                    <li>61 Bài học 📖</li>
+                    <li>Có source thi PE</li>
+                    
+                </ul>
+                <a href="https://www.facebook.com/tau.hu.758" target="_blank" style="text-decoration: none;">
+                    <button class="btn btn-purple">ĐĂNG KÝ NGAY</button>
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            Creator By <strong>Lữ Chí Vỹ</strong>
+        </footer>
+    </div>
+</body>
+</html>
