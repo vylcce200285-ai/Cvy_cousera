@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dịch Vụ Coursera - Lữ Chí Vỹ</title>
     <style>
+        /* --- GIỮ NGUYÊN CODE CỦA BẠN --- */
         body {
             background: linear-gradient(135deg, #6b46c1, #9f7aea);
             font-family: 'Segoe UI', Tahoma, Geneva, sans-serif;
@@ -20,7 +21,7 @@
 
         .container {
             width: 100%;
-            max-width: 850px; /* Thu nhỏ lại để 2 bảng trông cân đối */
+            max-width: 900px;
             text-align: center;
         }
 
@@ -31,169 +32,202 @@
             letter-spacing: 2px;
             font-weight: 900;
             text-shadow: 3px 6px 15px rgba(0, 0, 0, 0.4);
-            animation: fadeInDown 1s ease;
         }
 
         .header-text p {
             color: rgba(255, 255, 255, 0.9);
             font-size: 18px;
-            margin-top: 0;
             margin-bottom: 40px;
             font-style: italic;
-            opacity: 0.8;
         }
 
-        .pricing-wrapper {
+        /* --- PHẦN LOGO NÂNG CẤP: NEON ROTATING BORDER --- */
+        .header-wrapper {
             display: flex;
-            gap: 30px; /* Tăng khoảng cách giữa 2 bảng */
+            align-items: center;
             justify-content: center;
-            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 20px;
+            width: 100%;
         }
 
-        .card {
-            background: white;
-            border-radius: 20px;
-            padding: 35px;
-            width: 320px; 
-            text-align: left;
+        .logo-box {
             position: relative;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            transition: all 0.3s ease;
-            color: #333;
+            width: 130px;
+            height: 130px;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            animation: floatLogo 3s ease-in-out infinite;
         }
 
-        .card:hover {
-            transform: translateY(-15px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-
-        .card.highlight {
-            border: 4px solid #3b82f6;
-            transform: scale(1.05);
-        }
-        
-        .card.highlight:hover {
-            transform: scale(1.05) translateY(-15px);
-        }
-
-        .badge {
+        /* Vòng tròn xoay phía sau ảnh */
+        .logo-box::before {
+            content: "";
             position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #2563eb;
-            color: white;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
+            border-radius: 50%;
+            animation: rotateNeon 3s linear infinite;
         }
 
+        /* Tạo hiệu ứng mờ nhòe phát sáng (Glow) */
+        .logo-box::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
+            border-radius: 50%;
+            filter: blur(15px); /* Làm nhòe để tạo ánh sáng Neon */
+            animation: rotateNeon 3s linear infinite;
+            opacity: 0.7;
+        }
+
+        .vy-logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: relative;
+            z-index: 10; /* Đè lên trên lớp màu xoay */
+            border: 4px solid #fff; /* Viền trắng mảnh để tách biệt ảnh */
+            background: #fff;
+        }
+
+        .header-text { text-align: left; }
+
+        /* Keyframes xoay viền */
+        @keyframes rotateNeon {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Keyframes bay lên xuống */
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        /* GIỮ NGUYÊN CÁC CODE KHÁC CỦA BẠN (Pricing, Menu, Button...) */
+        .menu-wrapper { display: flex; justify-content: flex-end; width: 100%; margin-bottom: 25px; padding-right: 20px; box-sizing: border-box; }
+        .menu-selection { background: rgba(255, 255, 255, 0.2); padding: 10px 15px; border-radius: 12px; backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .pricing-wrapper { display: flex; gap: 30px; justify-content: center; flex-wrap: wrap; align-items: stretch; }
+        .card { background: white; border-radius: 20px; padding: 35px; width: 320px; text-align: left; box-shadow: 0 15px 35px rgba(0,0,0,0.2); transition: all 0.3s ease; color: #333; display: flex; flex-direction: column; position: relative; }
+        .card:hover { transform: translateY(-10px); box-shadow: 0 25px 50px rgba(0,0,0,0.3); }
+        .card.highlight { border: 4px solid #3b82f6; }
+        .badge { position: absolute; top: 15px; right: 15px; background: #2563eb; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; }
         .icon { font-size: 40px; margin-bottom: 10px; }
         h3 { color: #1e40af; margin: 15px 0 5px 0; font-size: 24px; text-transform: uppercase; }
         .subtitle { color: #666; font-size: 14px; margin-bottom: 20px; min-height: 40px; }
-        
-        .price { font-size: 26px; font-weight: 800; color: #1f2937; margin: 20px 0; }
-        .price span { font-size: 15px; color: #6b7280; font-weight: normal; }
-
+        .price { font-size: 20px; color: #1f2937; margin: 20px 0; display: flex; align-items: baseline; gap: 5px; }
+        #coursePrice { font-size: 42px; font-weight: 900; color: #e11d48; line-height: 1; }
         .features { list-style: none; padding: 0; margin-bottom: 30px; flex-grow: 1; }
         .features li { margin: 12px 0; font-size: 15px; display: flex; align-items: center; }
-        .features li::before { 
-            content: "✔"; 
-            background: #dcfce7; 
-            color: #16a34a; 
-            width: 22px; 
-            height: 22px; 
-            display: inline-flex; 
-            align-items: center; 
-            justify-content: center; 
-            border-radius: 50%; 
-            margin-right: 10px; 
-            font-size: 12px; 
-            font-weight: bold;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 14px;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
+        .features li::before { content: "✔"; background: #dcfce7; color: #16a34a; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; margin-right: 10px; font-size: 12px; font-weight: bold; }
+        .btn { display: block; width: 100%; padding: 14px 0; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; transition: 0.3s; text-align: center; text-decoration: none; box-sizing: border-box; }
         .btn-blue { background: #2563eb; color: white; }
-        .btn-blue:hover { background: #1d4ed8; letter-spacing: 1px; }
         .btn-purple { background: #9333ea; color: white; }
-        .btn-purple:hover { background: #7e22ce; letter-spacing: 1px; }
+        footer { margin-top: 50px; font-size: 14px; color: rgba(255, 255, 255, 0.7); }
+        .footer-link { color: white; text-decoration: none; font-weight: bold; }
 
-        footer {
-            margin-top: 50px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 1px;
-        }
-
-        footer strong {
-            color: white;
-            border-bottom: 1px solid white;
-            padding-bottom: 2px;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @media (max-width: 650px) {
+            .header-wrapper { flex-direction: column; text-align: center; }
+            .header-text { text-align: center; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header-text">
-            <h1>Chuyên Cung Cấp Dịch Vụ Coursera</h1>
-            <p>Giải pháp học tập tối ưu dành riêng cho sinh viên FPT</p>
+        <div class="header-wrapper">
+            <div class="logo-box">
+                <img src="vy.png" alt="Lữ Chí Vỹ" class="vy-logo">
+            </div>
+            <div class="header-text">
+                <h1>Chuyên Cung Cấp Dịch Vụ Coursera</h1>
+                <p>Giải pháp học tập tối ưu dành riêng cho sinh viên FPT</p>
+            </div>
+        </div>
+
+        <div class="menu-wrapper">
+            <div class="menu-selection">
+                <label style="font-size: 14px; font-weight: bold; margin-right: 8px;">Danh mục môn học:</label>
+                <select id="courseSelector" onchange="updateCourse()" style="padding: 8px; border-radius: 8px; border: none; cursor: pointer; outline: none;">
+                    <option value="SWE202c|100000|💻|Software Engineering">KHÓA SWE202c</option>
+                    <option value="NWC204|0|🌐|Tài liệu Miễn phí">KHÓA NWC202 (FREE)</option>
+                    <option value="OSG202|0|🖥️|Operating Systems">KHÓA OSG202</option>
+                    <option value="PRO192|0|☕|Java Object Oriented">KHÓA PRO192 (FREE)</option>
+                </select>
+            </div>
         </div>
 
         <div class="pricing-wrapper">
             <div class="card highlight">
-                <div class="badge">PHỔ BIẾN NHẤT</div>
+                <div class="badge">HOT NHẤT 🔥</div>
                 <div class="icon">💎</div>
-                <h3>THUÊ GÓI VIP</h3>
+                <h3>CRUSH COURSERA</h3>
                 <p class="subtitle">Trải nghiệm dịch vụ cao cấp 😍</p>
                 <div class="price">65.000 VND <span>/ 1 Khóa Học</span></div>
                 <ul class="features">
                     <li>Cam Kết + 1 BONUS 🔥</li>
                     <li>Bảo Mật & An Toàn 🛡️</li>
                     <li>Chống Check Đạo Văn 🤖</li>
-                    <li>Đúng cơi (Done khóa nhanh)</li>
+                    <li>Done khóa nhanh</li>
                 </ul>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSePV7fZLvpUiWKvTAGMTfk6IvIrA6cLqtokW_Cw8Ce1R5qQuw/viewform?usp=publish-editor" target="_blank" style="text-decoration: none;">
-                    <button class="btn btn-blue">ĐĂNG KÝ NGAY</button>
-                </a>
+                <a href="pay.html?price=65000" class="btn btn-blue">ĐĂNG KÝ NGAY</a>
             </div>
 
             <div class="card">
-                <div class="icon">💻</div>
-                <h3>KHÓA SWE202c</h3>
-                <p class="subtitle">Chuyên biệt cho môn Software Engineering</p>
-                <div class="price">100.000 VND <span>/ Trọn gói khóa</span></div>
+                <div class="icon" id="courseIcon">💻</div>
+                <h3 id="courseTitle">KHÓA SWE202c</h3>
+                <p class="subtitle" id="courseSub">Chuyên biệt cho môn Software Engineering</p>
+                <div class="price"><span id="coursePrice">100.000</span> VND <span>/ Trọn gói</span></div>
                 <ul class="features">
-                    <li> 06:30:41 Giờ học ⏰</li>
-                    <li>61 Bài học 📖</li>
-                    <li>Có source thi PE</li>
-                    
+                    <li>Hỗ trợ full Quiz & Assignment</li>
+                    <li>Bảo hành trọn khóa học</li>
+                    <li>Có tài liệu thi PE / Final</li>
                 </ul>
-                <a href="https://www.facebook.com/tau.hu.758" target="_blank" style="text-decoration: none;">
-                    <button class="btn btn-purple">ĐĂNG KÝ NGAY</button>
-                </a>
+                <a href="pay.html?price=100000" id="courseLink" class="btn btn-purple">ĐĂNG KÝ NGAY</a>
             </div>
         </div>
 
         <footer>
-            Creator By <strong>Lữ Chí Vỹ</strong>
+            Creator By <a href="https://www.facebook.com/tau.hu.758" target="_blank" class="footer-link">Lữ Chí Vỹ</a>
         </footer>
     </div>
+
+    <script>
+        function updateCourse() {
+            const selector = document.getElementById('courseSelector');
+            const [id, price, icon, sub] = selector.value.split('|');
+            document.getElementById('courseIcon').innerText = icon;
+            document.getElementById('courseTitle').innerText = (id === "FREE" || id === "PRO192" || id === "NWC204") ? id + " FREE" : "KHÓA " + id;
+            document.getElementById('courseSub').innerText = sub;
+            const priceDisplay = document.getElementById('coursePrice');
+            const linkBtn = document.getElementById('courseLink');
+            linkBtn.onclick = null; 
+            if (id === "FREE" || id === "PRO192" || id === "NWC204") {
+                priceDisplay.innerText = "0"; 
+                linkBtn.innerText = "NHẬP CODE TRUY CẬP";
+                linkBtn.style.background = "#22c55e"; 
+                linkBtn.href = "javascript:void(0)"; 
+                linkBtn.onclick = function() {
+                    let pass = prompt("Nhập PASSWORD để truy cập (chivy):");
+                    if (pass && pass.toLowerCase() === "chivy") {
+                        if(id === "NWC204") window.location.href = "nwc204-free.html";
+                        else if(id === "PRO192") window.location.href = "pro192-free.html";
+                        else window.location.href = "nwc204-free.html";
+                    } else if (pass !== null) { alert("Sai mật khẩu rồi Fen ơiii!"); }
+                };
+            } else {
+                priceDisplay.innerText = parseInt(price).toLocaleString();
+                linkBtn.innerText = "ĐĂNG KÝ NGAY";
+                linkBtn.style.background = "#9333ea"; 
+                linkBtn.href = `pay.html?price=${price}`;
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quét Mã QR - Lữ Chí Vỹ</title>
+    <style>
+        body {
+            background: #f0f2f5;
+            font-family: 'Segoe UI', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+        .qr-card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+        }
+        .header { margin-bottom: 20px; font-size: 14px; color: #666; }
+        .qr-image { width: 100%; border-radius: 10px; margin-bottom: 20px; border: 1px solid #eee; }
+        .bank-info { text-align: left; background: #f8fafc; padding: 15px; border-radius: 12px; }
+        .bank-info p { margin: 8px 0; color: #475569; font-size: 15px; display: flex; justify-content: space-between; }
+        .bank-info strong { color: #1e293b; }
+        .btn-home {
+            margin-top: 25px;
+            display: inline-block;
+            padding: 12px 30px;
+            background: #22c55e;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="qr-card">
+        <div class="header">Mở App Ngân hàng bất kỳ để quét mã <strong>VietQR</strong></div>
+        
+        <img id="qrImg" src="" class="qr-image" alt="VietQR">
+        
+        <div class="bank-info">
+            <p>Ngân hàng: <strong>MB Bank</strong></p>
+            <p>Chủ tài khoản: <strong>LU CHI VY</strong></p>
+            <p>Số tài khoản: <strong>0355585099</strong></p>
+            <p>Số tiền: <strong id="displayAmount">Đang tải...</strong></p>
+            <p>Nội dung: <strong>THANH TOAN COURSERA</strong></p>
+        </div>
+
+        <a href="index.html" class="btn-home">HOÀN TẤT</a>
+    </div>
+
+    <script>
+        // BƯỚC QUAN TRỌNG: Lấy số tiền từ URL do trang pay.html gửi sang
+        const urlParams = new URLSearchParams(window.location.search);
+        let amount = urlParams.get('amount') || '65000'; // Nếu không thấy thì mới để 65k
+        
+        // 1. Cập nhật chữ hiển thị trên màn hình
+        document.getElementById('displayAmount').innerText = parseInt(amount).toLocaleString() + ' VND';
+        
+        // 2. Tạo link VietQR mới với số tiền ĐÚNG (amount)
+        // Chú ý: amount ở đây phải là số tiền khách đã chọn (100000 hoặc 65000)
+        const qrUrl = `https://img.vietqr.io/image/MB-0355585099-compact2.png?amount=${amount}&addInfo=THANH%20TOAN%20COURSERA&accountName=LU%20CHI%20VY`;
+        
+        // nạp link vào thẻ img
+        document.getElementById('qrImg').src = qrUrl;
+    </script>
+</body>
+</html>
