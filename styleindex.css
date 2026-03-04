@@ -1,5 +1,5 @@
 body {
-    background: linear-gradient(135deg, #6b46c1, #9f7aea); /* Màu tím giống ảnh mẫu */
+    background: linear-gradient(135deg, #6b46c1, #9f7aea);
     font-family: 'Segoe UI', Arial, sans-serif;
     display: flex;
     justify-content: center;
@@ -111,24 +111,22 @@ h3 {
 
 .btn-blue { background: #2563eb; color: white; }
 .btn-gray { background: #f3f4f6; color: #4b5563; }
-/* Thêm đoạn này vào phần <style> */
-/* Làm cho số 100.000 to, đậm và nổi bật */
+
 #coursePrice {
-    font-size: 38px;      /* Kích thước cực đại */
-    color: #e11d48;       /* Màu đỏ nổi bật */
-    font-weight: 900;     /* Độ đậm tối đa */
+    font-size: 38px;
+    color: #e11d48;
+    font-weight: 900;
     display: inline-block;
     margin-right: 5px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.1); /* Tạo khối cho số */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
 }
 
-/* Căn chỉnh lại thanh menu chọn môn học */
 .menu-container {
     display: flex;
-    justify-content: flex-end; /* Đẩy về bên phải */
+    justify-content: flex-end;
     width: 100%;
     margin-bottom: 30px;
-    padding-right: 20px; /* Tạo khoảng cách vừa đủ với thanh trượt của trình duyệt */
+    padding-right: 20px;
 }
 
 .menu-selection {
@@ -139,37 +137,31 @@ h3 {
     border: 1px solid rgba(255, 255, 255, 0.4);
     box-shadow: 0 4px 15px rgba(0,0,0,0.1);
 }
-/* Hiệu ứng màu chữ chạy và bay nhẹ */
+
 .footer-link {
-    display: inline-block; /* Bắt buộc có để chữ có thể bay lên xuống */
+    display: inline-block;
     font-weight: bold;
     text-decoration: none;
     font-size: 18px;
-    
-    /* Tạo màu Gradient cho chữ */
     background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
     background-size: 400% 400%;
-    -webkit-background-clip: text; /* Cắt nền theo hình chữ */
-    -webkit-text-fill-color: transparent; /* Làm rỗng màu chữ gốc để hiện nền gradient */
-    
-    /* Gán 2 hiệu ứng: đổi màu và bay */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
     animation: moveGradient 5s ease infinite, floatText 3s ease-in-out infinite;
 }
 
-/* Hiệu ứng 1: Chạy màu cầu vồng */
 @keyframes moveGradient {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* Hiệu ứng 2: Bay lên xuống nhịp nhàng */
 @keyframes floatText {
     0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); } /* Bay lên 10px */
+    50% { transform: translateY(-10px); }
 }
 
 .footer-link:hover {
-    filter: brightness(1.2); /* Sáng rực lên khi rê chuột vào */
-    transform: scale(1.1) translateY(-10px); /* Phóng to nhẹ */
+    filter: brightness(1.2);
+    transform: scale(1.1) translateY(-10px);
 }

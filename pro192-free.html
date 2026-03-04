@@ -20,7 +20,6 @@
             animation: meshAnimation 15s ease infinite; overflow-x: hidden;
         }
 
-        /* NÚT BACK HOME */
         .back-home {
             position: fixed; top: 20px; left: 20px; z-index: 1000; padding: 10px 20px;
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
@@ -65,24 +64,51 @@
     <p>Coded by <b>Lữ Chí Vỹ</b> • Chúc AE học tốt nhá 💯</p>
     <div class="gallery" id="imageGallery"></div>
 <script>
-    const totalImages = 197; const gallery = document.getElementById('imageGallery');
-    const modal = document.getElementById('imageModal'); const modalImg = document.getElementById('modalImg');
+    const totalImages = 197; 
+    const gallery = document.getElementById('imageGallery');
+    const modal = document.getElementById('imageModal'); 
+    const modalImg = document.getElementById('modalImg');
     let currentIndex = 1;
+
     for (let i = 1; i <= totalImages; i++) {
-        const card = document.createElement('div'); card.className = 'img-card';
+        const card = document.createElement('div'); 
+        card.className = 'img-card';
         card.innerHTML = `<img src="img-pro/pro (${i}).png" loading="lazy" onerror="this.src='https://placehold.co/400x300?text=Error'"><div class="img-label">PRO192 • Câu ${i}</div>`;
-        card.onclick = () => openModal(i); gallery.appendChild(card);
+        card.onclick = () => openModal(i); 
+        gallery.appendChild(card);
     }
-    function openModal(index) { currentIndex = index; modal.style.display = "flex"; updateModalImage(); }
-    function closeModal() { modal.style.display = "none"; }
-    function updateModalImage() { modalImg.src = `img-pro/pro (${currentIndex}).png`; }
+
+    function openModal(index) { 
+        currentIndex = index; 
+        modal.style.display = "flex"; 
+        updateModalImage(); 
+    }
+
+    function closeModal() { 
+        modal.style.display = "none"; 
+    }
+
+    function updateModalImage() { 
+        modalImg.src = `img-pro/pro (${currentIndex}).png`; 
+    }
+
     document.addEventListener('keydown', (e) => {
         if (modal.style.display === "flex") {
-            if (e.key === "ArrowRight") { currentIndex = currentIndex < totalImages ? currentIndex + 1 : 1; updateModalImage(); }
-            else if (e.key === "ArrowLeft") { currentIndex = currentIndex > 1 ? currentIndex - 1 : totalImages; updateModalImage(); }
+            if (e.key === "ArrowRight") { 
+                currentIndex = currentIndex < totalImages ? currentIndex + 1 : 1; 
+                updateModalImage(); 
+            }
+            else if (e.key === "ArrowLeft") { 
+                currentIndex = currentIndex > 1 ? currentIndex - 1 : totalImages; 
+                updateModalImage(); 
+            }
             else if (e.key === "Escape") closeModal();
         }
     });
+
+    modal.onclick = (e) => {
+        if (e.target === modal) closeModal();
+    };
 </script>
 </body>
 </html>

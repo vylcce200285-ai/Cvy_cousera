@@ -37,7 +37,9 @@
             text-decoration: none;
             border-radius: 8px;
             font-weight: bold;
+            transition: 0.3s;
         }
+        .btn-home:hover { background: #16a34a; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -58,18 +60,13 @@
     </div>
 
     <script>
-        // BƯỚC QUAN TRỌNG: Lấy số tiền từ URL do trang pay.html gửi sang
         const urlParams = new URLSearchParams(window.location.search);
-        let amount = urlParams.get('amount') || '65000'; // Nếu không thấy thì mới để 65k
+        let amount = urlParams.get('amount') || '65000';
         
-        // 1. Cập nhật chữ hiển thị trên màn hình
         document.getElementById('displayAmount').innerText = parseInt(amount).toLocaleString() + ' VND';
         
-        // 2. Tạo link VietQR mới với số tiền ĐÚNG (amount)
-        // Chú ý: amount ở đây phải là số tiền khách đã chọn (100000 hoặc 65000)
         const qrUrl = `https://img.vietqr.io/image/MB-0355585099-compact2.png?amount=${amount}&addInfo=THANH%20TOAN%20COURSERA&accountName=LU%20CHI%20VY`;
         
-        // nạp link vào thẻ img
         document.getElementById('qrImg').src = qrUrl;
     </script>
 </body>

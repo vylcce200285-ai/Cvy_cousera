@@ -74,42 +74,40 @@
 
     <script>
         async function handlePayment() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const submitBtn = document.getElementById('submitBtn');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
 
-    // LẤY GIÁ TIỀN TỪ URL (Trang chủ gửi sang)
-    const urlParams = new URLSearchParams(window.location.search);
-    const amount = urlParams.get('price') || '65000'; // Mặc định 65k nếu lỗi
+            const urlParams = new URLSearchParams(window.location.search);
+            const amount = urlParams.get('price') || '65000';
 
-    if (!email || !password) {
-        alert("Vui lòng nhập đủ thông tin!");
-        return;
-    }
+            if (!email || !password) {
+                alert("Vui lòng nhập đủ thông tin!");
+                return;
+            }
 
-    submitBtn.disabled = true;
-    submitBtn.innerText = "ĐANG XỬ LÝ...";
+            submitBtn.disabled = true;
+            submitBtn.innerText = "ĐANG XỬ LÝ...";
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxD6JrqGtvKdLcatEWDx5EhaZzQ4x0Szv8KKEsJaq2Lag_v6TCL22hb-DeF9BgTKkY/exec";
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxD6JrqGtvKdLcatEWDx5EhaZzQ4x0Szv8KKEsJaq2Lag_v6TCL22hb-DeF9BgTKkY/exec";
 
-    try {
-        await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'no-cors',
-            body: JSON.stringify({
-                email: email,
-                password: password,
-                package: amount == '100000' ? "Khóa SWE202c" : "Thuê Gói VIP",
-                amount: amount + " VND"
-            })
-        });
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        package: amount == '100000' ? "Khóa SWE202c" : "Thuê Gói VIP",
+                        amount: amount + " VND"
+                    })
+                });
 
-        // CHUYỂN SANG QR KÈM GIÁ TIỀN CHÍNH XÁC
-        window.location.href = `qr.html?amount=${amount}`;
-    } catch (error) {
-        window.location.href = `qr.html?amount=${amount}`;
-    }
-}
+                window.location.href = `qr.html?amount=${amount}`;
+            } catch (error) {
+                window.location.href = `qr.html?amount=${amount}`;
+            }
+        }
     </script>
 </body>
 </html>
