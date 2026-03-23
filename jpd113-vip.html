@@ -3,17 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Source NWC204 - Lữ Chí Vỹ</title>
+    <title>Source VIP JPD113 - Lữ Chí Vỹ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. BIẾN CSS CHUẨN --- */
         :root {
             --bg-dark: #09090b;
-            --primary: #00d2ff;
-            --primary-glow: rgba(0, 210, 255, 0.5);
-            --accent: #10b981; /* Màu xanh lá cho trạng thái Đã học */
+            --primary: #f59e0b; /* Cam Java */
+            --primary-glow: rgba(245, 158, 11, 0.5);
+            --accent: #10b981; 
             --surface: rgba(255, 255, 255, 0.03);
             --surface-hover: rgba(255, 255, 255, 0.08);
             --border: rgba(255, 255, 255, 0.1);
@@ -24,41 +23,18 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; }
 
-        .ambient-bg {
-            position: fixed; inset: 0; z-index: -1;
-            background: 
-                radial-gradient(circle at 15% 0%, rgba(0, 210, 255, 0.15) 0%, transparent 40%),
-                radial-gradient(circle at 85% 100%, rgba(58, 123, 213, 0.15) 0%, transparent 40%);
-            filter: blur(40px);
-        }
+        .ambient-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 15% 0%, rgba(245, 158, 11, 0.15) 0%, transparent 40%), radial-gradient(circle at 85% 100%, rgba(217, 119, 6, 0.15) 0%, transparent 40%); filter: blur(40px); }
 
-        /* --- HEADER & TOOLBAR --- */
         .top-bar { padding: 20px; max-width: 1400px; margin: 0 auto; }
-        .btn-glass {
-            background: var(--surface); backdrop-filter: blur(12px); border: 1px solid var(--border);
-            color: var(--text-main); padding: 10px 20px; border-radius: 100px; text-decoration: none;
-            font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition);
-        }
+        .btn-glass { background: var(--surface); backdrop-filter: blur(12px); border: 1px solid var(--border); color: var(--text-main); padding: 10px 20px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); }
         .btn-glass:hover { background: var(--surface-hover); border-color: var(--primary); box-shadow: 0 4px 20px var(--primary-glow); }
 
         .header-section { text-align: center; padding: 20px 20px 40px; }
-        .super-title {
-            font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; text-transform: uppercase; letter-spacing: -1px;
-            background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 10px; filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.2));
-        }
+        .super-title { font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; text-transform: uppercase; letter-spacing: -1px; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.2)); }
+        .vip-badge { display: inline-block; background: linear-gradient(45deg, #f59e0b, #fbbf24); color: #000; padding: 4px 12px; border-radius: 20px; font-weight: 900; font-size: 0.9rem; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4); }
 
-        /* --- TIẾN ĐỘ HỌC (PROGRESS BAR) --- */
         .progress-wrapper { max-width: 400px; margin: 20px auto 30px; text-align: left; }
         .progress-text { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; }
         .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
@@ -66,25 +42,12 @@
 
         .search-container { max-width: 400px; margin: 0 auto; position: relative; }
         .search-container i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        .search-input {
-            width: 100%; padding: 16px 16px 16px 45px; background: var(--surface); border: 1px solid var(--border);
-            border-radius: 100px; color: white; font-size: 1rem; transition: var(--transition); outline: none;
-        }
+        .search-input { width: 100%; padding: 16px 16px 16px 45px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; color: white; font-size: 1rem; transition: var(--transition); outline: none; }
         .search-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
-        /* --- GALLERY GRID --- */
-        .gallery-container {
-            max-width: 1400px; margin: 0 auto; padding: 0 20px 60px;
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
-        }
-
-        .img-card {
-            background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-            overflow: hidden; cursor: pointer; transition: var(--transition); position: relative;
-            display: flex; flex-direction: column; backdrop-filter: blur(10px);
-        }
+        .gallery-container { max-width: 1400px; margin: 0 auto; padding: 0 20px 60px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
+        .img-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: var(--transition); position: relative; display: flex; flex-direction: column; backdrop-filter: blur(10px); }
         .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
-        
         .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; }
         .img-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; }
         .img-card img.loaded { opacity: 1; }
@@ -94,51 +57,25 @@
         .img-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
         .img-badge { background: var(--primary); color: #000; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; transition: var(--transition); }
 
-        /* Style cho card ĐÃ HỌC */
         .img-card.learned { border-color: var(--accent); background: rgba(16, 185, 129, 0.05); }
         .img-card.learned .img-badge { background: var(--accent); color: white; }
         .img-card.learned .img-badge::before { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-right: 4px; }
-        
-        /* Checkmark to trên ảnh */
-        .learned-overlay {
-            position: absolute; inset: 0; background: rgba(16, 185, 129, 0.2);
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; transition: var(--transition); pointer-events: none;
-        }
+        .learned-overlay { position: absolute; inset: 0; background: rgba(16, 185, 129, 0.2); display: flex; justify-content: center; align-items: center; opacity: 0; transition: var(--transition); pointer-events: none; }
         .img-card.learned .learned-overlay { opacity: 1; }
         .learned-overlay i { font-size: 3rem; color: rgba(255,255,255,0.8); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 
-        /* --- MODAL --- */
-        .modal {
-            position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px);
-            display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s ease;
-        }
+        .modal { position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
         .modal.active { opacity: 1; visibility: visible; }
         .modal-content { position: relative; max-width: 90%; max-height: 85vh; display: flex; align-items: center; justify-content: center; }
         .modal-img { max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; }
-        
-        .modal-btn {
-            position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid var(--border);
-            color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: var(--transition);
-        }
+        .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: var(--transition); }
         .modal-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); }
-        .btn-prev { left: -70px; }
-        .btn-next { right: -70px; }
-        .btn-close {
-            position: absolute; top: 20px; right: 20px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3);
-            width: 44px; height: 44px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition);
-        }
+        .btn-prev { left: -70px; } .btn-next { right: -70px; }
+        .btn-close { position: absolute; top: 20px; right: 20px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); width: 44px; height: 44px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); }
         .btn-close:hover { background: #f43f5e; color: white; transform: rotate(90deg); }
-
         .modal-footer { position: absolute; bottom: -60px; width: 100%; display: flex; justify-content: space-between; align-items: center; }
         .modal-counter { color: var(--text-muted); font-weight: 600; font-size: 1.1rem; letter-spacing: 2px; }
-        
-        /* Nút Đánh dấu trong Modal */
-        .btn-mark {
-            background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white;
-            padding: 10px 20px; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition);
-            display: flex; align-items: center; gap: 8px;
-        }
+        .btn-mark { background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; padding: 10px 20px; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px; }
         .btn-mark:hover { background: rgba(255,255,255,0.2); }
         .btn-mark.active { background: var(--accent); border-color: var(--accent); color: #000; }
         .btn-mark.active:hover { background: #059669; }
@@ -153,30 +90,21 @@
     </style>
 </head>
 <body>
-
     <div class="ambient-bg"></div>
-
-    <div class="top-bar">
-        <a href="index.html" class="btn-glass"><i class="fa-solid fa-arrow-left"></i> Trở về trang chủ</a>
-    </div>
+    <div class="top-bar"><a href="index.html" class="btn-glass"><i class="fa-solid fa-arrow-left"></i> Trở về trang chủ</a></div>
 
     <header class="header-section">
-        <h1 class="super-title">Kho Tài Liệu NWC204</h1>
-        <p style="color: var(--text-muted); font-size: 1.1rem;">Coded by <b style="color: white;">Lữ Chí Vỹ</b> • Chúc AE học tốt 💯</p>
+        <div class="vip-badge"><i class="fa-solid fa-crown"></i> GÓI VIP TRẢ PHÍ</div>
+        <h1 class="super-title">KHO TÀI LIỆU JPD113</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">Coded by <b style="color: white;">Lữ Chí Vỹ</b> • Chúc AE code Java mượt mà ☕</p>
         
         <div class="progress-wrapper">
-            <div class="progress-text">
-                <span>Tiến độ hoàn thành:</span>
-                <span id="progressPercent">0%</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
+            <div class="progress-text"><span>Tiến độ hoàn thành:</span><span id="progressPercent">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
         </div>
-
         <div class="search-container">
             <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="number" id="searchInput" class="search-input" placeholder="Nhập số câu để tìm nhanh (VD: 45)...">
+            <input type="number" id="searchInput" class="search-input" placeholder="Nhập số câu để tìm nhanh...">
         </div>
     </header>
 
@@ -186,39 +114,31 @@
         <button class="btn-close" id="btnClose"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-content">
             <button class="modal-btn btn-prev" id="btnPrev"><i class="fa-solid fa-chevron-left"></i></button>
-            <img id="modalImg" class="modal-img" src="" alt="NWC204 Document">
+            <img id="modalImg" class="modal-img" src="" alt="JPD113 VIP Document">
             <button class="modal-btn btn-next" id="btnNext"><i class="fa-solid fa-chevron-right"></i></button>
-            
             <div class="modal-footer">
-                <div class="modal-counter" id="modalCounter">1 / 197</div>
-                <button class="btn-mark" id="btnMarkLearned">
-                    <i class="fa-solid fa-check"></i> <span>Đánh dấu đã học</span>
-                </button>
+                <div class="modal-counter" id="modalCounter">1 / 100</div>
+                <button class="btn-mark" id="btnMarkLearned"><i class="fa-solid fa-check"></i> <span>Đánh dấu đã học</span></button>
             </div>
         </div>
     </div>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const TOTAL_IMAGES = 197;
-        const STORAGE_KEY = 'nwc204_learned_items';
+        const TOTAL_IMAGES = 100; // Đổi số ảnh thực tế ở đây nhé
+        const STORAGE_KEY = 'jpd113_vip_items'; 
         const gallery = document.getElementById('galleryContainer');
         const searchInput = document.getElementById('searchInput');
-        
-        // Khởi tạo Set lưu các câu đã học từ LocalStorage
         let learnedItems = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
 
-        // DOM Elements cho Modal & Progress
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
         const modalCounter = document.getElementById('modalCounter');
         const btnMarkLearned = document.getElementById('btnMarkLearned');
         const progressFill = document.getElementById('progressFill');
         const progressPercent = document.getElementById('progressPercent');
-        
         let currentIndex = 1;
 
-        // 1. CẬP NHẬT TIẾN ĐỘ
         function updateProgress() {
             const count = learnedItems.size;
             const percent = ((count / TOTAL_IMAGES) * 100).toFixed(1);
@@ -226,7 +146,6 @@
             progressFill.style.width = `${percent}%`;
         }
 
-        // 2. RENDER KHO ẢNH
         const fragment = document.createDocumentFragment();
         for (let i = 1; i <= TOTAL_IMAGES; i++) {
             const card = document.createElement('div');
@@ -236,21 +155,19 @@
             card.innerHTML = `
                 <div class="img-wrapper">
                     <div class="learned-overlay"><i class="fa-solid fa-circle-check"></i></div>
-                    <img src="img-pro/pro (${i}).png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1e293b/fff?text=Loi+Anh+${i}'" alt="Câu ${i}">
+                    <img src="img-jpd/jpd (${i}).png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1e293b/fff?text=Loi+Anh+${i}'" alt="Câu ${i}">
                 </div>
                 <div class="img-info">
                     <span class="img-title">Câu ${i}</span>
-                    <span class="img-badge">${learnedItems.has(i) ? 'Đã học' : 'NWC204'}</span>
+                    <span class="img-badge">${learnedItems.has(i) ? 'Đã học' : 'VIP'}</span>
                 </div>
             `;
-            
             card.addEventListener('click', () => openModal(i));
             fragment.appendChild(card);
         }
         gallery.appendChild(fragment);
-        updateProgress(); // Khởi tạo thanh tiến độ ban đầu
+        updateProgress();
 
-        // 3. TÌM KIẾM NHANH
         searchInput.addEventListener('input', (e) => {
             const val = e.target.value.trim();
             document.querySelectorAll('.img-card').forEach(card => {
@@ -258,7 +175,6 @@
             });
         });
 
-        // 4. LOGIC ĐÁNH DẤU TRONG MODAL
         function updateMarkButtonUI() {
             if (learnedItems.has(currentIndex)) {
                 btnMarkLearned.classList.add('active');
@@ -273,66 +189,37 @@
             e.stopPropagation();
             const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`);
             const badge = card.querySelector('.img-badge');
-
             if (learnedItems.has(currentIndex)) {
-                // Bỏ đánh dấu
                 learnedItems.delete(currentIndex);
                 card.classList.remove('learned');
-                badge.textContent = 'NWC204';
+                badge.textContent = 'VIP';
             } else {
-                // Thêm đánh dấu
                 learnedItems.add(currentIndex);
                 card.classList.add('learned');
                 badge.textContent = 'Đã học';
             }
-            
-            // Lưu lại bộ nhớ & cập nhật UI
             localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems]));
             updateMarkButtonUI();
             updateProgress();
         });
 
-        // 5. LOGIC MODAL
-        function openModal(index) {
-            currentIndex = index;
-            updateModalView();
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            setTimeout(() => modalImg.src = '', 300);
-        }
-
-        function updateModalView() {
-            modalImg.src = `img-pro/pro (${currentIndex}).png`;
-            modalCounter.textContent = `${currentIndex} / ${TOTAL_IMAGES}`;
-            updateMarkButtonUI();
-        }
-
+        function openModal(index) { currentIndex = index; updateModalView(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeModal() { modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
+        function updateModalView() { modalImg.src = `img-jpd/jpd (${currentIndex}).png`; modalCounter.textContent = `${currentIndex} / ${TOTAL_IMAGES}`; updateMarkButtonUI(); }
         function prevImage() { currentIndex = currentIndex > 1 ? currentIndex - 1 : TOTAL_IMAGES; updateModalView(); }
         function nextImage() { currentIndex = currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1; updateModalView(); }
 
         document.getElementById('btnClose').addEventListener('click', closeModal);
         document.getElementById('btnPrev').addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
         document.getElementById('btnNext').addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
-        
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal || e.target.closest('.modal-content') === null) closeModal();
-        });
+        modal.addEventListener('click', (e) => { if (e.target === modal || e.target.closest('.modal-content') === null) closeModal(); });
 
         document.addEventListener('keydown', (e) => {
             if (!modal.classList.contains('active')) return;
             if (e.key === 'ArrowLeft') prevImage();
             if (e.key === 'ArrowRight') nextImage();
             if (e.key === 'Escape') closeModal();
-            // Shortcut: Bấm phím Space để đánh dấu nhanh
-            if (e.key === ' ') {
-                e.preventDefault();
-                btnMarkLearned.click();
-            }
+            if (e.key === ' ') { e.preventDefault(); btnMarkLearned.click(); }
         });
     });
 </script>

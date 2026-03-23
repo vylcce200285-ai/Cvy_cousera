@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Source DBI202 - Lữ Chí Vỹ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-body: #05050a; 
+            --bg-glass: rgba(20, 20, 25, 0.6);
+            --bg-glass-hover: rgba(30, 30, 40, 0.8);
+            --primary: #8b5cf6; 
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --primary-light: #a78bfa;
+            --success: #10b981; 
+            --success-glow: rgba(16, 185, 129, 0.4);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            min-height: 100vh; 
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            position: relative;
+        }
+
+        /* --- BACKGROUND ĐẲNG CẤP --- */
+        .bg-animated {
+            position: fixed; inset: 0; z-index: -2;
+            background: radial-gradient(circle at 15% 50%, rgba(139, 92, 246, 0.15), transparent 40%),
+                        radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.1), transparent 40%);
+            filter: blur(60px); animation: pulseBg 15s infinite alternate;
+        }
+        @keyframes pulseBg { 0% { opacity: 0.7; transform: scale(1); } 100% { opacity: 1; transform: scale(1.05); } }
+
+        /* Lưới công nghệ mờ ảo */
+        .bg-grid {
+            position: fixed; inset: 0; z-index: -1; opacity: 0.15;
+            background-image: linear-gradient(var(--border-glass) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--border-glass) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-body); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* --- TOP BAR --- */
+        .top-bar { 
+            padding: 20px 30px; max-width: 1300px; margin: 0 auto; 
+            display: flex; align-items: center; justify-content: space-between; 
+            position: relative; z-index: 10;
+        }
+        
+        .btn-glass { 
+            color: var(--text-main); text-decoration: none; font-weight: 600; 
+            display: inline-flex; align-items: center; gap: 8px; 
+            padding: 10px 20px; border-radius: 100px;
+            background: var(--bg-glass); border: 1px solid var(--border-glass);
+            backdrop-filter: blur(12px); transition: var(--transition);
+        }
+        .btn-glass:hover { background: var(--primary); border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 4px 15px var(--primary-glow); }
+
+        .btn-music {
+            background: rgba(139, 92, 246, 0.1); color: var(--primary-light);
+            border: 1px solid rgba(139, 92, 246, 0.3); padding: 10px 20px;
+            border-radius: 100px; font-weight: 600; cursor: pointer;
+            transition: var(--transition); display: flex; align-items: center; gap: 10px;
+            backdrop-filter: blur(12px); font-family: inherit;
+        }
+        .btn-music:hover { background: rgba(139, 92, 246, 0.2); }
+        .btn-music.playing {
+            background: rgba(16, 185, 129, 0.15); color: var(--success);
+            border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 20px var(--success-glow);
+        }
+        @keyframes sound-wave { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.2); opacity: 1; } }
+        .btn-music.playing i { animation: sound-wave 1s infinite ease-in-out; }
+
+        /* --- HEADER & DASHBOARD --- */
+        .header-section { max-width: 900px; margin: 0 auto; padding: 20px 24px 50px; text-align: center; position: relative; z-index: 10; }
+        
+        .course-badge { 
+            display: inline-block; background: linear-gradient(135deg, var(--primary), #c084fc);
+            color: #fff; padding: 6px 20px; border-radius: 100px; font-weight: 800; 
+            font-size: 0.85rem; margin-bottom: 20px; letter-spacing: 1px;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        .title { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 900; color: #fff; margin-bottom: 10px; letter-spacing: -1px; text-transform: uppercase; }
+        .subtitle { color: var(--text-muted); font-size: 1.1rem; }
+
+        .dashboard {
+            background: var(--bg-glass); backdrop-filter: blur(20px); border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg); padding: 30px; margin-top: 40px;
+            text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .progress-title { font-weight: 600; font-size: 1.1rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+        .progress-title i { color: var(--primary); }
+        .progress-stat { font-weight: 800; color: var(--primary-light); font-size: 1.2rem; }
+        
+        .progress-track { width: 100%; height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--success)); width: 0%; transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 0 10px var(--success-glow); }
+
+        .search-box { margin-top: 25px; position: relative; }
+        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 1.1rem; }
+        .search-input { 
+            width: 100%; padding: 18px 20px 18px 55px; 
+            background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: var(--radius-md); color: var(--text-main); font-size: 1rem; 
+            font-family: inherit; transition: var(--transition); outline: none;
+        }
+        .search-input::placeholder { color: var(--text-muted); }
+        .search-input:focus { border-color: var(--primary); background: rgba(0,0,0,0.5); box-shadow: 0 0 20px rgba(139, 92, 246, 0.2); }
+
+        /* --- LƯỚI TÀI LIỆU --- */
+        .gallery-container { max-width: 1300px; margin: 0 auto; padding: 0 24px 80px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; position: relative; z-index: 10; }
+        
+        .img-card { 
+            background: var(--bg-glass); backdrop-filter: blur(10px); border: 1px solid var(--border-glass); 
+            border-radius: var(--radius-md); overflow: hidden; cursor: pointer; transition: var(--transition); 
+            display: flex; flex-direction: column; position: relative;
+        }
+        .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 15px var(--primary-glow); }
+        
+        .img-wrapper { width: 100%; aspect-ratio: 4/3; background: #000; position: relative; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        .img-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity 0.4s ease, transform 0.5s ease; }
+        .img-card img.loaded { opacity: 0.85; }
+        .img-card:hover img { opacity: 1; transform: scale(1.05); }
+
+        .img-info { padding: 18px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .img-title { font-weight: 700; font-size: 1.05rem; color: var(--text-main); }
+        
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; padding: 6px 12px; border-radius: 100px; background: rgba(255, 255, 255, 0.05); color: var(--text-muted); transition: var(--transition); }
+        
+        /* Trạng thái ĐÃ HỌC */
+        .img-card.learned { border-color: var(--success); background: rgba(16, 185, 129, 0.05); }
+        .img-card.learned .status-badge { background: rgba(16, 185, 129, 0.15); color: var(--success); box-shadow: 0 0 10px var(--success-glow); }
+        
+        .learned-overlay { position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; border-radius: 50%; background: var(--success); color: white; display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.4); z-index: 5; font-size: 1.1rem; }
+        .img-card.learned .learned-overlay { opacity: 1; transform: scale(1) rotate(360deg); }
+
+        /* --- MODAL XEM ẢNH XỊN XÒ --- */
+        .modal { position: fixed; inset: 0; z-index: 9999; background: rgba(5, 5, 10, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1); }
+        .modal.active { opacity: 1; visibility: visible; }
+        .modal-content { position: relative; width: 100%; max-width: 1200px; height: 90vh; display: flex; align-items: center; justify-content: center; }
+        
+        .modal-img { max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); object-fit: contain; user-select: none; transition: 0.3s; }
+        
+        .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); width: 56px; height: 56px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 10; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        .modal-btn:hover { background: var(--primary); border-color: var(--primary); color: white; box-shadow: 0 0 20px var(--primary-glow); scale: 1.1; }
+        .btn-prev { left: -80px; } .btn-next { right: -80px; }
+        
+        .btn-close { position: absolute; top: 25px; right: 30px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1); width: 48px; height: 48px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 100; backdrop-filter: blur(10px); display: flex; justify-content: center; align-items: center; }
+        .btn-close:hover { background: var(--danger); border-color: var(--danger); transform: rotate(90deg); }
+
+        .modal-footer { position: absolute; bottom: 30px; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 600px; background: rgba(20,20,25,0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100; }
+        .modal-counter { color: var(--primary-light); font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; }
+        
+        .btn-mark { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 12px 24px; border-radius: 100px; font-weight: 700; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px; font-family: inherit; font-size: 1rem; }
+        .btn-mark:hover { background: rgba(255,255,255,0.1); border-color: var(--text-muted); }
+        .btn-mark.active { background: var(--success); border-color: var(--success); color: #000; box-shadow: 0 0 15px var(--success-glow); }
+        .btn-mark.active:hover { filter: brightness(1.1); }
+
+        /* --- TỐI ƯU MOBILE --- */
+        @media (max-width: 1300px) { .btn-prev { left: 20px; } .btn-next { right: 20px; } }
+        @media (max-width: 768px) {
+            .top-bar { padding: 16px; flex-direction: column; gap: 15px; }
+            .title { font-size: 2.2rem; }
+            .header-section { padding: 0 16px 20px; }
+            .dashboard { padding: 20px; margin-top: 20px; }
+            .gallery-container { padding: 0 16px 80px; gap: 20px; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+            .img-info { padding: 12px; flex-direction: column; gap: 10px; align-items: flex-start; }
+            .modal-content { max-width: 100%; height: 100vh; }
+            .modal-img { max-height: calc(100vh - 160px); border-radius: 0; }
+            .modal-btn { display: none; } 
+            .btn-close { top: 15px; right: 15px; background: rgba(0,0,0,0.6); border: none; }
+            .modal-footer { bottom: 0; max-width: 100%; border-radius: 0; border-left: none; border-right: none; border-bottom: none; padding: 16px 20px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
+            .modal-counter { font-size: 1rem; }
+            .btn-mark { padding: 10px 16px; font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-animated"></div>
+    <div class="bg-grid"></div>
+
+    <div id="youtubePlayer" style="display: none;"></div>
+
+    <div class="top-bar">
+        <a href="index.html" class="btn-glass"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</a>
+        <button id="btnMusic" class="btn-music">
+            <i class="fa-solid fa-music"></i> <span>Lo-Fi Focus: Tắt</span>
+        </button>
+    </div>
+
+    <header class="header-section">
+        <div class="course-badge"><i class="fa-solid fa-database"></i> Source : DBI202</div>
+        <h1 class="title">Kho Ngân Hàng Câu Hỏi</h1>
+        <p class="subtitle">Hệ thống được tạo bởi <b>Lữ Chí Vỹ</b></p>
+        
+        <div class="dashboard">
+            <div class="progress-header">
+                <span class="progress-title"><i class="fa-solid fa-chart-line"></i> Tiến độ hoàn thành</span>
+                <span class="progress-stat" id="progressPercent">0%</span>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+            
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="number" id="searchInput" class="search-input" placeholder="Tìm kiếm nhanh đến câu hỏi số (VD: 45)...">
+            </div>
+        </div>
+    </header>
+
+    <main class="gallery-container" id="galleryContainer"></main>
+
+    <div class="modal" id="imageModal">
+        <button class="btn-close" id="btnClose"><i class="fa-solid fa-xmark"></i></button>
+        
+        <div class="modal-content" id="swipeArea">
+            <button class="modal-btn btn-prev" id="btnPrev"><i class="fa-solid fa-chevron-left"></i></button>
+            <img id="modalImg" class="modal-img" src="" alt="Câu hỏi DBI202">
+            <button class="modal-btn btn-next" id="btnNext"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+        
+        <div class="modal-footer">
+            <div class="modal-counter" id="modalCounter">Câu 1 / 291</div>
+            <button class="btn-mark" id="btnMarkLearned">
+                <i class="fa-solid fa-check"></i> <span>Đánh dấu đã hiểu</span>
+            </button>
+        </div>
+    </div>
+
+<script>
+    // --- KHỞI TẠO YOUTUBE API ---
+    var tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    var firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    var player;
+    function onYouTubeIframeAPIReady() {
+        player = new YT.Player('youtubePlayer', {
+            height: '0', width: '0', 
+            videoId: 'inn2yGLK_So', 
+            playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'inn2yGLK_So' },
+            events: { 'onReady': onPlayerReady }
+        });
+    }
+
+    let isPlaying = false;
+    const btnMusic = document.getElementById('btnMusic');
+
+    function onPlayerReady(event) { player.setVolume(30); }
+
+    btnMusic.addEventListener('click', () => {
+        if (!player || typeof player.playVideo !== 'function') {
+            alert("Hệ thống đang tải nhạc từ YouTube, Vỹ chờ chút xíu nhé!");
+            return;
+        }
+        if (isPlaying) {
+            player.pauseVideo();
+            btnMusic.innerHTML = '<i class="fa-solid fa-music"></i> <span>Lo-Fi Focus: Tắt</span>';
+            btnMusic.classList.remove('playing');
+        } else {
+            player.playVideo();
+            btnMusic.innerHTML = '<i class="fa-solid fa-headphones"></i> <span>Đang phát nhạc...</span>';
+            btnMusic.classList.add('playing');
+        }
+        isPlaying = !isPlaying;
+    });
+
+    // --- LOGIC HỆ THỐNG ẢNH ---
+    document.addEventListener('DOMContentLoaded', () => {
+        const TOTAL_IMAGES = 291; // ĐÃ SET SẴN 291 CHO BẠN
+        const STORAGE_KEY = 'dbi202_vip_items'; 
+        const gallery = document.getElementById('galleryContainer');
+        const searchInput = document.getElementById('searchInput');
+        let learnedItems = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
+
+        const modal = document.getElementById('imageModal');
+        const modalImg = document.getElementById('modalImg');
+        const modalCounter = document.getElementById('modalCounter');
+        const btnMarkLearned = document.getElementById('btnMarkLearned');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const swipeArea = document.getElementById('swipeArea');
+        let currentIndex = 1;
+
+        function updateProgress() {
+            const count = learnedItems.size;
+            const percent = ((count / TOTAL_IMAGES) * 100).toFixed(1);
+            progressPercent.textContent = `${count}/${TOTAL_IMAGES} (${percent}%)`;
+            progressFill.style.width = `${percent}%`;
+        }
+
+        const fragment = document.createDocumentFragment();
+        for (let i = 1; i <= TOTAL_IMAGES; i++) {
+            const card = document.createElement('div');
+            card.className = `img-card ${learnedItems.has(i) ? 'learned' : ''}`;
+            card.dataset.index = i;
+            
+            card.innerHTML = `
+                <div class="img-wrapper">
+                    <div class="learned-overlay"><i class="fa-solid fa-check"></i></div>
+                    <img src="img-dbi/dbi (${i}).png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1a1a24/94a3b8?text=Chua+co+anh+${i}'" alt="Câu ${i}">
+                </div>
+                <div class="img-info">
+                    <span class="img-title">Câu ${i}</span>
+                    <span class="status-badge">
+                        ${learnedItems.has(i) ? '<i class="fa-solid fa-check-circle"></i> Đã học' : '<i class="fa-regular fa-circle"></i> Chưa học'}
+                    </span>
+                </div>
+            `;
+            card.addEventListener('click', () => openModal(i));
+            fragment.appendChild(card);
+        }
+        gallery.appendChild(fragment);
+        updateProgress();
+
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            document.querySelectorAll('.img-card').forEach(card => {
+                card.style.display = (val === '' || card.dataset.index === val) ? 'flex' : 'none';
+            });
+        });
+
+        function updateMarkButtonUI() {
+            if (learnedItems.has(currentIndex)) {
+                btnMarkLearned.classList.add('active');
+                btnMarkLearned.innerHTML = `<i class="fa-solid fa-check-double"></i> <span>Đã hoàn thành</span>`;
+            } else {
+                btnMarkLearned.classList.remove('active');
+                btnMarkLearned.innerHTML = `<i class="fa-solid fa-check"></i> <span>Đánh dấu đã hiểu</span>`;
+            }
+        }
+
+        btnMarkLearned.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`);
+            const badge = card.querySelector('.status-badge');
+
+            if (learnedItems.has(currentIndex)) {
+                learnedItems.delete(currentIndex);
+                card.classList.remove('learned');
+                badge.innerHTML = '<i class="fa-regular fa-circle"></i> Chưa học';
+            } else {
+                learnedItems.add(currentIndex);
+                card.classList.add('learned');
+                badge.innerHTML = '<i class="fa-solid fa-check-circle"></i> Đã học';
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems]));
+            updateMarkButtonUI();
+            updateProgress();
+        });
+
+        function openModal(index) { currentIndex = index; updateModalView(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeModal() { modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
+        function updateModalView() { modalImg.src = `img-dbi/dbi (${currentIndex}).png`; modalCounter.textContent = `Câu ${currentIndex} / ${TOTAL_IMAGES}`; updateMarkButtonUI(); }
+        function prevImage() { currentIndex = currentIndex > 1 ? currentIndex - 1 : TOTAL_IMAGES; updateModalView(); }
+        function nextImage() { currentIndex = currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1; updateModalView(); }
+
+        document.getElementById('btnClose').addEventListener('click', closeModal);
+        document.getElementById('btnPrev').addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
+        document.getElementById('btnNext').addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
+        
+        modal.addEventListener('click', (e) => { 
+            if (e.target === modal || e.target === swipeArea) closeModal(); 
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (!modal.classList.contains('active')) return;
+            if (e.key === 'ArrowLeft') prevImage();
+            if (e.key === 'ArrowRight') nextImage();
+            if (e.key === 'Escape') closeModal();
+            if (e.key === ' ') { e.preventDefault(); btnMarkLearned.click(); }
+        });
+
+        // TÍNH NĂNG VUỐT (SWIPE) CHO ĐIỆN THOẠI
+        let touchstartX = 0;
+        let touchendX = 0;
+        
+        swipeArea.addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; }, {passive: true});
+        swipeArea.addEventListener('touchend', e => { touchendX = e.changedTouches[0].screenX; handleSwipe(); }, {passive: true});
+
+        function handleSwipe() {
+            const threshold = 50; 
+            if (touchendX < touchstartX - threshold) nextImage();
+            if (touchendX > touchstartX + threshold) prevImage();
+        }
+    });
+</script>
+</body>
+</html>

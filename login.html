@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng Nhập - Hệ Sinh Thái Học Tập</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS BIẾN - ĐỒNG BỘ VỚI TRANG CHỦ --- */
+        :root {
+            --bg-base: #09090b;
+            --bg-surface: rgba(30, 41, 59, 0.4);
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --primary-glow: rgba(99, 102, 241, 0.4);
+            --secondary: #ec4899;
+            --accent: #10b981;
+            --danger: #f43f5e;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --radius-lg: 24px;
+            --radius-md: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* --- BACKGROUND MƯỢT MÀ --- */
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15), transparent 40%),
+                        radial-gradient(circle at 80% 70%, rgba(236, 72, 153, 0.15), transparent 40%);
+            filter: blur(60px); animation: pulseBg 10s infinite alternate;
+        }
+        @keyframes pulseBg { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        /* --- NÚT TRỞ VỀ --- */
+        .btn-back {
+            position: absolute; top: 30px; left: 30px;
+            color: var(--text-muted); text-decoration: none;
+            display: flex; align-items: center; gap: 8px;
+            font-weight: 600; transition: var(--transition);
+            background: var(--bg-surface); padding: 10px 20px;
+            border-radius: 100px; border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+        }
+        .btn-back:hover { color: var(--text-main); border-color: var(--primary); transform: translateX(-5px); }
+
+        /* --- KHUNG ĐĂNG NHẬP --- */
+        .login-wrapper {
+            background: var(--bg-surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border); border-radius: var(--radius-lg);
+            padding: 50px 40px; width: 100%; max-width: 420px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0; transform: translateY(30px);
+        }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+        .logo-icon {
+            font-size: 3rem; color: var(--primary); text-align: center;
+            margin-bottom: 20px; filter: drop-shadow(0 0 15px var(--primary-glow));
+        }
+
+        .login-wrapper h2 {
+            font-size: 1.8rem; font-weight: 800; text-align: center; margin-bottom: 8px;
+            background: linear-gradient(to right, #fff, #cbd5e1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .login-wrapper p { text-align: center; color: var(--text-muted); margin-bottom: 30px; font-size: 0.95rem; }
+
+        /* --- FORM INPUT --- */
+        .input-group { margin-bottom: 20px; position: relative; }
+        .input-group i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        
+        .form-control {
+            width: 100%; padding: 16px 16px 16px 48px;
+            background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border);
+            border-radius: var(--radius-md); color: white; font-family: inherit;
+            font-size: 1rem; transition: var(--transition); outline: none;
+        }
+        .form-control:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.08); box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
+
+        /* --- BUTTON --- */
+        .btn-login {
+            width: 100%; padding: 16px; border-radius: var(--radius-md); border: none;
+            background: linear-gradient(to right, var(--primary), var(--primary-hover));
+            color: white; font-weight: 800; font-size: 1rem; cursor: pointer;
+            transition: var(--transition); text-transform: uppercase; letter-spacing: 1px;
+            margin-top: 10px; display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 25px var(--primary-glow); }
+
+        /* --- TOAST NOTIFICATION --- */
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
+        .toast {
+            background: rgba(30, 41, 59, 0.9); backdrop-filter: blur(10px);
+            border-left: 4px solid var(--primary); padding: 16px 24px; border-radius: 8px;
+            display: flex; align-items: center; gap: 12px; font-weight: 500;
+            animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .toast.error { border-color: var(--danger); }
+        .toast.success { border-color: var(--accent); }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+
+        @media (max-width: 480px) {
+            .login-wrapper { width: 90%; padding: 40px 20px; }
+            .btn-back { top: 15px; left: 15px; padding: 8px 16px; font-size: 0.85rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+
+    <a href="index.html" class="btn-back"><i class="fa-solid fa-arrow-left"></i> Trang chủ</a>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="login-wrapper">
+        <div class="logo-icon">
+            <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <h2>Đăng Nhập</h2>
+        <p>Vui lòng đăng nhập để truy cập tài liệu</p>
+
+        <form id="loginForm">
+            <div class="input-group">
+                <i class="fa-solid fa-user"></i>
+                <input type="text" id="username" class="form-control" placeholder="Tên hiển thị hoặc Mã SV..." autocomplete="off">
+            </div>
+            
+            <div class="input-group">
+                <i class="fa-solid fa-lock"></i>
+                <input type="password" id="password" class="form-control" placeholder="Mật khẩu...">
+            </div>
+
+            <button type="submit" class="btn-login" id="btnSubmit">
+                Đăng Nhập <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('loginForm');
+            const btnSubmit = document.getElementById('btnSubmit');
+
+            // Hàm hiển thị thông báo Toast
+            const Toast = {
+                show(message, type = 'success') {
+                    const container = document.getElementById('toastContainer');
+                    const toast = document.createElement('div');
+                    toast.className = `toast ${type}`;
+                    const icon = type === 'success' ? '<i class="fa-solid fa-circle-check" style="color: var(--accent)"></i>' : '<i class="fa-solid fa-circle-exclamation" style="color: var(--danger)"></i>';
+                    toast.innerHTML = `${icon} <span>${message}</span>`;
+                    container.appendChild(toast);
+                    
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateX(100%)';
+                        setTimeout(() => toast.remove(), 400);
+                    }, 3000);
+                }
+            };
+
+            // Xử lý sự kiện Đăng nhập
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault(); // Chặn tải lại trang khi bấm submit
+                
+                const username = document.getElementById('username').value.trim();
+                const password = document.getElementById('password').value.trim();
+
+                // Validate cơ bản
+                if (!username || !password) {
+                    Toast.show('Vui lòng nhập đầy đủ Tên và Mật khẩu!', 'error');
+                    return;
+                }
+
+                // Hiệu ứng Loading
+                const originalText = btnSubmit.innerHTML;
+                btnSubmit.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Đang xác thực...';
+                btnSubmit.style.pointerEvents = 'none';
+
+                // Giả lập thời gian kết nối server (1.5 giây)
+                setTimeout(() => {
+                    // Lưu tên người dùng vào LocalStorage (Đây là phần quan trọng nhất để index.html nhận diện được user)
+                    localStorage.setItem('currentUser', username);
+                    
+                    Toast.show(`Đăng nhập thành công! Chào ${username}`, 'success');
+                    
+                    // Đợi 1 giây cho thông báo chạy xong rồi chuyển hướng về trang chủ
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+
+                }, 1500);
+            });
+        });
+    </script>
+</body>
+</html>
