@@ -56,8 +56,18 @@
         .img-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: var(--transition); position: relative; display: flex; flex-direction: column; backdrop-filter: blur(10px); }
         .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
         .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center; }
-        .img-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; }
-        .img-card img.loaded { opacity: 0.85; }
+        
+        /* CẬP NHẬT: ÉP NÉT ẢNH THUMBNAIL */
+        .img-card img { 
+            width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; 
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -ms-interpolation-mode: nearest-neighbor;
+        }
+        /* CẬP NHẬT: BỎ LÀM MỜ KHI LOAD XONG */
+        .img-card img.loaded { opacity: 1; }
         .img-card:hover img { opacity: 1; transform: scale(1.05); }
 
         .img-info { padding: 16px; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
@@ -76,7 +86,15 @@
         .modal.active { opacity: 1; visibility: visible; }
         .modal-content { position: relative; width: 100%; max-width: 1200px; height: 85vh; display: flex; align-items: center; justify-content: center; overflow: hidden;}
         
-        .modal-img { max-width: 100%; max-height: calc(100vh - 150px); border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; transition: 0.3s ease;}
+        /* CẬP NHẬT: ÉP NÉT ẢNH PHÓNG TO TRONG MODAL */
+        .modal-img { 
+            max-width: 100%; max-height: calc(100vh - 150px); border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; transition: 0.3s ease;
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -ms-interpolation-mode: nearest-neighbor;
+        }
         
         /* ĐÂY LÀ PHÉP THUẬT CHE ĐÁP ÁN: Cắt đi 15% phía dưới của ảnh khi bật Quiz Mode */
         body.quiz-mode-active .modal-img { clip-path: inset(0 0 15% 0); }

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KHÓA HỌC FPT - Lữ Chí Vỹ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS BIẾN - TÔNG MÀU HOÀNG GIA (LUXURY THEME) --- */
+        :root {
+            --bg-base: #050505;
+            --bg-surface: rgba(20, 20, 22, 0.75);
+            --bg-surface-hover: rgba(30, 30, 33, 0.9);
+            --primary: #d4af37;
+            --primary-hover: #f3e5ab;
+            --primary-glow: rgba(212, 175, 55, 0.25);
+            --secondary: #e2e8f0;
+            --accent: #10b981;
+            --danger: #ef4444;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --glass-border: rgba(212, 175, 55, 0.15);
+            --radius-lg: 24px;
+            --radius-md: 12px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            overflow-x: hidden; position: relative;
+        }
+
+        .ambient-bg {
+            position: fixed; inset: 0; z-index: -1;
+            background: radial-gradient(circle at 15% 0%, rgba(212, 175, 55, 0.08), transparent 40%),
+                        radial-gradient(circle at 85% 100%, rgba(226, 232, 240, 0.05), transparent 40%);
+            filter: blur(60px); animation: pulseBg 10s infinite alternate;
+        }
+        @keyframes pulseBg { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        .container { max-width: 1300px; margin: 0 auto; padding: 80px 24px 40px; width: 100%; flex: 1; z-index: 1; }
+
+        /* --- THANH TÀI KHOẢN --- */
+        .top-nav { position: absolute; top: 24px; right: 24px; z-index: 50; display: flex; align-items: center; gap: 15px; }
+
+        .auth-box {
+            background: var(--bg-surface); backdrop-filter: blur(12px); border: 1px solid var(--glass-border);
+            border-radius: 100px; padding: 8px 16px 8px 20px; display: flex; align-items: center; gap: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .btn-login-outline {
+            background: rgba(255,255,255,0.03); backdrop-filter: blur(12px);
+            border: 1px solid rgba(255,255,255,0.1); color: var(--text-main);
+            padding: 10px 24px; border-radius: 100px; text-decoration: none;
+            font-weight: 600; display: flex; align-items: center; gap: 8px;
+            transition: var(--transition);
+        }
+        .btn-login-outline:hover { background: var(--primary); border-color: var(--primary); color: #000; transform: translateY(-2px); }
+
+        .auth-box span { font-size: 0.9rem; font-weight: 600; color: var(--primary); }
+        .btn-logout { background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.1); padding: 6px 16px; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition); }
+        .btn-logout:hover { background: rgba(255,255,255,0.1); color: white; }
+
+        /* --- HEADER QUYỀN LỰC --- */
+        header { display: flex; align-items: center; justify-content: center; gap: 32px; margin-bottom: 70px; text-align: left; }
+        
+        .avatar-box {
+            position: relative; width: 130px; height: 130px; border-radius: 50%; padding: 3px;
+            background: linear-gradient(135deg, #fff, var(--primary), #000); box-shadow: 0 0 30px var(--primary-glow);
+        }
+        .avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-base); background-color: var(--bg-base); z-index: 2; position: relative; }
+        .avatar-box::before { content: ""; position: absolute; inset: 0; border-radius: 50%; background: inherit; animation: inherit; z-index: 1; }
+        .avatar-box > div { position: absolute; inset: 0; animation: rotateBorder 4s linear infinite; border-radius: 50%; background: linear-gradient(135deg, #fff, var(--primary), #222); z-index: 1; }
+        @keyframes rotateBorder { 100% { transform: rotate(360deg); } }
+
+        .header-content h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 900; line-height: 1.1; letter-spacing: -1px;
+            background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .header-content p { color: var(--text-muted); font-size: 1.1rem; margin-top: 8px; font-weight: 400; letter-spacing: 0.5px; }
+
+        /* --- GRID BẢNG GIÁ --- */
+        .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; align-items: stretch; }
+
+        .card {
+            background: var(--bg-surface); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.05); border-radius: var(--radius-lg); padding: 40px 32px;
+            position: relative; overflow: hidden; transition: var(--transition); display: flex; flex-direction: column; height: 100%;
+        }
+        .card:hover { transform: translateY(-8px); background: var(--bg-surface-hover); border-color: var(--glass-border); box-shadow: 0 15px 40px rgba(0,0,0,0.6); }
+
+        .card.premium { border-color: var(--glass-border); background: linear-gradient(145deg, rgba(20,20,22,0.8), rgba(30,28,20,0.9)); }
+        .card.premium:hover { box-shadow: 0 20px 50px var(--primary-glow); }
+
+        .badge {
+            position: absolute; top: 25px; right: -35px; background: linear-gradient(to right, #f3e5ab, var(--primary)); color: #000;
+            padding: 6px 40px; font-size: 0.75rem; font-weight: 900; letter-spacing: 1.5px; transform: rotate(45deg); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .card-icon { font-size: 2.2rem; margin-bottom: 24px; color: var(--text-main); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 16px; transition: var(--transition); border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); }
+        .card:hover .card-icon { transform: scale(1.1) rotate(5deg); border-color: var(--primary); color: var(--primary); }
+        .card.premium .card-icon { color: var(--primary); border-color: var(--glass-border); background: rgba(212, 175, 55, 0.05); }
+
+        .card-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; color: var(--secondary); }
+        .card.premium .card-title { color: var(--primary); }
+        .card-desc { color: var(--text-muted); font-size: 0.95rem; min-height: 44px; margin-bottom: 24px; line-height: 1.6; }
+        
+        .card-price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 32px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 24px; }
+        .price-val { font-size: 2.8rem; font-weight: 900; line-height: 1; color: #fff; letter-spacing: -1px; }
+        .price-unit { color: var(--text-muted); font-weight: 500; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 1px; }
+
+        .feature-list { list-style: none; margin-bottom: 40px; flex-grow: 1; }
+        .feature-list li { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; font-size: 0.95rem; color: #cbd5e1; }
+        .feature-list i { color: var(--primary); font-size: 1rem; opacity: 0.8; }
+        .card:hover .feature-list i { opacity: 1; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+            padding: 16px; border-radius: var(--radius-md); border: 1px solid transparent; font-weight: 700; font-size: 0.95rem;
+            cursor: pointer; transition: var(--transition); text-decoration: none; text-transform: uppercase; letter-spacing: 1.5px;
+        }
+        .btn-gradient { background: linear-gradient(to right, #b8860b, var(--primary)); color: #000; box-shadow: 0 4px 15px var(--primary-glow); }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4); filter: brightness(1.1); }
+        .btn-primary { background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border); color: var(--primary); }
+        .btn-primary:hover { background: var(--primary); color: #000; transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: var(--text-main); }
+        .btn-outline:hover { background: rgba(255,255,255,0.1); border-color: #fff; transform: translateY(-2px); }
+
+        /* --- OVERLAY FORMS --- */
+        .overlay-form { position: absolute; inset: 0; background: rgba(5, 5, 5, 0.95); backdrop-filter: blur(15px); padding: 40px 32px; display: flex; flex-direction: column; justify-content: center; transform: translateY(100%); transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); z-index: 10; border-radius: var(--radius-lg); }
+        .overlay-form.active { transform: translateY(0); }
+        .overlay-close { position: absolute; top: 20px; right: 20px; background: transparent; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; transition: var(--transition); }
+        .overlay-close:hover { color: var(--primary); transform: rotate(90deg); }
+        .form-control { width: 100%; padding: 14px 14px 14px 45px; margin-bottom: 15px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); color: white; font-family: inherit; font-size: 0.95rem; outline: none; transition: var(--transition); }
+        .form-control:focus { border-color: var(--primary); background: rgba(255, 255, 255, 0.05); }
+
+        .input-group { position: relative; }
+        .input-group i { position: absolute; left: 16px; top: 25px; transform: translateY(-50%); color: var(--primary); }
+
+        /* --- TOAST & FOOTER --- */
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 100; display: flex; flex-direction: column; gap: 12px; }
+        .toast { background: rgba(20, 20, 22, 0.95); border: 1px solid var(--glass-border); border-left: 4px solid var(--primary); padding: 16px 24px; border-radius: 8px; display: flex; align-items: center; gap: 12px; animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; font-weight: 500; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .toast.error { border-left-color: var(--danger); }
+        @keyframes slideInRight { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+
+        footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.85rem; letter-spacing: 1px; border-top: 1px solid rgba(255,255,255,0.05); margin-top: 40px; text-transform: uppercase; }
+        footer a { color: var(--primary); text-decoration: none; font-weight: 700; transition: var(--transition); }
+        footer a:hover { color: #fff; text-shadow: 0 0 10px var(--primary-glow); }
+
+        @media (max-width: 768px) {
+            header { flex-direction: column; text-align: center; }
+            .pricing-grid { grid-template-columns: 1fr; max-width: 450px; margin: 0 auto; }
+            .top-nav { top: auto; bottom: 24px; left: 50%; transform: translateX(-50%); right: auto; width: max-content; position: fixed; }
+            .toast-container { bottom: 80px; left: 24px; right: auto; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg"></div>
+
+    <div class="top-nav">
+        <div id="unauthView">
+            <a href="login.html" class="btn-login-outline"><i class="fa-solid fa-gem"></i> Xác thực tài khoản</a>
+        </div>
+        <div id="authView" class="auth-box" style="display: none;">
+            <span id="userNameDisplay"><i class="fa-solid fa-crown"></i> <strong></strong></span>
+            <button class="btn-logout" id="btnLogout"><i class="fa-solid fa-right-from-bracket"></i> Đóng</button>
+        </div>
+    </div>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="container">
+        <header>
+            <div class="avatar-box">
+                <div></div>
+                <img src="Admin.png" alt="Lữ Chí Vỹ" class="avatar" onerror="this.src='https://ui-avatars.com/api/?name=Chi+Vy&background=d4af37&color=000&size=128&bold=true'">
+            </div>
+            <div class="header-content">
+                <h1>NƠI HỌC TẬP FPT</h1>
+                <p>Bộ giải pháp học tập tối ưu, tinh gọn và độc quyền dành cho sinh viên FPT.</p>
+            </div>
+        </header>
+
+        <main>
+            <section class="pricing-grid">
+                
+                <article class="card premium">
+                    <div class="badge">SIGNATURE</div>
+                    <div class="card-icon"><i class="fa-solid fa-gem"></i></div>
+                    <h3 class="card-title">Coursera Premium</h3>
+                    <p class="card-desc">Dịch vụ giải quyết Coursera trọn gói, bảo mật tuyệt đối và nhanh chóng.</p>
+                    <div class="card-price"><span class="price-val">65K</span><span class="price-unit">/ Khóa</span></div>
+
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check"></i> Cam Kết Hoàn Thành + 1 BONUS</li>
+                        <li><i class="fa-solid fa-check"></i> Bảo Mật Dữ Liệu Khách Hàng</li>
+                        <li><i class="fa-solid fa-check"></i> Hệ Thống Chống Đạo Văn</li>
+                    </ul>
+
+                    <button class="btn btn-gradient" id="btnShowPay"><i class="fa-solid fa-bolt"></i> Thanh Toán Ngay</button>
+
+                    <div class="overlay-form" id="payOverlay">
+                        <button class="overlay-close" id="btnClosePay"><i class="fa-solid fa-xmark"></i></button>
+                        <h4 style="margin-bottom: 20px; text-align: center; color: var(--primary);">Xác Thực Coursera</h4>
+                        <div class="input-group"><i class="fa-solid fa-envelope"></i><input type="email" id="c_email" class="form-control" placeholder="Email Coursera"></div>
+                        <div class="input-group"><i class="fa-solid fa-lock"></i><input type="password" id="c_pass" class="form-control" placeholder="Mật khẩu Coursera"></div>
+                        <button class="btn btn-gradient" id="btnSubmitPay" style="margin-top: 10px;">Xác Nhận 65K</button>
+                        <p style="font-size: 11px; color: var(--text-muted); margin-top: 20px; text-align: center; text-transform: uppercase;"><i class="fa-solid fa-shield"></i> Mã hóa End-to-End</p>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <div class="card-icon"><i class="fa-brands fa-java"></i></div>
+                    <h3 class="card-title">JPD113 VIP</h3>
+                    <p class="card-desc">Tài liệu ôn tập và code mẫu chuẩn xác chuyên ngành Lập trình Java cơ bản.</p>
+                    <div class="card-price"><span class="price-val">100K</span><span class="price-unit">/ Access</span></div>
+
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check"></i> Source Code Tối Ưu Hóa</li>
+                        <li><i class="fa-solid fa-check"></i> Giao Diện Quản Lý Tiến Độ</li>
+                        <li><i class="fa-solid fa-check"></i> Quyền Truy Cập Vĩnh Viễn</li>
+                    </ul>
+
+                    <button class="btn btn-primary btn-code-trigger">Nhập Mã Kích Hoạt</button>
+
+                    <div class="overlay-form code-overlay">
+                        <button class="overlay-close btn-close-code"><i class="fa-solid fa-xmark"></i></button>
+                        <h4 style="margin-bottom: 20px; text-align: center; color: var(--primary);">Mã Kích Hoạt JPD113</h4>
+                        <div class="input-group">
+                            <i class="fa-solid fa-key"></i>
+                            <input type="password" class="form-control access-code-input" placeholder="Nhập mã do Admin cấp...">
+                        </div>
+                        <button class="btn btn-gradient btn-submit-code" data-target="jpd113-vip.html" data-code="luchivy" style="margin-top: 10px;">Mở Khóa Khóa Học</button>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <div class="card-icon"><i class="fa-solid fa-database"></i></div>
+                    <h3 class="card-title">DBI202 VIP</h3>
+                    <p class="card-desc">Kho tài liệu và bộ đề luyện thi thực chiến môn Cơ sở dữ liệu.</p>
+                    <div class="card-price"><span class="price-val">100K</span><span class="price-unit">/ Access</span></div>
+
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check"></i> Full Query SQL Chi Tiết</li>
+                        <li><i class="fa-solid fa-check"></i> Giao Diện Quản Lý Tiến Độ</li>
+                        <li><i class="fa-solid fa-check"></i> Quyền Truy Cập Vĩnh Viễn</li>
+                    </ul>
+
+                    <button class="btn btn-primary btn-code-trigger">Nhập Mã Kích Hoạt</button>
+
+                    <div class="overlay-form code-overlay">
+                        <button class="overlay-close btn-close-code"><i class="fa-solid fa-xmark"></i></button>
+                        <h4 style="margin-bottom: 20px; text-align: center; color: var(--primary);">Mã Kích Hoạt DBI202</h4>
+                        <div class="input-group">
+                            <i class="fa-solid fa-key"></i>
+                            <input type="password" class="form-control access-code-input" placeholder="Nhập mã do Admin cấp...">
+                        </div>
+                        <button class="btn btn-gradient btn-submit-code" data-target="dbi202-vip.html" data-code="chivy123" style="margin-top: 10px;">Mở Khóa Khóa Học</button>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <div class="card-icon"><i class="fa-solid fa-code-branch"></i></div>
+                    <h3 class="card-title">SWE202c PRO</h3>
+                    <p class="card-desc">Gói hỗ trợ chuyên sâu định hướng Software Engineering.</p>
+                    <div class="card-price"><span class="price-val">100K</span><span class="price-unit">/ Trọn Gói</span></div>
+
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check"></i> Giải Quyết Quiz & Assignment</li>
+                        <li><i class="fa-solid fa-check"></i> Hỗ Trợ Xuyên Suốt Khóa Học</li>
+                    </ul>
+
+                    <button class="btn btn-primary btn-code-trigger">Nhập Mã Kích Hoạt</button>
+
+                    <div class="overlay-form code-overlay">
+                        <button class="overlay-close btn-close-code"><i class="fa-solid fa-xmark"></i></button>
+                        <h4 style="margin-bottom: 20px; text-align: center; color: var(--primary);">Mã Kích Hoạt SWE202c</h4>
+                        <div class="input-group">
+                            <i class="fa-solid fa-key"></i>
+                            <input type="password" class="form-control access-code-input" placeholder="Nhập mã do Admin cấp...">
+                        </div>
+                        <button class="btn btn-gradient btn-submit-code" data-target="swe202c-pro.html" data-code="swe123" style="margin-top: 10px;">Mở Khóa Khóa Học</button>
+                    </div>
+                </article>
+
+                <article class="card">
+                    <div class="card-icon"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3 class="card-title">PRO192 Standard</h3>
+                    <p class="card-desc">Thư viện tài liệu mở môn Object-Oriented Programming.</p>
+                    <div class="card-price"><span class="price-val" style="color: var(--secondary);">0Đ</span></div>
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check"></i> Trắc Nghiệm & Phân Tích Code</li>
+                        <li><i class="fa-solid fa-check"></i> Nền Tảng Xem Trực Tuyến</li>
+                    </ul>
+                    <button class="btn btn-outline btn-auth-required" data-url="pro192-free.html">Mở Khóa Miễn Phí</button>
+                </article>
+
+                <article class="card">
+                    <div class="card-icon"><i class="fa-solid fa-network-wired"></i></div>
+                    <h3 class="card-title">NWC204 Standard</h3>
+                    <p class="card-desc">Tài liệu lưu trữ nội bộ chuyên ngành Mạng Máy Tính.</p>
+                    <div class="card-price"><span class="price-val" style="color: var(--secondary);">0Đ</span></div>
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check"></i> Ngân Hàng Câu Hỏi Khách Quan</li>
+                        <li><i class="fa-solid fa-check"></i> Cập Nhật Thường Xuyên</li>
+                    </ul>
+                    <button class="btn btn-outline btn-auth-required" data-url="nwc204-free.html">Mở Khóa Miễn Phí</button>
+                </article>
+
+                <article class="card">
+                    <div class="card-icon"><i class="fa-solid fa-pen-nib"></i></div>
+                    <h3 class="card-title">WED201c Standard</h3>
+                    <p class="card-desc">Nguồn tham khảo cấu trúc Website cơ bản chuyên ngành Web Design.</p>
+                    <div class="card-price"><span class="price-val" style="color: var(--secondary);">0Đ</span></div>
+                    <ul class="feature-list">
+                        <li><i class="fa-solid fa-check"></i> Phân Tích HTML/CSS Chuẩn</li>
+                        <li><i class="fa-solid fa-check"></i> Kiến Thức Nền Tảng Thực Tế</li>
+                    </ul>
+                    <button class="btn btn-outline btn-auth-required" data-url="wed201c-free.html">Mở Khóa Miễn Phí</button>
+                </article>
+
+            </section>
+        </main>
+
+        <footer>
+            <p>Designed with <i class="fa-solid fa-gem" style="color: var(--primary);"></i> by <a href="https://www.facebook.com/tau.hu.758" target="_blank">Lữ Chí Vỹ</a></p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const AppState = {
+                user: localStorage.getItem('currentUser'),
+                init() {
+                    const unauthView = document.getElementById('unauthView');
+                    const authView = document.getElementById('authView');
+
+                    if (this.user) {
+                        unauthView.style.display = 'none';
+                        authView.style.display = 'flex';
+                        document.querySelector('#userNameDisplay strong').textContent = this.user.toUpperCase();
+                    } else {
+                        unauthView.style.display = 'block';
+                        authView.style.display = 'none';
+                    }
+                },
+                logout() {
+                    localStorage.removeItem('currentUser');
+                    location.reload();
+                }
+            };
+
+            const Toast = {
+                show(message, type = 'success') {
+                    const container = document.getElementById('toastContainer');
+                    const toast = document.createElement('div');
+                    toast.className = `toast ${type}`;
+                    const icon = type === 'success' ? '<i class="fa-solid fa-check" style="color: var(--primary)"></i>' : '<i class="fa-solid fa-triangle-exclamation" style="color: var(--danger)"></i>';
+                    toast.innerHTML = `${icon} <span style="letter-spacing: 0.5px;">${message}</span>`;
+                    container.appendChild(toast);
+                    setTimeout(() => {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateX(100%)';
+                        setTimeout(() => toast.remove(), 400);
+                    }, 3000);
+                }
+            };
+
+            const UI = {
+                init() {
+                    document.getElementById('btnLogout').addEventListener('click', () => AppState.logout());
+
+                    // Xử lý Form Coursera Premium
+                    const overlay = document.getElementById('payOverlay');
+                    document.getElementById('btnShowPay').addEventListener('click', () => {
+                        if (!AppState.user) {
+                            Toast.show('Yêu cầu xác thực danh tính.', 'error');
+                            setTimeout(() => window.location.href = 'login.html', 1500);
+                            return;
+                        }
+                        overlay.classList.add('active');
+                    });
+                    document.getElementById('btnClosePay').addEventListener('click', () => overlay.classList.remove('active'));
+
+                    document.getElementById('btnSubmitPay').addEventListener('click', () => {
+                        const email = document.getElementById('c_email').value.trim();
+                        const pass = document.getElementById('c_pass').value.trim();
+                        if (!email || !pass) { Toast.show('Thông tin không hợp lệ.', 'error'); return; }
+                        
+                        const btn = document.getElementById('btnSubmitPay');
+                        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                        btn.style.pointerEvents = 'none';
+
+                        setTimeout(() => {
+                            Toast.show(`Đang thiết lập bảo mật cho: ${email}`, 'success');
+                            setTimeout(() => window.location.href = "pay.html?price=65000", 1500);
+                        }, 800);
+                    });
+
+                    // ==========================================
+                    // TÍNH NĂNG MỚI: NHẬP MÃ KÍCH HOẠT CHO GÓI VIP
+                    // ==========================================
+                    
+                    // 1. Mở Overlay Nhập Mã
+                    document.querySelectorAll('.btn-code-trigger').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            if (!AppState.user) {
+                                Toast.show('Yêu cầu xác thực danh tính.', 'error');
+                                setTimeout(() => window.location.href = 'login.html', 1500);
+                                return;
+                            }
+                            const card = e.target.closest('.card');
+                            card.querySelector('.code-overlay').classList.add('active');
+                        });
+                    });
+
+                    // 2. Đóng Overlay Nhập Mã
+                    document.querySelectorAll('.btn-close-code').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            e.target.closest('.code-overlay').classList.remove('active');
+                        });
+                    });
+
+                    // 3. Xử Lý Submit Mã (Check đúng/sai)
+                    document.querySelectorAll('.btn-submit-code').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const card = e.target.closest('.card');
+                            const inputElem = card.querySelector('.access-code-input');
+                            const inputValue = inputElem.value.trim();
+                            
+                            // Lấy mã đúng đã cài sẵn trong HTML (thuộc tính data-code)
+                            const expectedCode = e.target.dataset.code;
+                            const targetUrl = e.target.dataset.target;
+
+                            if (!inputValue) {
+                                Toast.show('Vui lòng nhập mã kích hoạt!', 'error');
+                                return;
+                            }
+
+                            // So sánh chữ thường để tránh lỗi viết hoa/viết thường
+                            if (inputValue.toLowerCase() === expectedCode.toLowerCase()) {
+                                Toast.show('Mã chính xác! Đang mở khóa...', 'success');
+                                e.target.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
+                                e.target.style.pointerEvents = 'none';
+                                
+                                setTimeout(() => {
+                                    window.location.href = targetUrl;
+                                }, 1000);
+                            } else {
+                                Toast.show('Mã kích hoạt không đúng!', 'error');
+                                inputElem.value = ''; // Xóa trắng ô nhập để nhập lại
+                            }
+                        });
+                    });
+
+                    // Xử lý các khóa FREE (Chỉ cần đăng nhập)
+                    document.querySelectorAll('.btn-auth-required').forEach(btn => {
+                        btn.addEventListener('click', (e) => {
+                            const targetUrl = e.currentTarget.dataset.url;
+                            if (!AppState.user) {
+                                Toast.show('Yêu cầu xác thực danh tính.', 'error');
+                                setTimeout(() => window.location.href = 'login.html', 1500);
+                            } else {
+                                window.location.href = targetUrl;
+                            }
+                        });
+                    });
+                }
+            };
+
+            AppState.init();
+            UI.init();
+        });
+    </script>
+</body>
+</html>
