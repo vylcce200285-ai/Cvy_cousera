@@ -3,9 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hệ Sinh Thái Học Tập VIP - Lữ Chí Vỹ</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>Source VIP JPD113 - Lữ Chí Vỹ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -24,7 +22,7 @@
             --glass-border: rgba(212, 175, 55, 0.15);
             --radius-lg: 24px;
             --radius-md: 12px;
-            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -117,15 +115,18 @@
         .learned-overlay { position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: white; display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; z-index: 5; font-size: 1.1rem; }
         .img-card.learned .learned-overlay { opacity: 1; transform: scale(1) rotate(360deg); }
 
-        /* --- MODAL --- */
+        /* --- MODAL (ĐÃ TINH CHỈNH ĐỂ KHÔNG CHE ẢNH) --- */
         .modal { position: fixed; inset: 0; z-index: 9999; background: rgba(5, 5, 10, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.4s; }
         .modal.active { opacity: 1; visibility: visible; }
-        .modal-content { position: relative; width: 100%; max-width: 1200px; height: 85vh; display: flex; align-items: center; justify-content: center; }
         
-        .modal-img { max-width: 100%; max-height: 100%; border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); object-fit: contain; transition: 0.3s; }
+        /* CHÚ Ý: padding-bottom 80px giúp tạo khoảng trống bên dưới, ảnh không bị đè bởi Dock */
+        .modal-content { position: relative; width: 100%; max-width: 1200px; height: 100vh; display: flex; align-items: center; justify-content: center; padding-bottom: 80px; flex-direction: column;}
         
-        /* PHÉP THUẬT: Cắt ảnh khi bật Luyện Thi hoặc Thi Thử */
-        body.quiz-mode-active .modal-img { clip-path: inset(0 0 15% 0); }
+        /* Giới hạn chiều cao ảnh để nó nằm gọn gàng bên trên thanh Dock */
+        .modal-img { max-width: 100%; max-height: calc(100vh - 120px); border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); object-fit: contain; transition: 0.3s; }
+        
+        /* Che bớt phần mép dưới ảnh (cắt 5%) nếu muốn giấu đáp án */
+        body.quiz-mode-active .modal-img { clip-path: inset(0 0 5% 0); }
 
         .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); width: 56px; height: 56px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 10; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
         .modal-btn:hover { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); scale: 1.1; }
@@ -133,27 +134,42 @@
         .btn-close { position: absolute; top: 25px; right: 30px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1); width: 48px; height: 48px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; z-index: 100; transition: 0.3s; }
         .btn-close:hover { background: var(--danger); border-color: var(--danger); color: white; transform: rotate(90deg); }
 
-        /* Footer Controls */
-        .modal-footer { position: absolute; bottom: 20px; display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 700px; background: rgba(20,20,25,0.8); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 15px 30px; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); z-index: 100; }
-        .modal-counter { color: var(--primary); font-weight: 700; font-size: 1.1rem; letter-spacing: 1px; min-width: 140px; }
+        /* =======================================================
+           MINI DOCK - GỌN GÀNG, TRONG SUỐT VÀ NẰM GIỮA
+           ======================================================= */
+        .modal-footer { 
+            position: absolute; bottom: 15px; 
+            width: max-content; /* Tự động co lại bằng đúng nội dung */
+            max-width: 95%;
+            background: rgba(10, 10, 12, 0.4); 
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-top: 1px solid rgba(255, 255, 255, 0.2); 
+            padding: 8px 20px; /* Thu nhỏ padding */
+            border-radius: 100px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
+            display: flex; justify-content: center; align-items: center; gap: 15px; z-index: 100;
+        }
         
-        .normal-mode-controls { display: flex; flex: 1; justify-content: flex-end; }
-        .btn-mark { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); padding: 12px 24px; border-radius: 100px; font-weight: 700; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
-        .btn-mark:hover { background: rgba(255,255,255,0.1); }
+        .modal-counter { color: var(--primary); font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px; background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 100px; text-align: center; white-space: nowrap;}
+        
+        .normal-mode-controls { display: flex; align-items: center; }
+        .btn-mark { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--text-main); padding: 8px 16px; border-radius: 100px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; white-space: nowrap;}
+        .btn-mark:hover { background: rgba(255,255,255,0.15); }
         .btn-mark.active { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
 
-        .quiz-mode-controls { display: none; flex: 1; justify-content: flex-end; gap: 12px; align-items: center; }
-        .btn-option { width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.2s; }
-        .btn-option:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
+        .quiz-mode-controls { display: none; gap: 8px; align-items: center; }
         
-        /* Trạng thái nút bấm */
-        .btn-option.correct { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); transform: scale(1.1); }
-        .btn-option.wrong { background: var(--danger); border-color: var(--danger); color: #fff; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
+        /* Nút A B C D thu nhỏ lại */
+        .btn-option { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center;}
+        .btn-option:hover { background: rgba(255,255,255,0.15); border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
         
-        /* Trạng thái chọn trong lúc Thi Thử (không báo đúng sai ngay) */
-        .btn-option.selected { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); transform: scale(1.1); }
+        .btn-option.correct { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 15px rgba(16, 185, 129, 0.6); transform: scale(1.1); }
+        .btn-option.wrong { background: var(--danger); border-color: var(--danger); color: #fff; box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
+        .btn-option.selected { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); transform: scale(1.1); }
 
-        .btn-submit { display: none; background: var(--accent); color: #000; font-weight: 700; padding: 10px 20px; border-radius: 100px; border: none; cursor: pointer; margin-left: 15px; }
+        .action-controls { display: flex; gap: 8px; align-items: center; }
+        .btn-submit { display: none; background: var(--accent); color: #000; font-weight: 700; padding: 8px 16px; border-radius: 100px; border: none; cursor: pointer; margin-left: 5px; font-size: 0.85rem; white-space: nowrap;}
         .btn-submit:hover { box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
 
         /* Bảng Kết Quả Thi */
@@ -169,8 +185,13 @@
         @media (max-width: 768px) {
             .top-bar { flex-direction: column; gap: 15px; } .top-actions { justify-content: center; flex-wrap: wrap; }
             .modal-btn { display: none; }
-            .modal-footer { bottom: 0; max-width: 100%; border-radius: 0; flex-direction: column; gap: 15px; padding-bottom: calc(16px + env(safe-area-inset-bottom)); }
-            .normal-mode-controls, .quiz-mode-controls { justify-content: center; }
+            
+            /* Căn chỉnh Mobile */
+            .modal-content { padding-bottom: 90px; }
+            .modal-img { max-height: calc(100vh - 140px); border-radius: 0; }
+            
+            .modal-footer { bottom: 15px; width: max-content; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px 15px; border-radius: 20px; }
+            .quiz-mode-controls { justify-content: center; }
             .result-box { width: 90%; padding: 30px; }
         }
     </style>
@@ -208,7 +229,7 @@
     </div>
 
     <header class="header-section">
-        <div class="course-badge"><i class="fa-solid fa-database"></i> Source : DBI202</div>
+        <div class="course-badge"><i class="fa-solid fa-database"></i> Source : JPD113</div>
         <h1 class="title">Kho Ngân Hàng Câu Hỏi</h1>
         <p class="subtitle">Hệ thống trắc nghiệm và ôn tập tạo bởi <b>Lữ Chí Vỹ</b></p>
         
@@ -238,65 +259,40 @@
         </div>
         
         <div class="modal-footer">
-            <div class="modal-counter" id="modalCounter">Câu 1 / 291</div>
+            <div class="modal-counter" id="modalCounter">Câu 1 / 285</div>
             
-            <div class="normal-mode-controls" id="normalModeControls">
-                <button class="btn-mark" id="btnMarkLearned">
-                    <i class="fa-solid fa-check"></i> <span>Đánh dấu đã hiểu</span>
-                </button>
-            </div>
-
             <div class="quiz-mode-controls" id="quizModeControls">
                 <button class="btn-option" data-opt="A">A</button>
                 <button class="btn-option" data-opt="B">B</button>
                 <button class="btn-option" data-opt="C">C</button>
                 <button class="btn-option" data-opt="D">D</button>
+            </div>
+
+            <div class="action-controls">
+                <div class="normal-mode-controls" id="normalModeControls">
+                    <button class="btn-mark" id="btnMarkLearned">
+                        <i class="fa-solid fa-check"></i> <span id="markText">Đã hiểu</span>
+                    </button>
+                </div>
                 <button class="btn-submit" id="btnSubmitExam"><i class="fa-solid fa-paper-plane"></i> Nộp Bài</button>
             </div>
         </div>
     </div>
 
 <script>
-    // --- TỪ ĐIỂN ĐÁP ÁN (BẠN ĐIỀN VÀO ĐÂY NHÉ) ---
-    const QUIZ_ANSWERS = {
-        1: 'A', 2: 'C', 3: 'B', 4: 'D', 5: 'A'
-        // Cập nhật thêm cho đến 291 nhé
-    };
+    // =========================================================
+    // ĐIỀN ĐÁP ÁN CỦA BẠN VÀO ĐÂY NHÉ (CHUỖI CỦA BẠN)
+    // =========================================================
+    const RAW_ANSWERS = "b d b b d a c a a d a d d b b b d c a d c c d b c b b b d a a c d d a a a c b b d b b a c b b d a b b a c b c b c a a d b d d d b b c d b c c c c b d c c d c d c b b d a b b a a b a b c b b a c b b a a a b a b c a b d d a c a a a a d b d a d d a c b b b b d a d d b a c a a c d a a b c d d c d b b b d c d c b b a b b b d c c b b d c b a b d c b a d c d d c c d d d d c b a b a d d d a b d c b a a a c c b b b c c d b b c d c d a a d d b a d b a"; 
 
-    // --- YOUTUBE API ---
-    var tag = document.createElement('script');
-    tag.src = "https://www.youtube.com/iframe_api";
-    var firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+    // Cắt chuỗi thông minh
+    const ANSWERS_ARRAY = RAW_ANSWERS.trim().toUpperCase().split(/\s+/);
+    // =========================================================
 
-    var player;
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('youtubePlayer', {
-            height: '0', width: '0', videoId: 'inn2yGLK_So', 
-            playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'inn2yGLK_So' },
-            events: { 'onReady': () => { player.setVolume(30); } }
-        });
-    }
-
-    let isPlaying = false;
-    document.getElementById('btnMusic').addEventListener('click', function() {
-        if (!player || typeof player.playVideo !== 'function') { alert("Đang tải nhạc, chờ chút xíu nhé!"); return; }
-        if (isPlaying) {
-            player.pauseVideo();
-            this.innerHTML = '<i class="fa-solid fa-music"></i> <span>Lo-Fi: TẮT</span>';
-            this.classList.remove('playing');
-        } else {
-            player.playVideo();
-            this.innerHTML = '<i class="fa-solid fa-headphones"></i> <span>Đang Chill...</span>';
-            this.classList.add('playing');
-        }
-        isPlaying = !isPlaying;
-    });
-
-    // --- LOGIC HỆ THỐNG ---
     document.addEventListener('DOMContentLoaded', () => {
-        const TOTAL_IMAGES = 285; 
-        const STORAGE_KEY = 'dbi202_vip_items'; 
+        const TOTAL_IMAGES = 223; 
+        const STORAGE_KEY = 'jpd113_vip_items'; 
+        
         const gallery = document.getElementById('galleryContainer');
         const searchInput = document.getElementById('searchInput');
         let learnedItems = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
@@ -305,167 +301,148 @@
         const modalImg = document.getElementById('modalImg');
         const modalCounter = document.getElementById('modalCounter');
         
-        // Mode Flags
         let currentIndex = 1;
         let isQuizMode = false;
-        
-        // Exam Mode State
         let isExamMode = false;
         let examSequence = [];
-        let currentExamStep = 0; // Từ 0 đến 49
-        let userExamAnswers = {}; // Lưu đáp án User chọn
+        let currentExamStep = 0; 
+        let userExamAnswers = {}; 
 
         const btnToggleQuiz = document.getElementById('btnToggleQuiz');
         const btnExamMode = document.getElementById('btnExamMode');
-        const normalModeControls = document.getElementById('normalModeControls');
-        const quizModeControls = document.getElementById('quizModeControls');
         const btnSubmitExam = document.getElementById('btnSubmitExam');
+        const btnMarkLearned = document.getElementById('btnMarkLearned');
+        const markText = document.getElementById('markText');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const quizModeControls = document.getElementById('quizModeControls');
+        const normalModeControls = document.getElementById('normalModeControls');
 
-        // --- TÍNH NĂNG THI THỬ (MOCK TEST) ---
+        // --- YOUTUBE API ---
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player; let isPlaying = false;
+        window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('youtubePlayer', { height: '0', width: '0', videoId: 'inn2yGLK_So', playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'inn2yGLK_So' }, events: { 'onReady': () => { player.setVolume(30); } } });
+        }
+        document.getElementById('btnMusic').addEventListener('click', function() {
+            if (!player || !player.playVideo) return alert("Đang tải nhạc, chờ xíu!");
+            if (isPlaying) { player.pauseVideo(); this.innerHTML = '<i class="fa-solid fa-music"></i> <span>Lo-Fi: TẮT</span>'; this.classList.remove('playing'); } 
+            else { player.playVideo(); this.innerHTML = '<i class="fa-solid fa-headphones"></i> <span>Đang Chill...</span>'; this.classList.add('playing'); }
+            isPlaying = !isPlaying;
+        });
+
+        // --- CHẾ ĐỘ THI THỬ (MOCK TEST) ---
         function startExam() {
-            // Lấy 50 câu random
-            let arr = Array.from({length: TOTAL_IMAGES}, (_, i) => i + 1);
-            arr.sort(() => Math.random() - 0.5);
-            examSequence = arr.slice(0, 50);
+            let maxQuestions = TOTAL_IMAGES < 50 ? TOTAL_IMAGES : 50;
+            let arr = Array.from({length: TOTAL_IMAGES}, (_, i) => i + 1).sort(() => Math.random() - 0.5);
+            examSequence = arr.slice(0, maxQuestions);
             
-            isExamMode = true;
-            currentExamStep = 0;
-            userExamAnswers = {};
+            isExamMode = true; currentExamStep = 0; userExamAnswers = {};
             
-            // Ép bật mode che đáp án
-            document.body.classList.add('quiz-mode-active');
-            isQuizMode = true; // Vô hiệu hóa tính năng lật đáp án
+            normalModeControls.style.display = 'none'; 
+            btnSubmitExam.style.display = 'block'; 
             
-            btnSubmitExam.style.display = 'block'; // Hiện nút nộp bài
+            document.body.classList.add('quiz-mode-active'); 
+            quizModeControls.style.display = 'flex';
             
             openModal(examSequence[currentExamStep]);
         }
 
         btnExamMode.addEventListener('click', () => {
-            if(confirm("Hệ thống sẽ trộn ngẫu nhiên 50 câu. Bạn đã sẵn sàng thi chưa?")) {
-                startExam();
-            }
+            if(confirm(`Hệ thống sẽ trộn ngẫu nhiên 50 câu. Bạn đã sẵn sàng thi chưa?`)) startExam();
         });
 
         btnSubmitExam.addEventListener('click', () => {
-            let score = 0;
-            let answeredCount = Object.keys(userExamAnswers).length;
-            
-            if(answeredCount < 50) {
-                if(!confirm(`Bạn mới làm ${answeredCount}/50 câu. Có chắc chắn muốn nộp bài sớm không?`)) return;
-            }
+            let score = 0; let totalQ = examSequence.length;
+            if(Object.keys(userExamAnswers).length < totalQ && !confirm(`Chưa làm xong. Có muốn nộp bài sớm không?`)) return;
 
-            // Chấm điểm
-            for (let i = 0; i < examSequence.length; i++) {
+            for (let i = 0; i < totalQ; i++) {
                 let qIndex = examSequence[i];
                 let userAns = userExamAnswers[qIndex];
-                let correctAns = QUIZ_ANSWERS[qIndex];
-                
-                if (userAns && correctAns && userAns === correctAns) {
-                    score++;
-                }
+                let correctAns = ANSWERS_ARRAY[qIndex - 1];
+                if (userAns && correctAns && correctAns.includes(userAns)) score++;
             }
 
-            // Hiển thị kết quả
-            const finalPoint = ((score / 50) * 10).toFixed(1); // Thang điểm 10
-            document.getElementById('scoreText').innerText = `${score}/50`;
-            document.getElementById('pointText').innerText = `Điểm: ${finalPoint}`;
+            document.getElementById('scoreText').innerText = `${score}/${totalQ}`;
+            document.getElementById('pointText').innerText = `Điểm: ${((score / totalQ) * 10).toFixed(1)}`;
             document.getElementById('resultOverlay').style.display = 'flex';
         });
 
-        document.getElementById('btnCloseResult').addEventListener('click', () => {
-            document.getElementById('resultOverlay').style.display = 'none';
-            closeModal();
-            startExam(); // Làm đề mới
-        });
-
-        document.getElementById('btnExitResult').addEventListener('click', () => {
-            document.getElementById('resultOverlay').style.display = 'none';
-            closeModal();
-            exitExamMode();
-        });
+        document.getElementById('btnCloseResult').addEventListener('click', () => { document.getElementById('resultOverlay').style.display = 'none'; closeModal(); startExam(); });
+        document.getElementById('btnExitResult').addEventListener('click', () => { document.getElementById('resultOverlay').style.display = 'none'; closeModal(); exitExamMode(); });
 
         function exitExamMode() {
-            isExamMode = false;
-            btnSubmitExam.style.display = 'none';
-            document.body.classList.remove('quiz-mode-active');
-            btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span>';
-            btnToggleQuiz.classList.remove('active');
-            isQuizMode = false;
+            isExamMode = false; 
+            normalModeControls.style.display = 'flex'; 
+            btnSubmitExam.style.display = 'none'; 
+            
+            if(!isQuizMode) {
+                document.body.classList.remove('quiz-mode-active');
+                quizModeControls.style.display = 'none';
+            }
         }
 
-
-        // --- BẬT / TẮT LUYỆN THI (QUIZ BÌNH THƯỜNG) ---
+        // --- BẬT TẮT LUYỆN THI (CHE ĐÁP ÁN) ---
         btnToggleQuiz.addEventListener('click', () => {
-            if(isExamMode) {
-                alert("Bạn đang trong chế độ Thi Thử. Hãy Nộp bài hoặc Thoát trước khi chuyển mode nhé!");
-                return;
-            }
-
+            if(isExamMode) return alert("Đang Thi Thử. Không thể tắt chế độ này!");
+            
             isQuizMode = !isQuizMode;
             document.body.classList.toggle('quiz-mode-active', isQuizMode);
             
             if (isQuizMode) {
-                btnToggleQuiz.classList.add('active');
+                btnToggleQuiz.classList.add('active'); 
                 btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: BẬT</span>';
                 normalModeControls.style.display = 'none';
-                quizModeControls.style.display = 'flex';
+                quizModeControls.style.display = 'flex'; 
                 resetQuizButtons();
             } else {
-                btnToggleQuiz.classList.remove('active');
+                btnToggleQuiz.classList.remove('active'); 
                 btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span>';
                 normalModeControls.style.display = 'flex';
-                quizModeControls.style.display = 'none';
+                quizModeControls.style.display = 'none'; 
             }
         });
 
-        // --- XỬ LÝ KHI CHỌN ĐÁP ÁN (A B C D) ---
+        // --- XỬ LÝ CHỌN ĐÁP ÁN ---
         document.querySelectorAll('.btn-option').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const selectedOpt = e.target.dataset.opt;
 
                 if (isExamMode) {
-                    // Chế độ thi thật: Chỉ lưu đáp án, tô màu nút đang chọn, KHÔNG BÁO ĐÚNG SAI
                     userExamAnswers[currentIndex] = selectedOpt;
-                    resetQuizButtons();
-                    e.target.classList.add('selected');
+                    resetQuizButtons(); e.target.classList.add('selected');
                 } else {
-                    // Chế độ Luyện Thi bình thường: Báo đúng sai ngay
-                    const correctOpt = QUIZ_ANSWERS[currentIndex];
-                    if (!correctOpt) {
-                        alert(`Câu ${currentIndex} chưa có đáp án trong hệ thống!`);
-                        return;
-                    }
-
+                    const correctOpt = ANSWERS_ARRAY[currentIndex - 1];
+                    if (!correctOpt) return alert(`Câu ${currentIndex} Admin chưa cập nhật đáp án!`);
+                    
                     resetQuizButtons();
-
-                    if (selectedOpt === correctOpt) {
-                        e.target.classList.add('correct');
-                        if (!learnedItems.has(currentIndex)) {
-                            learnedItems.add(currentIndex);
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems]));
-                            updateProgress();
-                            document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned');
-                            document.querySelector(`.img-card[data-index="${currentIndex}"] .status-badge`).innerHTML = '<i class="fa-solid fa-check-circle"></i> Đã học';
+                    
+                    if (correctOpt.includes(selectedOpt)) {
+                        for(let char of correctOpt) document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
+                        if (!learnedItems.has(currentIndex)) { 
+                            learnedItems.add(currentIndex); 
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
+                            updateProgress(); 
+                            document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
                         }
                     } else {
                         e.target.classList.add('wrong');
-                        document.querySelector(`.btn-option[data-opt="${correctOpt}"]`).classList.add('correct');
+                        for(let char of correctOpt) document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
                     }
                 }
             });
         });
 
-        function resetQuizButtons() {
-            document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('correct', 'wrong', 'selected'));
-        }
+        function resetQuizButtons() { document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('correct', 'wrong', 'selected')); }
 
-        // --- GIAO DIỆN LƯỚI ẢNH ---
+        // --- RENDER GIAO DIỆN LƯỚI ---
         function updateProgress() {
-            const count = learnedItems.size;
-            const percent = ((count / TOTAL_IMAGES) * 100).toFixed(1);
-            document.getElementById('progressPercent').textContent = `${count}/${TOTAL_IMAGES} (${percent}%)`;
-            document.getElementById('progressFill').style.width = `${percent}%`;
+            const count = learnedItems.size; const percent = ((count / TOTAL_IMAGES) * 100).toFixed(1);
+            progressPercent.textContent = `${count}/${TOTAL_IMAGES} (${percent}%)`; progressFill.style.width = `${percent}%`;
         }
 
         const fragment = document.createDocumentFragment();
@@ -473,128 +450,57 @@
             const card = document.createElement('div');
             card.className = `img-card ${learnedItems.has(i) ? 'learned' : ''}`;
             card.dataset.index = i;
-            card.style.animationDelay = `${(i % 15) * 0.05}s`;
-            
-            card.innerHTML = `
-                <div class="img-wrapper">
-                    <div class="learned-overlay"><i class="fa-solid fa-check"></i></div>
-                    <img src="img-dbi/dbi (${i}).png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1a1a24/94a3b8?text=Chua+co+anh+${i}'" alt="Câu ${i}">
-                </div>
-                <div class="img-info">
-                    <span class="img-title">Câu ${i}</span>
-                    <span class="status-badge">
-                        ${learnedItems.has(i) ? '<i class="fa-solid fa-check-circle"></i> Đã học' : '<i class="fa-regular fa-circle"></i> Chưa học'}
-                    </span>
-                </div>
-            `;
-            card.addEventListener('click', () => {
-                if(isExamMode) {
-                    alert("Bạn đang trong quá trình Thi Thử, không thể chọn câu hỏi tự do!");
-                    return;
-                }
-                openModal(i);
-            });
+            card.innerHTML = `<div class="img-wrapper"><div class="learned-overlay"><i class="fa-solid fa-check"></i></div><img src="img-jpd/jpd (${i}).png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1e1e24/94a3b8?text=Chua+co+anh+${i}'" alt="Câu ${i}"></div><div class="img-info"><span class="img-title">Câu ${i}</span><span class="status-badge">${learnedItems.has(i) ? '<i class="fa-solid fa-check-circle"></i> Đã học' : '<i class="fa-regular fa-circle"></i> Chưa học'}</span></div>`;
+            card.addEventListener('click', () => { if(isExamMode) return alert("Đang Thi Thử, không được chọn câu tự do!"); openModal(i); });
             fragment.appendChild(card);
         }
-        gallery.appendChild(fragment);
-        updateProgress();
+        gallery.appendChild(fragment); updateProgress();
 
         searchInput.addEventListener('input', (e) => {
             const val = e.target.value.trim();
-            document.querySelectorAll('.img-card').forEach(card => {
-                const isMatch = val === '' || card.dataset.index.includes(val);
-                card.style.display = isMatch ? 'flex' : 'none';
-            });
+            document.querySelectorAll('.img-card').forEach(card => card.style.display = (val === '' || card.dataset.index === val) ? 'flex' : 'none');
         });
 
-        // --- ĐIỀU KHIỂN MODAL XEM ẢNH ---
-        document.getElementById('btnMarkLearned').addEventListener('click', (e) => {
-            e.stopPropagation();
-            const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`);
-            const badge = card.querySelector('.status-badge');
-
-            if (learnedItems.has(currentIndex)) {
-                learnedItems.delete(currentIndex);
-                card.classList.remove('learned');
-                badge.innerHTML = '<i class="fa-regular fa-circle"></i> Chưa học';
-            } else {
-                learnedItems.add(currentIndex);
-                card.classList.add('learned');
-                badge.innerHTML = '<i class="fa-solid fa-check-circle"></i> Đã học';
-            }
-            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems]));
-            updateModalView();
-            updateProgress();
+        // --- NÚT ĐÁNH DẤU THỦ CÔNG ---
+        btnMarkLearned.addEventListener('click', (e) => {
+            e.stopPropagation(); const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`); const badge = card.querySelector('.status-badge');
+            if (learnedItems.has(currentIndex)) { learnedItems.delete(currentIndex); card.classList.remove('learned'); badge.innerHTML = '<i class="fa-regular fa-circle"></i> Chưa học'; } 
+            else { learnedItems.add(currentIndex); card.classList.add('learned'); badge.innerHTML = '<i class="fa-solid fa-check-circle"></i> Đã học'; }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); updateMarkButtonUI(); updateProgress();
         });
 
-        function openModal(index) { 
-            currentIndex = index; 
-            updateModalView(); 
-            modal.classList.add('active'); 
-            document.body.style.overflow = 'hidden'; 
+        function updateMarkButtonUI() {
+            if (learnedItems.has(currentIndex)) { btnMarkLearned.classList.add('active'); markText.textContent = 'Hoàn thành'; } 
+            else { btnMarkLearned.classList.remove('active'); markText.textContent = 'Đã hiểu'; }
         }
-        
-        function closeModal() { 
-            if(isExamMode) {
-                if(!confirm("Bạn đang làm bài Thi Thử. Thoát bây giờ sẽ mất toàn bộ kết quả. Có chắc chắn thoát?")) return;
-                exitExamMode();
-            }
-            modal.classList.remove('active'); 
-            document.body.style.overflow = 'auto'; 
-            setTimeout(() => modalImg.src = '', 300); 
-        }
+
+        // --- LOGIC MỞ MODAL & CHUYỂN CÂU ---
+        function openModal(index) { currentIndex = index; updateModalView(); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeModal() { if(isExamMode && !confirm("Đang Thi Thử. Thoát sẽ mất điểm. Chắc chưa?")) return; if(isExamMode) exitExamMode(); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
         
         function updateModalView() { 
-            modalImg.src = `img-dbi/dbi (${currentIndex}).png`; 
+            modalImg.src = `img-jpd/jpd (${currentIndex}).png`; 
+            resetQuizButtons();
             
             if (isExamMode) {
-                modalCounter.textContent = `Câu ${currentExamStep + 1} / 50 (Gốc: ${currentIndex})`;
-                normalModeControls.style.display = 'none';
-                quizModeControls.style.display = 'flex';
-                resetQuizButtons();
-                // Phục hồi lại lựa chọn cũ nếu User back lại câu trước
-                if(userExamAnswers[currentIndex]) {
-                    document.querySelector(`.btn-option[data-opt="${userExamAnswers[currentIndex]}"]`).classList.add('selected');
-                }
+                modalCounter.textContent = `Câu ${currentExamStep + 1} / ${examSequence.length} (Gốc: ${currentIndex})`;
+                if(userExamAnswers[currentIndex]) document.querySelector(`.btn-option[data-opt="${userExamAnswers[currentIndex]}"]`).classList.add('selected');
             } else {
                 modalCounter.textContent = `Câu ${currentIndex} / ${TOTAL_IMAGES}`; 
-                
-                if (learnedItems.has(currentIndex)) {
-                    document.getElementById('btnMarkLearned').classList.add('active');
-                    document.getElementById('btnMarkLearned').innerHTML = `<i class="fa-solid fa-check-double"></i> <span>Đã hoàn thành</span>`;
-                } else {
-                    document.getElementById('btnMarkLearned').classList.remove('active');
-                    document.getElementById('btnMarkLearned').innerHTML = `<i class="fa-solid fa-check"></i> <span>Đánh dấu đã hiểu</span>`;
-                }
-                resetQuizButtons();
+                updateMarkButtonUI(); 
             }
         }
 
-        function prevImage() { 
-            if (isExamMode) {
-                if (currentExamStep > 0) { currentExamStep--; currentIndex = examSequence[currentExamStep]; updateModalView(); }
-            } else {
-                currentIndex = currentIndex > 1 ? currentIndex - 1 : TOTAL_IMAGES; updateModalView(); 
-            }
-        }
-        function nextImage() { 
-            if (isExamMode) {
-                if (currentExamStep < 49) { currentExamStep++; currentIndex = examSequence[currentExamStep]; updateModalView(); }
-            } else {
-                currentIndex = currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1; updateModalView(); 
-            }
-        }
+        function prevImage() { if(isExamMode) { if(currentExamStep > 0) { currentExamStep--; currentIndex = examSequence[currentExamStep]; updateModalView(); } } else { currentIndex = currentIndex > 1 ? currentIndex - 1 : TOTAL_IMAGES; updateModalView(); } }
+        function nextImage() { if(isExamMode) { if(currentExamStep < examSequence.length - 1) { currentExamStep++; currentIndex = examSequence[currentExamStep]; updateModalView(); } } else { currentIndex = currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1; updateModalView(); } }
 
-        document.getElementById('btnClose').addEventListener('click', closeModal);
-        document.getElementById('btnPrev').addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
-        document.getElementById('btnNext').addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
-        
-        document.addEventListener('keydown', (e) => {
-            if (!modal.classList.contains('active')) return;
-            if (e.key === 'ArrowLeft') prevImage();
-            if (e.key === 'ArrowRight') nextImage();
-            if (e.key === 'Escape') closeModal();
-        });
+        document.getElementById('btnClose').addEventListener('click', closeModal); document.getElementById('btnPrev').addEventListener('click', e => { e.stopPropagation(); prevImage(); }); document.getElementById('btnNext').addEventListener('click', e => { e.stopPropagation(); nextImage(); });
+        document.addEventListener('keydown', e => { if(!modal.classList.contains('active')) return; if(e.key === 'ArrowLeft') prevImage(); if(e.key === 'ArrowRight') nextImage(); if(e.key === 'Escape') closeModal(); if(e.key === ' ' && !isExamMode && !isQuizMode) { e.preventDefault(); btnMarkLearned.click(); } });
+
+        // SWIPE TRÊN ĐIỆN THOẠI
+        let touchstartX = 0; let touchendX = 0;
+        document.getElementById('swipeArea').addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; }, {passive: true});
+        document.getElementById('swipeArea').addEventListener('touchend', e => { touchendX = e.changedTouches[0].screenX; if(touchendX < touchstartX - 50) nextImage(); if(touchendX > touchstartX + 50) prevImage(); }, {passive: true});
     });
 </script>
 </body>
