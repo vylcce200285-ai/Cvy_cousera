@@ -57,7 +57,6 @@
         .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
         .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center; }
         
-        /* CẬP NHẬT: ÉP NÉT ẢNH THUMBNAIL */
         .img-card img { 
             width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; 
             image-rendering: -moz-crisp-edges;
@@ -66,7 +65,6 @@
             image-rendering: crisp-edges;
             -ms-interpolation-mode: nearest-neighbor;
         }
-        /* CẬP NHẬT: BỎ LÀM MỜ KHI LOAD XONG */
         .img-card img.loaded { opacity: 1; }
         .img-card:hover img { opacity: 1; transform: scale(1.05); }
 
@@ -86,9 +84,9 @@
         .modal.active { opacity: 1; visibility: visible; }
         .modal-content { position: relative; width: 100%; max-width: 1200px; height: 85vh; display: flex; align-items: center; justify-content: center; overflow: hidden;}
         
-        /* CẬP NHẬT: ÉP NÉT ẢNH PHÓNG TO TRONG MODAL */
         .modal-img { 
-            max-width: 100%; max-height: calc(100vh - 150px); border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; transition: 0.3s ease;
+            max-width: 100%; max-height: calc(100vh - 150px); border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Hiệu ứng nảy */
             image-rendering: -moz-crisp-edges;
             image-rendering: -o-crisp-edges;
             image-rendering: -webkit-optimize-contrast;
@@ -96,8 +94,15 @@
             -ms-interpolation-mode: nearest-neighbor;
         }
         
-        /* ĐÂY LÀ PHÉP THUẬT CHE ĐÁP ÁN: Cắt đi 15% phía dưới của ảnh khi bật Quiz Mode */
+        /* PHÉP THUẬT CHE ĐÁP ÁN */
         body.quiz-mode-active .modal-img { clip-path: inset(0 0 15% 0); }
+
+        /* HIỆU ỨNG DỰT ẢNH */
+        body.quiz-mode-active .modal-img.reveal-answer {
+            clip-path: inset(0 0 0 0);
+            transform: scale(1.03) translateY(-10px);
+            box-shadow: 0 15px 50px rgba(249, 115, 22, 0.5); /* Sáng viền cam */
+        }
 
         .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; width: 56px; height: 56px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 10; }
         .modal-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
@@ -106,7 +111,6 @@
         .btn-close { position: absolute; top: 20px; right: 20px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); width: 48px; height: 48px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 100; }
         .btn-close:hover { background: #f43f5e; color: white; transform: rotate(90deg); }
         
-        /* GIAO DIỆN NÚT BẤM DƯỚI ẢNH */
         .modal-footer { 
             position: absolute; bottom: 20px; width: 95%; max-width: 800px; 
             background: rgba(20,20,25,0.9); backdrop-filter: blur(20px); 
@@ -249,6 +253,9 @@
         let examSequence = [];
         let currentExamStep = 0; 
         let userExamAnswers = {}; 
+        
+        // BIẾN MỚI: Xử lý vụ chọn nhiều đáp án + Dựt ảnh
+        let currentQuizSelections = new Set(); 
 
         const btnToggleQuiz = document.getElementById('btnToggleQuiz');
         const btnExamMode = document.getElementById('btnExamMode');
@@ -286,7 +293,6 @@
             btnMarkLearned.style.display = 'none'; 
             btnSubmitExam.style.display = 'block'; 
             
-            // Ép bật mode che đáp án và hiện ABCD
             document.body.classList.add('quiz-mode-active'); 
             quizModeControls.style.display = 'flex';
             
@@ -343,10 +349,14 @@
                 btnToggleQuiz.classList.remove('active'); 
                 btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span>';
                 quizModeControls.style.display = 'none'; 
+                
+                // Trả ảnh về bình thường khi tắt Luyện thi
+                modalImg.classList.remove('reveal-answer');
+                currentQuizSelections.clear();
             }
         });
 
-        // --- XỬ LÝ CHỌN ĐÁP ÁN ---
+        // --- XỬ LÝ CHỌN ĐÁP ÁN (ĐÃ CẬP NHẬT HIỆU ỨNG DỰT) ---
         document.querySelectorAll('.btn-option').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const selectedOpt = e.target.dataset.opt;
@@ -359,21 +369,34 @@
                     const correctOpt = ANSWERS_ARRAY[currentIndex - 1];
                     if (!correctOpt) return alert(`Câu ${currentIndex} Admin chưa cập nhật đáp án!`);
                     
-                    resetQuizButtons();
+                    // Nếu đã hiện đáp án rồi thì không nhận click nữa
+                    if (modalImg.classList.contains('reveal-answer')) return;
                     
                     if (correctOpt.includes(selectedOpt)) {
-                        for(let char of correctOpt) document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
+                        currentQuizSelections.add(selectedOpt);
+                        e.target.classList.add('correct');
                         
-                        if (!learnedItems.has(currentIndex)) { 
-                            learnedItems.add(currentIndex); 
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
-                            updateProgress(); 
-                            document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
-                            document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
+                        // Kiểm tra nếu chọn đủ các đáp án đúng
+                        if (currentQuizSelections.size === correctOpt.length) {
+                            modalImg.classList.add('reveal-answer'); // Dựt ảnh
+                            
+                            if (!learnedItems.has(currentIndex)) { 
+                                learnedItems.add(currentIndex); 
+                                localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
+                                updateProgress(); 
+                                document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
+                                document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
+                            }
                         }
                     } else {
+                        // Chọn sai -> Báo đỏ và dựt ảnh luôn
                         e.target.classList.add('wrong');
-                        for(let char of correctOpt) document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
+                        modalImg.classList.add('reveal-answer'); 
+                        
+                        // Sáng hết đáp án đúng lên cho lẹ
+                        for(let char of correctOpt) {
+                            document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
+                        }
                     }
                 }
             });
@@ -423,6 +446,10 @@
         function updateModalView() { 
             modalImg.src = `img-jpd/jpd (${currentIndex}).png`; 
             resetQuizButtons();
+            
+            // Xóa hiệu ứng lộ đáp án và lịch sử bấm khi qua câu mới
+            modalImg.classList.remove('reveal-answer');
+            currentQuizSelections.clear();
             
             if (isExamMode) {
                 modalCounter.textContent = `Câu ${currentExamStep + 1} / ${examSequence.length} (Gốc: ${currentIndex})`;

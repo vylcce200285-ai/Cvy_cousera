@@ -3,201 +3,234 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Source VIP JPD113 - Lữ Chí Vỹ</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Source VIP DBI202 - Lữ Chí Vỹ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CSS BIẾN - TÔNG MÀU HOÀNG GIA --- */
         :root {
-            --bg-base: #050505;
-            --bg-surface: rgba(20, 20, 22, 0.75);
-            --primary: #d4af37;
-            --primary-hover: #f3e5ab;
-            --primary-glow: rgba(212, 175, 55, 0.25);
-            --accent: #10b981;
-            --danger: #ef4444;
+            --bg-dark: #09090b;
+            --primary: #3b82f6; 
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --accent: #10b981; 
+            --surface: rgba(255, 255, 255, 0.03);
+            --surface-hover: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.1);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            --glass-border: rgba(212, 175, 55, 0.15);
-            --radius-lg: 24px;
-            --radius-md: 12px;
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --radius: 16px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-base);
-            color: var(--text-main);
-            min-height: 100vh; display: flex; flex-direction: column;
-            overflow-x: hidden; position: relative;
-        }
+        .ambient-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 15% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 40%), radial-gradient(circle at 85% 100%, rgba(14, 165, 233, 0.15) 0%, transparent 40%); filter: blur(40px); }
 
-        .ambient-bg {
-            position: fixed; inset: 0; z-index: -1;
-            background: radial-gradient(circle at 15% 0%, rgba(212, 175, 55, 0.08), transparent 40%),
-                        radial-gradient(circle at 85% 100%, rgba(226, 232, 240, 0.05), transparent 40%);
-            filter: blur(60px); animation: pulseBg 10s infinite alternate;
-        }
-        @keyframes pulseBg { 0% { opacity: 0.6; } 100% { opacity: 1; } }
-
-        .bg-grid {
-            position: fixed; inset: 0; z-index: -1; opacity: 0.15;
-            background-image: linear-gradient(var(--glass-border) 1px, transparent 1px),
-                              linear-gradient(90deg, var(--glass-border) 1px, transparent 1px);
-            background-size: 30px 30px;
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-base); }
-        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
-
-        /* --- TOP BAR --- */
-        .top-bar { 
-            padding: 20px 30px; max-width: 1300px; margin: 0 auto; width: 100%;
-            display: flex; align-items: center; justify-content: space-between; z-index: 10;
-        }
+        .top-bar { padding: 20px; max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;}
         .top-actions { display: flex; gap: 15px; }
-
-        .btn-glass { 
-            color: var(--text-main); text-decoration: none; font-weight: 600; 
-            display: inline-flex; align-items: center; gap: 8px; 
-            padding: 10px 20px; border-radius: 100px;
-            background: var(--bg-surface); border: 1px solid var(--glass-border);
-            backdrop-filter: blur(12px); transition: var(--transition); cursor: pointer;
-        }
-        .btn-glass:hover { background: var(--primary); border-color: var(--primary); color: #000; transform: translateY(-2px); box-shadow: 0 4px 15px var(--primary-glow); }
-
+        
+        .btn-glass { background: var(--surface); backdrop-filter: blur(12px); border: 1px solid var(--border); color: var(--text-main); padding: 10px 20px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); cursor: pointer; }
+        .btn-glass:hover { background: var(--surface-hover); border-color: var(--primary); box-shadow: 0 4px 20px var(--primary-glow); }
+        
         .btn-music.playing { background: rgba(16, 185, 129, 0.15); color: var(--accent); border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
-        .btn-quiz.active { background: rgba(212, 175, 55, 0.2); color: var(--primary); border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
-        
+        .btn-quiz.active { background: rgba(59, 130, 246, 0.2); color: var(--primary); border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
         .btn-exam { background: linear-gradient(135deg, #ef4444, #b91c1c); border: none; color: white; }
-        .btn-exam:hover { background: #dc2626; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4); color: white; }
+        .btn-exam:hover { background: #dc2626; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4); color: white; transform: translateY(-2px); }
 
-        /* --- HEADER & DASHBOARD --- */
-        .header-section { max-width: 900px; margin: 0 auto; padding: 20px 24px 50px; text-align: center; z-index: 10; }
-        .course-badge { display: inline-block; background: linear-gradient(135deg, var(--primary), #fff); color: #000; padding: 6px 20px; border-radius: 100px; font-weight: 800; font-size: 0.85rem; margin-bottom: 20px; box-shadow: 0 4px 15px var(--primary-glow); }
-        .title { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 900; color: #fff; margin-bottom: 10px; text-transform: uppercase; }
-        .subtitle { color: var(--text-muted); font-size: 1.1rem; }
+        .header-section { text-align: center; padding: 20px 20px 40px; }
+        .super-title { font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; text-transform: uppercase; letter-spacing: -1px; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.2)); }
+        .vip-badge { display: inline-block; background: linear-gradient(45deg, #3b82f6, #0ea5e9); color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: 900; font-size: 0.9rem; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4); }
 
-        .dashboard { background: var(--bg-surface); backdrop-filter: blur(20px); border: 1px solid var(--glass-border); border-radius: var(--radius-lg); padding: 30px; margin-top: 40px; text-align: left; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .progress-title { font-weight: 600; font-size: 1.1rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
-        .progress-stat { font-weight: 800; color: var(--primary); font-size: 1.2rem; }
+        .progress-wrapper { max-width: 400px; margin: 20px auto 30px; text-align: left; }
+        .progress-text { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .search-container { max-width: 400px; margin: 0 auto; position: relative; }
+        .search-container i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-input { width: 100%; padding: 16px 16px 16px 45px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; color: white; font-size: 1rem; transition: var(--transition); outline: none; }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+
+        .gallery-container { max-width: 1400px; margin: 0 auto; padding: 0 20px 60px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; z-index: 10; }
+        .img-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: var(--transition); position: relative; display: flex; flex-direction: column; backdrop-filter: blur(10px); }
+        .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+        .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center; }
         
-        .progress-track { width: 100%; height: 10px; background: rgba(0, 0, 0, 0.4); border-radius: 999px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-hover)); width: 0%; transition: width 0.8s cubic-bezier(0.25, 1, 0.5, 1); box-shadow: 0 0 10px var(--primary-glow); }
-
-        .search-box { margin-top: 25px; position: relative; }
-        .search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
-        .search-input { width: 100%; padding: 18px 20px 18px 55px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: var(--radius-md); color: var(--text-main); font-size: 1rem; outline: none; transition: var(--transition); }
-        .search-input:focus { border-color: var(--primary); background: rgba(0,0,0,0.5); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
-
-        /* --- GALLERY --- */
-        .gallery-container { max-width: 1300px; margin: 0 auto; padding: 0 24px 80px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; z-index: 10; }
-        .img-card { background: var(--bg-surface); border: 1px solid var(--glass-border); border-radius: var(--radius-md); overflow: hidden; cursor: pointer; transition: var(--transition); display: flex; flex-direction: column; opacity: 0; transform: translateY(20px); animation: fadeInUp 0.6s ease forwards; position: relative; }
-        .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 15px 30px rgba(0,0,0,0.4), 0 0 15px var(--primary-glow); }
-        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
-
-        .img-wrapper { width: 100%; aspect-ratio: 4/3; background: #000; position: relative; overflow: hidden; display: flex; justify-content: center; align-items: center; }
-        .img-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.4s; }
-        .img-card img.loaded { opacity: 0.85; }
+        .img-card img { 
+            width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; 
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -ms-interpolation-mode: nearest-neighbor;
+        }
+        .img-card img.loaded { opacity: 1; }
         .img-card:hover img { opacity: 1; transform: scale(1.05); }
 
-        .img-info { padding: 18px; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
-        .img-title { font-weight: 700; font-size: 1.05rem; }
-        .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.8rem; font-weight: 600; padding: 6px 12px; border-radius: 100px; background: rgba(255, 255, 255, 0.05); color: var(--text-muted); }
-        
-        .img-card.learned { border-color: var(--accent); }
-        .img-card.learned .status-badge { background: rgba(16, 185, 129, 0.15); color: var(--accent); }
-        .learned-overlay { position: absolute; top: 15px; right: 15px; width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: white; display: flex; justify-content: center; align-items: center; opacity: 0; transition: 0.3s ease; z-index: 5; font-size: 1.1rem; }
-        .img-card.learned .learned-overlay { opacity: 1; transform: scale(1) rotate(360deg); }
+        .img-info { padding: 16px; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .img-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
+        .img-badge { background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; transition: var(--transition); }
 
-        /* --- MODAL (ĐÃ TINH CHỈNH ĐỂ KHÔNG CHE ẢNH) --- */
-        .modal { position: fixed; inset: 0; z-index: 9999; background: rgba(5, 5, 10, 0.95); backdrop-filter: blur(20px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.4s; }
+        .img-card.learned { border-color: var(--accent); background: rgba(16, 185, 129, 0.05); }
+        .img-card.learned .img-badge { background: var(--accent); color: white; }
+        .img-card.learned .img-badge::before { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-right: 4px; }
+        .learned-overlay { position: absolute; inset: 0; background: rgba(16, 185, 129, 0.2); display: flex; justify-content: center; align-items: center; opacity: 0; transition: var(--transition); pointer-events: none; }
+        .img-card.learned .learned-overlay { opacity: 1; }
+        .learned-overlay i { font-size: 3rem; color: rgba(255,255,255,0.8); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+
+        .modal { position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
         .modal.active { opacity: 1; visibility: visible; }
+        .modal-content { position: relative; width: 100%; max-width: 1200px; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;}
         
-        /* CHÚ Ý: padding-bottom 80px giúp tạo khoảng trống bên dưới, ảnh không bị đè bởi Dock */
-        .modal-content { position: relative; width: 100%; max-width: 1200px; height: 100vh; display: flex; align-items: center; justify-content: center; padding-bottom: 80px; flex-direction: column;}
-        
-        /* Giới hạn chiều cao ảnh để nó nằm gọn gàng bên trên thanh Dock */
-        .modal-img { max-width: 100%; max-height: calc(100vh - 120px); border-radius: 12px; box-shadow: 0 20px 50px rgba(0,0,0,0.8); object-fit: contain; transition: 0.3s; }
-        
-        /* Che bớt phần mép dưới ảnh (cắt 5%) nếu muốn giấu đáp án */
-        body.quiz-mode-active .modal-img { clip-path: inset(0 0 5% 0); }
-
-        .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: var(--text-main); width: 56px; height: 56px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 10; display: flex; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        .modal-btn:hover { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); scale: 1.1; }
-        .btn-prev { left: -80px; } .btn-next { right: -80px; }
-        .btn-close { position: absolute; top: 25px; right: 30px; background: rgba(255,255,255,0.05); color: var(--text-main); border: 1px solid rgba(255,255,255,0.1); width: 48px; height: 48px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; z-index: 100; transition: 0.3s; }
-        .btn-close:hover { background: var(--danger); border-color: var(--danger); color: white; transform: rotate(90deg); }
-
-        /* =======================================================
-           MINI DOCK - GỌN GÀNG, TRONG SUỐT VÀ NẰM GIỮA
-           ======================================================= */
-        .modal-footer { 
-            position: absolute; bottom: 15px; 
-            width: max-content; /* Tự động co lại bằng đúng nội dung */
-            max-width: 95%;
-            background: rgba(10, 10, 12, 0.4); 
-            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            border-top: 1px solid rgba(255, 255, 255, 0.2); 
-            padding: 8px 20px; /* Thu nhỏ padding */
-            border-radius: 100px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6); 
-            display: flex; justify-content: center; align-items: center; gap: 15px; z-index: 100;
+        .modal-img { 
+            max-width: 100%; 
+            max-height: calc(100vh - 160px); 
+            margin-bottom: 70px; 
+            border-radius: 8px; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.5); 
+            object-fit: contain; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            image-rendering: -moz-crisp-edges;
+            image-rendering: -o-crisp-edges;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -ms-interpolation-mode: nearest-neighbor;
         }
         
-        .modal-counter { color: var(--primary); font-weight: 700; font-size: 0.9rem; letter-spacing: 0.5px; background: rgba(0,0,0,0.5); padding: 6px 14px; border-radius: 100px; text-align: center; white-space: nowrap;}
+        body.quiz-mode-active .modal-img { clip-path: inset(0 0 15% 0); }
+
+        body.quiz-mode-active .modal-img.reveal-answer {
+            clip-path: inset(0 0 0 0);
+            transform: scale(1.03) translateY(-10px);
+            box-shadow: 0 15px 50px rgba(59, 130, 246, 0.5);
+        }
+
+        .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; width: 56px; height: 56px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 10; }
+        .modal-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+        .btn-prev { left: 20px; } .btn-next { right: 20px; }
         
-        .normal-mode-controls { display: flex; align-items: center; }
-        .btn-mark { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); color: var(--text-main); padding: 8px 16px; border-radius: 100px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; align-items: center; gap: 6px; font-size: 0.85rem; white-space: nowrap;}
-        .btn-mark:hover { background: rgba(255,255,255,0.15); }
+        .btn-close { position: absolute; top: 20px; right: 20px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); width: 48px; height: 48px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 100; }
+        .btn-close:hover { background: #f43f5e; color: white; transform: rotate(90deg); }
+        
+        .modal-footer { 
+            position: absolute; 
+            bottom: 25px; 
+            width: max-content; 
+            min-width: 300px;
+            max-width: 95%;
+            background: rgba(20,20,25,0.85); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            padding: 10px 25px; 
+            border-radius: 100px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 20px;
+        }
+        
+        .modal-counter { color: var(--text-muted); font-weight: 600; font-size: 1rem; letter-spacing: 1px; min-width: auto; }
+        
+        .quiz-mode-controls { display: none; gap: 8px; justify-content: center; flex: 1; }
+        .btn-option { width: 38px; height: 38px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center;}
+        .btn-option:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
+        
+        .btn-option.correct { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); transform: scale(1.1); }
+        .btn-option.wrong { background: var(--danger, #ef4444); border-color: var(--danger, #ef4444); color: #fff; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); }
+        .btn-option.selected { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 0 20px var(--primary-glow); transform: scale(1.1); }
+
+        .action-controls { display: flex; gap: 10px; align-items: center; }
+        .btn-mark, .btn-submit { padding: 8px 16px; font-size: 0.9rem; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px; white-space: nowrap;}
+        .btn-mark:hover { background: rgba(255,255,255,0.2); }
         .btn-mark.active { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
 
-        .quiz-mode-controls { display: none; gap: 8px; align-items: center; }
-        
-        /* Nút A B C D thu nhỏ lại */
-        .btn-option { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 800; font-size: 0.95rem; cursor: pointer; transition: 0.2s; display: flex; justify-content: center; align-items: center;}
-        .btn-option:hover { background: rgba(255,255,255,0.15); border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
-        
-        .btn-option.correct { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 15px rgba(16, 185, 129, 0.6); transform: scale(1.1); }
-        .btn-option.wrong { background: var(--danger); border-color: var(--danger); color: #fff; box-shadow: 0 0 15px rgba(239, 68, 68, 0.6); }
-        .btn-option.selected { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); transform: scale(1.1); }
+        .btn-submit { display: none; background: var(--accent); color: #000; border: none; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .btn-submit:hover { filter: brightness(1.1); background: var(--accent); }
 
-        .action-controls { display: flex; gap: 8px; align-items: center; }
-        .btn-submit { display: none; background: var(--accent); color: #000; font-weight: 700; padding: 8px 16px; border-radius: 100px; border: none; cursor: pointer; margin-left: 5px; font-size: 0.85rem; white-space: nowrap;}
-        .btn-submit:hover { box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
-
-        /* Bảng Kết Quả Thi */
         .result-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
-        .result-box { background: var(--bg-surface); padding: 50px; border-radius: var(--radius-lg); border: 2px solid var(--primary); text-align: center; box-shadow: 0 0 50px var(--primary-glow); animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .result-box { background: var(--surface); padding: 50px; border-radius: 24px; border: 2px solid var(--primary); text-align: center; box-shadow: 0 0 50px var(--primary-glow); animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes scaleUp { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .result-title { font-size: 2rem; color: var(--primary); margin-bottom: 20px; font-weight: 900; text-transform: uppercase; }
         .result-score { font-size: 4rem; color: #fff; font-weight: 900; margin-bottom: 10px; }
         .result-detail { color: var(--text-muted); font-size: 1.2rem; margin-bottom: 30px; }
         .result-mark { font-size: 1.5rem; color: var(--accent); font-weight: 700; display: block; margin-top: 10px; }
 
-        @media (max-width: 1300px) { .btn-prev { left: 20px; } .btn-next { right: 20px; } }
+        @media (max-width: 1024px) { .btn-prev { left: 10px; } .btn-next { right: 10px; } }
         @media (max-width: 768px) {
-            .top-bar { flex-direction: column; gap: 15px; } .top-actions { justify-content: center; flex-wrap: wrap; }
+            .top-bar { flex-direction: column; gap: 15px; text-align: center; }
+            .top-actions { flex-wrap: wrap; justify-content: center; }
+            .modal-img { max-height: calc(100vh - 180px); margin-bottom: 90px; border-radius: 0; }
             .modal-btn { display: none; }
-            
-            /* Căn chỉnh Mobile */
-            .modal-content { padding-bottom: 90px; }
-            .modal-img { max-height: calc(100vh - 140px); border-radius: 0; }
-            
-            .modal-footer { bottom: 15px; width: max-content; flex-wrap: wrap; justify-content: center; gap: 10px; padding: 10px 15px; border-radius: 20px; }
-            .quiz-mode-controls { justify-content: center; }
+            .modal-footer { bottom: 15px; width: 90%; flex-wrap: wrap; padding: 12px 15px; border-radius: 24px; gap: 10px; }
+            .quiz-mode-controls { width: 100%; justify-content: space-evenly; }
+            .action-controls { width: 100%; justify-content: center; }
+            .modal-counter { order: -1; text-align: center; font-size: 1rem; width: 100%; }
             .result-box { width: 90%; padding: 30px; }
+        }
+
+        /* --- HIỆU ỨNG AVATAR STACK --- */
+        .avatar-group {
+            display: inline-flex;
+            align-items: center;
+            margin-top: 15px;
+            padding: 8px 16px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .avatar-text {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-right: 12px;
+            font-weight: 600;
+        }
+        .avatar-list {
+            display: flex;
+            align-items: center;
+        }
+        .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 2px solid var(--bg-dark); 
+            margin-left: -12px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: white;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+            transition: 0.2s ease;
+        }
+        .avatar:hover {
+            transform: translateY(-5px);
+            z-index: 20;
+        }
+        .avatar:first-child { margin-left: 0; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .avatar.c1 { background: #5D4037; border-color: #00838F; border-width: 3px; z-index: 5; }
+        .avatar.c2 { background: #689F38; border-color: #1B5E20; border-width: 3px; z-index: 4; }
+        .avatar.c3 { background: #AB47BC; border-color: #8E24AA; border-width: 3px; z-index: 3; }
+        .avatar.c4 { border-color: #1565C0; border-width: 3px; z-index: 2; }
+        .avatar-more {
+            background: #D2E3FC; 
+            color: #174EA6;     
+            font-size: 0.95rem;
+            border: 2px solid var(--bg-dark);
+            z-index: 1;
+            display: inline-block;
         }
     </style>
 </head>
 <body>
-
     <div class="ambient-bg"></div>
     <div class="bg-grid"></div>
 
@@ -206,8 +239,8 @@
             <h2 class="result-title">Hoàn Thành Bài Thi</h2>
             <div class="result-score" id="scoreText">45/50</div>
             <div class="result-detail">Số câu trả lời đúng <br> <span class="result-mark" id="pointText">Điểm: 9.0</span></div>
-            <button class="btn-glass" id="btnCloseResult"><i class="fa-solid fa-rotate-right"></i> Làm Đề Khác</button>
-            <button class="btn-glass" id="btnExitResult" style="margin-top: 10px;"><i class="fa-solid fa-xmark"></i> Thoát</button>
+            <button class="btn-glass" id="btnCloseResult" style="background: var(--primary); color: #fff;"><i class="fa-solid fa-rotate-right"></i> Làm Đề Khác</button>
+            <button class="btn-glass" id="btnExitResult" style="margin-top: 15px;"><i class="fa-solid fa-xmark"></i> Thoát Chế Độ Thi</button>
         </div>
     </div>
 
@@ -216,34 +249,37 @@
     <div class="top-bar">
         <a href="index.html" class="btn-glass"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</a>
         <div class="top-actions">
-            <button id="btnExamMode" class="btn-glass btn-exam">
-                <i class="fa-solid fa-file-signature"></i> <span>Thi Thử (50 Câu)</span>
-            </button>
-            <button id="btnToggleQuiz" class="btn-glass btn-quiz">
-                <i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span>
-            </button>
-            <button id="btnMusic" class="btn-glass btn-music">
-                <i class="fa-solid fa-music"></i> <span>Lo-Fi: TẮT</span>
-            </button>
+            <button id="btnExamMode" class="btn-glass btn-exam"><i class="fa-solid fa-database"></i> <span>Thi Thử (50 Câu)</span></button>
+            <button id="btnToggleQuiz" class="btn-glass btn-quiz"><i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span></button>
+            <button id="btnMusic" class="btn-glass btn-music"><i class="fa-solid fa-music"></i> <span>Lo-Fi: TẮT</span></button>
         </div>
     </div>
 
     <header class="header-section">
-        <div class="course-badge"><i class="fa-solid fa-database"></i> Source : JPD113</div>
-        <h1 class="title">Kho Ngân Hàng Câu Hỏi</h1>
-        <p class="subtitle">Hệ thống trắc nghiệm và ôn tập tạo bởi <b>Lữ Chí Vỹ</b></p>
+        <div class="vip-badge"><i class="fa-solid fa-server"></i> GÓI VIP DBI202</div>
+        <h1 class="super-title">KHO TÀI LIỆU DBI202 KIMOCHI</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">Coded by <b style="color: white;">Lữ Chí Vỹ</b> • Chúc AE múa SQL mượt mà</p>
         
-        <div class="dashboard">
-            <div class="progress-header">
-                <span class="progress-title"><i class="fa-solid fa-chart-line"></i> Tiến độ hoàn thành</span>
-                <span class="progress-stat" id="progressPercent">0%</span>
+        <div class="avatar-group">
+            <span class="avatar-text">Đang try-hard:</span>
+            <div class="avatar-list">
+                <div class="avatar c1">H</div>
+                <div class="avatar c2">P</div>
+                <div class="avatar c3">L</div>
+                <div class="avatar c4">
+                    <img src="https://i.pravatar.cc/100?img=11" alt="user">
+                </div>
+                <div class="avatar avatar-more" id="moreCount">+12</div>
             </div>
-            <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-            
-            <div class="search-box">
-                <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                <input type="number" id="searchInput" class="search-input" placeholder="Tìm nhanh đến câu hỏi số (VD: 45)...">
-            </div>
+        </div>
+        
+        <div class="progress-wrapper">
+            <div class="progress-text"><span>Tiến độ hoàn thành:</span><span id="progressPercent">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="number" id="searchInput" class="search-input" placeholder="Tìm nhanh đến câu hỏi số (VD: 45)...">
         </div>
     </header>
 
@@ -251,15 +287,14 @@
 
     <div class="modal" id="imageModal">
         <button class="btn-close" id="btnClose"><i class="fa-solid fa-xmark"></i></button>
-        
         <div class="modal-content" id="swipeArea">
             <button class="modal-btn btn-prev" id="btnPrev"><i class="fa-solid fa-chevron-left"></i></button>
-            <img id="modalImg" class="modal-img" src="" alt="Câu hỏi ôn tập">
+            <img id="modalImg" class="modal-img" src="" alt="DBI202 VIP Document">
             <button class="modal-btn btn-next" id="btnNext"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
         
         <div class="modal-footer">
-            <div class="modal-counter" id="modalCounter">Câu 1 / 285</div>
+            <div class="modal-counter" id="modalCounter">1 / ?</div>
             
             <div class="quiz-mode-controls" id="quizModeControls">
                 <button class="btn-option" data-opt="A">A</button>
@@ -269,11 +304,7 @@
             </div>
 
             <div class="action-controls">
-                <div class="normal-mode-controls" id="normalModeControls">
-                    <button class="btn-mark" id="btnMarkLearned">
-                        <i class="fa-solid fa-check"></i> <span id="markText">Đã hiểu</span>
-                    </button>
-                </div>
+                <button class="btn-mark" id="btnMarkLearned"><i class="fa-solid fa-check"></i> <span>Đã hiểu</span></button>
                 <button class="btn-submit" id="btnSubmitExam"><i class="fa-solid fa-paper-plane"></i> Nộp Bài</button>
             </div>
         </div>
@@ -281,17 +312,318 @@
 
 <script>
     // =========================================================
-    // ĐIỀN ĐÁP ÁN CỦA BẠN VÀO ĐÂY NHÉ (CHUỖI CỦA BẠN)
+    // ĐIỀN ĐÁP ÁN CỦA BẠN VÀO ĐÂY (Hỗ trợ định dạng: [số] dbi (x).png => ĐÁP ÁN)
     // =========================================================
-    const RAW_ANSWERS = "b d b b d a c a a d a d d b b b d c a d c c d b c b b b d a a c d d a a a c b b d b b a c b b d a b b a c b c b c a a d b d d d b b c d b c c c c b d c c d c d c b b d a b b a a b a b c b b a c b b a a a b a b c a b d d a c a a a a d b d a d d a c b b b b d a d d b a c a a c d a a b c d d c d b b b d c d c b b a b b b d c c b b d c b a b d c b a d c d d c c d d d d c b a b a d d d a b d c b a a a c c b b b c c d b b c d c d a a d d b a d b a"; 
+    const RAW_ANSWERS = `
+dbi (1).png               => BC
+dbi (2).png               => AB
+dbi (3).png               => A
+dbi (4).png               => C
+dbi (5).png               => D
+dbi (6).png               => B
+dbi (7).png               => A
+dbi (8).png               => A
+dbi (9).png               => A
+dbi (10).png              => B
+dbi (11).png              => A
+dbi (12).png              => D
+dbi (13).png              => A
+dbi (14).png              => D
+dbi (15).png              => B
+dbi (16).png              => D
+dbi (17).png              => B
+dbi (18).png              => D
+dbi (19).png              => E
+dbi (20).png              => C
+dbi (21).png              => C
+dbi (22).png              => A
+dbi (23).png              => B
+dbi (24).png              => A
+dbi (25).png              => C
+dbi (26).png              => A
+dbi (27).png              => A
+dbi (28).png              => B
+dbi (29).png              => A
+dbi (30).png              => D
+dbi (31).png              => A
+dbi (32).png              => A
+dbi (33).png              => C
+dbi (34).png              => B
+dbi (35).png              => D
+dbi (36).png              => B
+dbi (37).png              => C
+dbi (38).png              => D
+dbi (39).png              => C
+dbi (40).png              => A
+dbi (41).png              => A
+dbi (42).png              => C
+dbi (43).png              => C
+dbi (44).png              => D
+dbi (45).png              => B
+dbi (46).png              => A
+dbi (47).png              => B
+dbi (48).png              => B
+dbi (49).png              => A
+dbi (50).png              => BC
+dbi (51).png              => B
+dbi (52).png              => C
+dbi (53).png              => C
+dbi (54).png              => B
+dbi (55).png              => A
+dbi (56).png              => A
+dbi (57).png              => D
+dbi (58).png              => D
+dbi (59).png              => D
+dbi (60).png              => C
+dbi (61).png              => C
+dbi (62).png              => D
+dbi (63).png              => A
+dbi (64).png              => B
+dbi (65).png              => A
+dbi (66).png              => A
+dbi (67).png              => A
+dbi (68).png              => A
+dbi (69).png              => A
+dbi (70).png              => C
+dbi (71).png              => B
+dbi (72).png              => A
+dbi (73).png              => A
+dbi (74).png              => A
+dbi (75).png              => A
+dbi (76).png              => C
+dbi (77).png              => A
+dbi (78).png              => AD
+dbi (79).png              => C
+dbi (80).png              => A
+dbi (81).png              => A
+dbi (82).png              => A
+dbi (83).png              => C
+dbi (84).png              => A
+dbi (85).png              => C
+dbi (86).png              => B
+dbi (87).png              => B
+dbi (88).png              => B
+dbi (89).png              => B
+dbi (90).png              => A
+dbi (91).png              => B
+dbi (92).png              => C
+dbi (93).png              => C
+dbi (94).png              => A
+dbi (95).png              => B
+dbi (96).png              => B
+dbi (97).png              => A
+dbi (98).png              => B
+dbi (99).png              => C
+dbi (100).png             => C
+dbi (101).png             => A
+dbi (102).png             => B
+dbi (103).png             => B
+dbi (104).png             => B
+dbi (105).png             => A
+dbi (106).png             => D
+dbi (107).png             => B
+dbi (108).png             => C
+dbi (109).png             => C
+dbi (110).png             => A
+dbi (111).png             => A
+dbi (112).png             => C
+dbi (113).png             => C
+dbi (114).png             => B
+dbi (115).png             => A
+dbi (116).png             => C
+dbi (117).png             => B
+dbi (118).png             => C
+dbi (119).png             => C
+dbi (120).png             => C
+dbi (121).png             => A
+dbi (122).png             => D
+dbi (123).png             => B
+dbi (124).png             => A
+dbi (125).png             => A
+dbi (126).png             => D
+dbi (127).png             => D
+dbi (128).png             => A
+dbi (129).png             => D
+dbi (130).png             => A
+dbi (131).png             => A
+dbi (132).png             => C
+dbi (133).png             => B
+dbi (134).png             => B
+dbi (135).png             => B
+dbi (136).png             => C
+dbi (137).png             => A
+dbi (138).png             => A
+dbi (139).png             => B
+dbi (140).png             => D
+dbi (141).png             => CD
+dbi (142).png             => D
+dbi (143).png             => D
+dbi (144).png             => C
+dbi (145).png             => C
+dbi (146).png             => C
+dbi (147).png             => C
+dbi (148).png             => A
+dbi (149).png             => B
+dbi (150).png             => C
+dbi (151).png             => D
+dbi (152).png             => C
+dbi (153).png             => A
+dbi (154).png             => C
+dbi (155).png             => C
+dbi (156).png             => B
+dbi (157).png             => B
+dbi (158).png             => B
+dbi (159).png             => C
+dbi (160).png             => B
+dbi (161).png             => D
+dbi (162).png             => ACD
+dbi (163).png             => B
+dbi (164).png             => D
+dbi (165).png             => C
+dbi (166).png             => C
+dbi (167).png             => B
+dbi (168).png             => B
+dbi (169).png             => B
+dbi (170).png             => A
+dbi (171).png             => D
+dbi (172).png             => D
+dbi (173).png             => B
+dbi (174).png             => D
+dbi (175).png             => A
+dbi (176).png             => B
+dbi (177).png             => B
+dbi (178).png             => B
+dbi (179).png             => B
+dbi (180).png             => A
+dbi (181).png             => B
+dbi (182).png             => A
+dbi (183).png             => C
+dbi (184).png             => D
+dbi (185).png             => D
+dbi (186).png             => C
+dbi (187).png             => A
+dbi (188).png             => B
+dbi (189).png             => B
+dbi (190).png             => A
+dbi (191).png             => A
+dbi (192).png             => B
+dbi (193).png             => B
+dbi (194).png             => D
+dbi (195).png             => C
+dbi (196).png             => C
+dbi (197).png             => A
+dbi (198).png             => D
+dbi (199).png             => A
+dbi (200).png             => A
+dbi (201).png             => A
+dbi (202).png             => C
+dbi (203).png             => A
+dbi (204).png             => A
+dbi (205).png             => A
+dbi (206).png             => A
+dbi (207).png             => C
+dbi (208).png             => C
+dbi (209).png             => E
+dbi (210).png             => B
+dbi (211).png             => B
+dbi (212).png             => C
+dbi (213).png             => A
+dbi (214).png             => B
+dbi (215).png             => C
+dbi (216).png             => A
+dbi (217).png             => C
+dbi (218).png             => D
+dbi (219).png             => A
+dbi (220).png             => A
+dbi (221).png             => A
+dbi (222).png             => B
+dbi (223).png             => B
+dbi (224).png             => D
+dbi (225).png             => B
+dbi (226).png             => A
+dbi (227).png             => C
+dbi (228).png             => D
+dbi (229).png             => A
+dbi (230).png             => C
+dbi (231).png             => A
+dbi (232).png             => D
+dbi (233).png             => C
+dbi (234).png             => A
+dbi (235).png             => D
+dbi (236).png             => A
+dbi (237).png             => D
+dbi (238).png             => D
+dbi (239).png             => A
+dbi (240).png             => A
+dbi (241).png             => D
+dbi (242).png             => A
+dbi (243).png             => A
+dbi (244).png             => A
+dbi (245).png             => A
+dbi (246).png             => D
+dbi (247).png             => A
+dbi (248).png             => A
+dbi (249).png             => D
+dbi (250).png             => A
+dbi (251).png             => B
+dbi (252).png             => B
+dbi (253).png             => B
+dbi (254).png             => B
+dbi (255).png             => A
+dbi (256).png             => D
+dbi (257).png             => A
+dbi (258).png             => A
+dbi (259).png             => D
+dbi (260).png             => A
+dbi (261).png             => A
+dbi (262).png             => D
+dbi (263).png             => C
+dbi (264).png             => A
+dbi (265).png             => A
+dbi (266).png             => D
+dbi (267).png             => A
+dbi (268).png             => C
+dbi (269).png             => A
+dbi (270).png             => ACD
+dbi (271).png             => D
+dbi (272).png             => A
+dbi (273).png             => A
+dbi (274).png             => A
+dbi (275).png             => A
+dbi (276).png             => A
+dbi (277).png             => D
+dbi (278).png             => A
+dbi (279).png             => A
+dbi (280).png             => D
+dbi (281).png             => B
+dbi (282).png             => A
+dbi (283).png             => A
+dbi (284).png             => B
+dbi (285).png             => D
 
-    // Cắt chuỗi thông minh
-    const ANSWERS_ARRAY = RAW_ANSWERS.trim().toUpperCase().split(/\s+/);
+    `; 
+
+    // Hàm xử lý bóc tách đáp án dựa trên số trong ngoặc dbi (x)
+    function parseAnswers(rawStr) {
+        const answers = [];
+        const regex = /dbi\s*\((\d+)\)\.png\s*=>\s*([A-Z]+)/gi;
+        let match;
+        
+        while ((match = regex.exec(rawStr)) !== null) {
+            const index = parseInt(match[1]); 
+            const answer = match[2].toUpperCase(); 
+            answers[index - 1] = answer; 
+        }
+        return answers;
+    }
+
+    const ANSWERS_ARRAY = parseAnswers(RAW_ANSWERS);
     // =========================================================
 
     document.addEventListener('DOMContentLoaded', () => {
-        const TOTAL_IMAGES = 223; 
-        const STORAGE_KEY = 'jpd113_vip_items'; 
+        
+        const TOTAL_IMAGES = 285; 
+        const STORAGE_KEY = 'dbi202_vip_items'; 
         
         const gallery = document.getElementById('galleryContainer');
         const searchInput = document.getElementById('searchInput');
@@ -307,16 +639,33 @@
         let examSequence = [];
         let currentExamStep = 0; 
         let userExamAnswers = {}; 
+        
+        // BIẾN MỚI: Lưu trữ các đáp án user đã chọn trong câu hiện tại (Dành cho Multi-choice)
+        let currentQuizSelections = new Set(); 
+
+        // --- LOGIC FAKE ONLINE USERS (AVATAR STACK) ---
+        const moreCountEl = document.getElementById('moreCount');
+        let totalOnline = Math.floor(Math.random() * (70 - 30 + 1)) + 30; 
+        moreCountEl.textContent = `+${totalOnline - 4}`;
+
+        setInterval(() => {
+            const change = Math.floor(Math.random() * 9) - 3; 
+            totalOnline += change;
+            if (totalOnline < 15) totalOnline = 15;
+            
+            moreCountEl.textContent = `+${totalOnline - 4}`;
+            moreCountEl.style.transition = "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+            moreCountEl.style.transform = "scale(1.2)";
+            setTimeout(() => { moreCountEl.style.transform = "scale(1)"; }, 200);
+        }, 180000); 
 
         const btnToggleQuiz = document.getElementById('btnToggleQuiz');
         const btnExamMode = document.getElementById('btnExamMode');
         const btnSubmitExam = document.getElementById('btnSubmitExam');
         const btnMarkLearned = document.getElementById('btnMarkLearned');
-        const markText = document.getElementById('markText');
         const progressFill = document.getElementById('progressFill');
         const progressPercent = document.getElementById('progressPercent');
         const quizModeControls = document.getElementById('quizModeControls');
-        const normalModeControls = document.getElementById('normalModeControls');
 
         // --- YOUTUBE API ---
         var tag = document.createElement('script');
@@ -335,7 +684,7 @@
             isPlaying = !isPlaying;
         });
 
-        // --- CHẾ ĐỘ THI THỬ (MOCK TEST) ---
+        // --- CHẾ ĐỘ THI THỬ ---
         function startExam() {
             let maxQuestions = TOTAL_IMAGES < 50 ? TOTAL_IMAGES : 50;
             let arr = Array.from({length: TOTAL_IMAGES}, (_, i) => i + 1).sort(() => Math.random() - 0.5);
@@ -343,7 +692,7 @@
             
             isExamMode = true; currentExamStep = 0; userExamAnswers = {};
             
-            normalModeControls.style.display = 'none'; 
+            btnMarkLearned.style.display = 'none'; 
             btnSubmitExam.style.display = 'block'; 
             
             document.body.classList.add('quiz-mode-active'); 
@@ -377,7 +726,7 @@
 
         function exitExamMode() {
             isExamMode = false; 
-            normalModeControls.style.display = 'flex'; 
+            btnMarkLearned.style.display = 'flex'; 
             btnSubmitExam.style.display = 'none'; 
             
             if(!isQuizMode) {
@@ -386,7 +735,7 @@
             }
         }
 
-        // --- BẬT TẮT LUYỆN THI (CHE ĐÁP ÁN) ---
+        // --- BẬT TẮT LUYỆN THI ---
         btnToggleQuiz.addEventListener('click', () => {
             if(isExamMode) return alert("Đang Thi Thử. Không thể tắt chế độ này!");
             
@@ -396,14 +745,14 @@
             if (isQuizMode) {
                 btnToggleQuiz.classList.add('active'); 
                 btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: BẬT</span>';
-                normalModeControls.style.display = 'none';
                 quizModeControls.style.display = 'flex'; 
                 resetQuizButtons();
             } else {
                 btnToggleQuiz.classList.remove('active'); 
                 btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span>';
-                normalModeControls.style.display = 'flex';
                 quizModeControls.style.display = 'none'; 
+                modalImg.classList.remove('reveal-answer');
+                currentQuizSelections.clear();
             }
         });
 
@@ -414,30 +763,47 @@
 
                 if (isExamMode) {
                     userExamAnswers[currentIndex] = selectedOpt;
-                    resetQuizButtons(); e.target.classList.add('selected');
+                    resetQuizButtons(); 
+                    e.target.classList.add('selected');
                 } else {
                     const correctOpt = ANSWERS_ARRAY[currentIndex - 1];
                     if (!correctOpt) return alert(`Câu ${currentIndex} Admin chưa cập nhật đáp án!`);
                     
-                    resetQuizButtons();
+                    // Nếu đã show đáp án rồi thì không cho bấm nữa
+                    if (modalImg.classList.contains('reveal-answer')) return;
                     
                     if (correctOpt.includes(selectedOpt)) {
-                        for(let char of correctOpt) document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
-                        if (!learnedItems.has(currentIndex)) { 
-                            learnedItems.add(currentIndex); 
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
-                            updateProgress(); 
-                            document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
+                        // Chọn đúng 1 phần -> Lưu lại và đổi màu nút
+                        currentQuizSelections.add(selectedOpt);
+                        e.target.classList.add('correct');
+                        
+                        // Kiểm tra xem đã chọn ĐỦ tất cả các đáp án đúng chưa
+                        if (currentQuizSelections.size === correctOpt.length) {
+                            modalImg.classList.add('reveal-answer'); // Đủ rồi thì mới "dựt" ảnh
+                            
+                            if (!learnedItems.has(currentIndex)) { 
+                                learnedItems.add(currentIndex); 
+                                localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
+                                updateProgress(); 
+                                document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
+                                document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
+                            }
                         }
                     } else {
+                        // Chọn sai -> Báo đỏ, show đáp án và hiện tất cả đáp án đúng lên
                         e.target.classList.add('wrong');
-                        for(let char of correctOpt) document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
+                        modalImg.classList.add('reveal-answer'); 
+                        for(let char of correctOpt) {
+                            document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
+                        }
                     }
                 }
             });
         });
 
-        function resetQuizButtons() { document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('correct', 'wrong', 'selected')); }
+        function resetQuizButtons() { 
+            document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('correct', 'wrong', 'selected')); 
+        }
 
         // --- RENDER GIAO DIỆN LƯỚI ---
         function updateProgress() {
@@ -450,7 +816,9 @@
             const card = document.createElement('div');
             card.className = `img-card ${learnedItems.has(i) ? 'learned' : ''}`;
             card.dataset.index = i;
-            card.innerHTML = `<div class="img-wrapper"><div class="learned-overlay"><i class="fa-solid fa-check"></i></div><img src="img-jpd/jpd (${i}).png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1e1e24/94a3b8?text=Chua+co+anh+${i}'" alt="Câu ${i}"></div><div class="img-info"><span class="img-title">Câu ${i}</span><span class="status-badge">${learnedItems.has(i) ? '<i class="fa-solid fa-check-circle"></i> Đã học' : '<i class="fa-regular fa-circle"></i> Chưa học'}</span></div>`;
+            
+            card.innerHTML = `<div class="img-wrapper"><div class="learned-overlay"><i class="fa-solid fa-circle-check"></i></div><img src="img-dbi/dbi (${i}).png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1e293b/fff?text=Loi+Anh+${i}'" alt="Câu ${i}"></div><div class="img-info"><span class="img-title">Câu ${i}</span><span class="img-badge">${learnedItems.has(i) ? 'Đã học' : 'VIP'}</span></div>`;
+            
             card.addEventListener('click', () => { if(isExamMode) return alert("Đang Thi Thử, không được chọn câu tự do!"); openModal(i); });
             fragment.appendChild(card);
         }
@@ -463,15 +831,15 @@
 
         // --- NÚT ĐÁNH DẤU THỦ CÔNG ---
         btnMarkLearned.addEventListener('click', (e) => {
-            e.stopPropagation(); const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`); const badge = card.querySelector('.status-badge');
-            if (learnedItems.has(currentIndex)) { learnedItems.delete(currentIndex); card.classList.remove('learned'); badge.innerHTML = '<i class="fa-regular fa-circle"></i> Chưa học'; } 
-            else { learnedItems.add(currentIndex); card.classList.add('learned'); badge.innerHTML = '<i class="fa-solid fa-check-circle"></i> Đã học'; }
+            e.stopPropagation(); const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`); const badge = card.querySelector('.img-badge');
+            if (learnedItems.has(currentIndex)) { learnedItems.delete(currentIndex); card.classList.remove('learned'); badge.textContent = 'VIP'; } 
+            else { learnedItems.add(currentIndex); card.classList.add('learned'); badge.textContent = 'Đã học'; }
             localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); updateMarkButtonUI(); updateProgress();
         });
 
         function updateMarkButtonUI() {
-            if (learnedItems.has(currentIndex)) { btnMarkLearned.classList.add('active'); markText.textContent = 'Hoàn thành'; } 
-            else { btnMarkLearned.classList.remove('active'); markText.textContent = 'Đã hiểu'; }
+            if (learnedItems.has(currentIndex)) { btnMarkLearned.classList.add('active'); btnMarkLearned.innerHTML = `<i class="fa-solid fa-check-double"></i> <span>Hoàn thành</span>`; } 
+            else { btnMarkLearned.classList.remove('active'); btnMarkLearned.innerHTML = `<i class="fa-solid fa-check"></i> <span>Đã hiểu</span>`; }
         }
 
         // --- LOGIC MỞ MODAL & CHUYỂN CÂU ---
@@ -479,8 +847,10 @@
         function closeModal() { if(isExamMode && !confirm("Đang Thi Thử. Thoát sẽ mất điểm. Chắc chưa?")) return; if(isExamMode) exitExamMode(); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
         
         function updateModalView() { 
-            modalImg.src = `img-jpd/jpd (${currentIndex}).png`; 
+            modalImg.src = `img-dbi/dbi (${currentIndex}).png`; 
             resetQuizButtons();
+            modalImg.classList.remove('reveal-answer'); // Giấu đáp án khi qua câu mới
+            currentQuizSelections.clear(); // XÓA LỊCH SỬ CHỌN KHI QUA CÂU MỚI
             
             if (isExamMode) {
                 modalCounter.textContent = `Câu ${currentExamStep + 1} / ${examSequence.length} (Gốc: ${currentIndex})`;
@@ -495,7 +865,7 @@
         function nextImage() { if(isExamMode) { if(currentExamStep < examSequence.length - 1) { currentExamStep++; currentIndex = examSequence[currentExamStep]; updateModalView(); } } else { currentIndex = currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1; updateModalView(); } }
 
         document.getElementById('btnClose').addEventListener('click', closeModal); document.getElementById('btnPrev').addEventListener('click', e => { e.stopPropagation(); prevImage(); }); document.getElementById('btnNext').addEventListener('click', e => { e.stopPropagation(); nextImage(); });
-        document.addEventListener('keydown', e => { if(!modal.classList.contains('active')) return; if(e.key === 'ArrowLeft') prevImage(); if(e.key === 'ArrowRight') nextImage(); if(e.key === 'Escape') closeModal(); if(e.key === ' ' && !isExamMode && !isQuizMode) { e.preventDefault(); btnMarkLearned.click(); } });
+        document.addEventListener('keydown', e => { if(!modal.classList.contains('active')) return; if(e.key === 'ArrowLeft') prevImage(); if(e.key === 'ArrowRight') nextImage(); if(e.key === 'Escape') closeModal(); if(e.key === ' ' && !isExamMode) { e.preventDefault(); btnMarkLearned.click(); } });
 
         // SWIPE TRÊN ĐIỆN THOẠI
         let touchstartX = 0; let touchendX = 0;
