@@ -57,7 +57,12 @@
         .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
         .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center; }
         
-        .img-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; image-rendering: crisp-edges; }
+        /* Cải thiện độ sắc nét của ảnh thumbnail */
+        .img-card img { 
+            width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; 
+            image-rendering: -webkit-optimize-contrast; 
+            image-rendering: crisp-edges;
+        }
         .img-card img.loaded { opacity: 1; }
         .img-card:hover img { opacity: 1; transform: scale(1.05); }
 
@@ -74,18 +79,34 @@
 
         .modal { position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
         .modal.active { opacity: 1; visibility: visible; }
-        .modal-content { position: relative; width: 100%; max-width: 1200px; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden;}
+        .modal-content { position: relative; width: 100%; max-width: 1200px; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; touch-action: none; }
         
+        /* Cải thiện độ nét của ảnh khi xem to và zoom */
         .modal-img { 
-            max-width: 100%; max-height: calc(100vh - 160px); margin-bottom: 70px; border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; 
+            max-width: 100%; 
+            max-height: calc(100vh - 160px); 
+            margin-bottom: 70px; 
+            border-radius: 8px; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.5); 
+            object-fit: contain; 
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 1; transform: translateX(0);
+            opacity: 1; 
+            transform: translate(0px, 0px) scale(1);
+            transform-origin: center center;
+            cursor: grab;
+            image-rendering: -webkit-optimize-contrast; 
+            image-rendering: crisp-edges;
+            transform: translateZ(0); /* Kích hoạt tăng tốc phần cứng */
+            backface-visibility: hidden;
         }
         
+        .modal-img:active { cursor: grabbing; }
+
         body.quiz-mode-active .modal-img { clip-path: inset(0 0 15% 0); }
 
         body.quiz-mode-active .modal-img.reveal-answer {
-            clip-path: inset(0 0 0 0); transform: scale(1.03) translateY(-10px); box-shadow: 0 15px 50px rgba(249, 115, 22, 0.5);
+            clip-path: inset(0 0 0 0); 
+            box-shadow: 0 15px 50px rgba(249, 115, 22, 0.5);
         }
 
         .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; width: 56px; height: 56px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 10; }
@@ -99,7 +120,7 @@
             position: absolute; bottom: 25px; width: max-content; min-width: 300px; max-width: 95%;
             background: rgba(20,20,25,0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); 
             padding: 10px 25px; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
-            display: flex; justify-content: center; align-items: center; gap: 20px;
+            display: flex; justify-content: center; align-items: center; gap: 20px; z-index: 60;
         }
         
         .modal-counter { color: var(--text-muted); font-weight: 600; font-size: 1rem; letter-spacing: 1px; min-width: auto; }
@@ -135,9 +156,13 @@
         .btn-option.selected { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); transform: scale(1.1); }
 
         .action-controls { display: flex; gap: 10px; align-items: center; }
-        .btn-mark, .btn-submit { padding: 8px 16px; font-size: 0.9rem; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px; white-space: nowrap;}
-        .btn-mark:hover { background: rgba(255,255,255,0.2); }
+        .btn-mark, .btn-submit, .btn-auto { padding: 8px 16px; font-size: 0.9rem; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px; white-space: nowrap;}
+        .btn-mark:hover, .btn-auto:hover { background: rgba(255,255,255,0.2); }
         .btn-mark.active { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+
+        .btn-auto { display: none; }
+        body.quiz-mode-active .btn-auto { display: flex; }
+        .btn-auto.active { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
 
         .btn-submit { display: none; background: var(--accent); color: #000; border: none; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
         .btn-submit:hover { filter: brightness(1.1); background: var(--accent); }
@@ -150,7 +175,6 @@
         .result-detail { color: var(--text-muted); font-size: 1.2rem; margin-bottom: 30px; }
         .result-mark { font-size: 1.5rem; color: var(--accent); font-weight: 700; display: block; margin-top: 10px; }
 
-        /* --- HIỆU ỨNG AVATAR STACK Y NHƯ BẢN DBI --- */
         .avatar-group { display: inline-flex; align-items: center; margin-top: 15px; padding: 8px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .avatar-text { font-size: 0.9rem; color: var(--text-muted); margin-right: 12px; font-weight: 600; }
         .avatar-list { display: flex; align-items: center; }
@@ -173,9 +197,21 @@
             .modal-footer { bottom: 15px; width: 95%; flex-wrap: wrap; padding: 15px 20px; border-radius: 20px; gap: 15px; justify-content: space-between; }
             .quiz-mode-controls { width: 100%; justify-content: space-evenly; gap: 15px; } 
             .btn-option { width: 48px; height: 48px; font-size: 1.2rem; } 
-            .action-controls { width: 100%; justify-content: center; }
+            .action-controls { width: 100%; justify-content: center; flex-wrap: wrap;}
             .modal-counter { order: -1; text-align: center; font-size: 1rem; width: 100%; margin-bottom: -5px;}
             .result-box { width: 90%; padding: 30px; }
+        }
+
+        /* Hỗ trợ xoay ngang trên Mobile */
+        @media (orientation: landscape) and (max-height: 600px) {
+            .modal-img { max-height: calc(100vh - 100px); margin-bottom: 60px; }
+            .modal-footer { bottom: 5px; padding: 5px 15px; flex-direction: row; flex-wrap: nowrap; gap: 15px; border-radius: 15px; }
+            .modal-counter { width: auto; order: 0; font-size: 0.9rem; margin: 0; }
+            .quiz-mode-controls { width: auto; gap: 8px; flex: none; }
+            .btn-option { width: 35px; height: 35px; font-size: 1rem; }
+            .action-controls { width: auto; }
+            .btn-mark, .btn-submit, .btn-auto { padding: 5px 12px; font-size: 0.8rem; }
+            .btn-close { top: 10px; right: 10px; width: 40px; height: 40px; font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -253,6 +289,7 @@
             </div>
 
             <div class="action-controls">
+                <button class="btn-auto" id="btnAutoNext"><i class="fa-solid fa-forward"></i> <span>Auto: TẮT</span></button>
                 <button class="btn-mark" id="btnMarkLearned"><i class="fa-solid fa-check"></i> <span>Đã hiểu</span></button>
                 <button class="btn-submit" id="btnSubmitExam"><i class="fa-solid fa-paper-plane"></i> Nộp Bài</button>
             </div>
@@ -279,10 +316,20 @@
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
         const modalCounter = document.getElementById('modalCounter');
+        const swipeArea = document.getElementById('swipeArea');
         
         let currentIndex = 1;
         let isQuizMode = false;
         let isExamMode = false;
+        let isAutoNext = false;
+        let autoNextTimeout;
+
+        // Biến phục vụ Zoom và Pan
+        let currentScale = 1;
+        let panX = 0, panY = 0;
+        let isDragging = false;
+        let startPanX = 0, startPanY = 0;
+
         let examSequence = [];
         let currentExamStep = 0; 
         let userExamAnswers = {}; 
@@ -306,6 +353,7 @@
         const btnExamMode = document.getElementById('btnExamMode');
         const btnSubmitExam = document.getElementById('btnSubmitExam');
         const btnMarkLearned = document.getElementById('btnMarkLearned');
+        const btnAutoNext = document.getElementById('btnAutoNext');
         const progressFill = document.getElementById('progressFill');
         const progressPercent = document.getElementById('progressPercent');
         const quizModeControls = document.getElementById('quizModeControls');
@@ -339,6 +387,18 @@
             if (isPlaying) { player.pauseVideo(); this.innerHTML = '<i class="fa-solid fa-music"></i> <span>Lo-Fi: TẮT</span>'; this.classList.remove('playing'); } 
             else { player.playVideo(); this.innerHTML = '<i class="fa-solid fa-headphones"></i> <span>Đang Chill...</span>'; this.classList.add('playing'); }
             isPlaying = !isPlaying;
+        });
+
+        // Nút Auto Next
+        btnAutoNext.addEventListener('click', () => {
+            isAutoNext = !isAutoNext;
+            if (isAutoNext) {
+                btnAutoNext.classList.add('active');
+                btnAutoNext.innerHTML = '<i class="fa-solid fa-forward"></i> <span>Auto: BẬT</span>';
+            } else {
+                btnAutoNext.classList.remove('active');
+                btnAutoNext.innerHTML = '<i class="fa-solid fa-forward"></i> <span>Auto: TẮT</span>';
+            }
         });
 
         function startExam() {
@@ -429,6 +489,14 @@
                                 document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
                                 document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
                             }
+
+                            // Xử lý Auto Next
+                            if (isAutoNext) {
+                                clearTimeout(autoNextTimeout);
+                                autoNextTimeout = setTimeout(() => {
+                                    nextImage();
+                                }, 1000); 
+                            }
                         }
                     } else {
                         e.target.classList.add('wrong');
@@ -478,26 +546,37 @@
             else { btnMarkLearned.classList.remove('active'); btnMarkLearned.innerHTML = `<i class="fa-solid fa-check"></i> <span>Đã hiểu</span>`; }
         }
 
+        // Tắt Zoom
+        function resetZoom() {
+            currentScale = 1;
+            panX = 0; panY = 0;
+            modalImg.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            modalImg.style.transform = `translate(0px, 0px) scale(1)`;
+        }
+
         function slideImage(direction) {
+            resetZoom();
+            clearTimeout(autoNextTimeout);
             modalImg.style.opacity = '0';
             modalImg.style.transform = `translateX(${direction === 'next' ? '50px' : '-50px'})`;
             setTimeout(() => {
                 modalImg.src = `img-jpd/jpd (${currentIndex}).png`;
                 modalImg.onload = () => {
                     modalImg.style.opacity = '1';
-                    modalImg.style.transform = 'translateX(0)';
+                    modalImg.style.transform = 'translate(0px, 0px) scale(1)';
                 }
             }, 150);
         }
 
         function openModal(index) { currentIndex = index; updateModalView(true); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
-        function closeModal() { if(isExamMode && !confirm("Đang Thi Thử. Thoát sẽ mất điểm. Chắc chưa?")) return; if(isExamMode) exitExamMode(); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
+        function closeModal() { if(isExamMode && !confirm("Đang Thi Thử. Thoát sẽ mất điểm. Chắc chưa?")) return; if(isExamMode) exitExamMode(); resetZoom(); clearTimeout(autoNextTimeout); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
         
         function updateModalView(initialLoad = false) { 
             if(initialLoad) modalImg.src = `img-jpd/jpd (${currentIndex}).png`;
             resetQuizButtons();
             modalImg.classList.remove('reveal-answer'); 
             currentQuizSelections.clear(); 
+            resetZoom();
             
             if (isExamMode) {
                 modalCounter.textContent = `Câu ${currentExamStep + 1} / ${examSequence.length}`;
@@ -522,13 +601,98 @@
         document.getElementById('btnNext').addEventListener('click', e => { e.stopPropagation(); nextImage(); });
         document.addEventListener('keydown', e => { if(!modal.classList.contains('active')) return; if(e.key === 'ArrowLeft') prevImage(); if(e.key === 'ArrowRight') nextImage(); if(e.key === 'Escape') closeModal(); if(e.key === ' ' && !isExamMode) { e.preventDefault(); btnMarkLearned.click(); } });
 
-        let touchstartX = 0; let touchendX = 0;
-        document.getElementById('swipeArea').addEventListener('touchstart', e => { touchstartX = e.changedTouches[0].screenX; }, {passive: true});
-        document.getElementById('swipeArea').addEventListener('touchend', e => { 
-            touchendX = e.changedTouches[0].screenX; 
-            if(touchendX < touchstartX - 40) nextImage(); 
-            if(touchendX > touchstartX + 40) prevImage(); 
-        }, {passive: true});
+        // LOGIC PAN & ZOOM (Mobile)
+        let touchstartX = 0; let touchstartY = 0;
+        let lastTapTime = 0;
+
+        swipeArea.addEventListener('touchstart', e => { 
+            if(e.touches.length > 1) return;
+            touchstartX = e.touches[0].clientX; 
+            touchstartY = e.touches[0].clientY;
+            
+            if (currentScale > 1) {
+                isDragging = true;
+                startPanX = touchstartX - panX;
+                startPanY = touchstartY - panY;
+                modalImg.style.transition = 'none'; 
+            }
+        }, {passive: false});
+
+        swipeArea.addEventListener('touchmove', e => { 
+            if (currentScale > 1 && isDragging) {
+                e.preventDefault(); 
+                panX = e.touches[0].clientX - startPanX;
+                panY = e.touches[0].clientY - startPanY;
+                modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+            }
+        }, {passive: false});
+
+        swipeArea.addEventListener('touchend', e => { 
+            isDragging = false;
+            modalImg.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; 
+            
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTapTime;
+            const moveDistX = Math.abs(e.changedTouches[0].clientX - touchstartX);
+            
+            if (tapLength < 300 && tapLength > 0 && moveDistX < 20) {
+                if (currentScale === 1) {
+                    currentScale = 2.5; 
+                } else {
+                    currentScale = 1;
+                    panX = 0; panY = 0;
+                }
+                modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+                e.preventDefault();
+                return;
+            }
+            lastTapTime = currentTime;
+
+            if (currentScale === 1) {
+                let touchendX = e.changedTouches[0].clientX; 
+                if(touchendX < touchstartX - 40) nextImage(); 
+                if(touchendX > touchstartX + 40) prevImage(); 
+            }
+        }, {passive: false});
+
+        // LOGIC PAN & ZOOM (PC Mouse)
+        swipeArea.addEventListener('mousedown', e => {
+            if (currentScale > 1) {
+                isDragging = true;
+                startPanX = e.clientX - panX;
+                startPanY = e.clientY - panY;
+                modalImg.style.transition = 'none';
+            }
+        });
+
+        swipeArea.addEventListener('mousemove', e => {
+            if (currentScale > 1 && isDragging) {
+                e.preventDefault();
+                panX = e.clientX - startPanX;
+                panY = e.clientY - startPanY;
+                modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+            }
+        });
+
+        swipeArea.addEventListener('mouseup', () => {
+            isDragging = false;
+            modalImg.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        });
+
+        swipeArea.addEventListener('mouseleave', () => {
+            isDragging = false;
+            modalImg.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        });
+
+        modalImg.addEventListener('dblclick', () => {
+            if (currentScale === 1) {
+                currentScale = 2.5;
+            } else {
+                currentScale = 1;
+                panX = 0; panY = 0;
+            }
+            modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+        });
     });
 </script>
 </body>
