@@ -10,134 +10,273 @@
     <style>
         :root {
             --bg-dark: #09090b;
-            --primary: #8b5cf6; 
+            --primary: #8b5cf6; /* Tím SWE202c */
+            --primary-glow: rgba(139, 92, 246, 0.5);
             --accent: #10b981; 
             --surface: rgba(255, 255, 255, 0.03);
+            --surface-hover: rgba(255, 255, 255, 0.08);
             --border: rgba(255, 255, 255, 0.1);
             --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --radius: 16px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; touch-action: manipulation; }
-        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
+        body { font-family: 'Inter', sans-serif; background-color: var(--bg-dark); color: var(--text-main); min-height: 100vh; overflow-x: hidden; position: relative; }
 
-        /* GIAO DIỆN CHÍNH */
-        .top-bar { padding: 15px; display: flex; justify-content: space-between; align-items: center; position: relative; z-index: 10; }
-        .btn-glass { background: var(--surface); backdrop-filter: blur(10px); border: 1px solid var(--border); color: #fff; padding: 8px 16px; border-radius: 100px; cursor: pointer; transition: 0.3s; text-decoration: none; font-weight: 600; }
-        .btn-quiz.active { background: var(--primary); border-color: var(--primary); }
+        .ambient-bg { position: fixed; inset: 0; z-index: -1; background: radial-gradient(circle at 15% 0%, rgba(139, 92, 246, 0.15) 0%, transparent 40%), radial-gradient(circle at 85% 100%, rgba(109, 40, 217, 0.15) 0%, transparent 40%); filter: blur(40px); }
 
-        .header-section { text-align: center; padding: 10px 20px; }
-        .super-title { font-size: 1.5rem; font-weight: 900; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-        .gallery-container { max-width: 1400px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-        .img-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; cursor: pointer; transition: 0.3s; }
-        .img-wrapper { width: 100%; height: 160px; overflow: hidden; }
-        .img-card img { width: 100%; height: 100%; object-fit: cover; }
-        .img-info { padding: 10px; display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem;}
-
-        /* MODAL VÀ CHIẾN THUẬT CẮT SÁT (HARD CUT) */
-        .modal { position: fixed; inset: 0; z-index: 9999; background: #000; display: none; flex-direction: column; justify-content: center; align-items: center; }
-        .modal.active { display: flex; }
+        .top-bar { padding: 20px; max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;}
+        .top-actions { display: flex; gap: 15px; }
         
-        .modal-content-wrapper { 
-            position: relative; 
-            width: 100%; 
-            max-width: 1000px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center;
-        }
+        .btn-glass { background: var(--surface); backdrop-filter: blur(12px); border: 1px solid var(--border); color: var(--text-main); padding: 10px 20px; border-radius: 100px; text-decoration: none; font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition); cursor: pointer; }
+        .btn-glass:hover { background: var(--surface-hover); border-color: var(--primary); box-shadow: 0 4px 20px var(--primary-glow); }
+        
+        .btn-music.playing { background: rgba(16, 185, 129, 0.15); color: var(--accent); border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+        .btn-quiz.active { background: rgba(139, 92, 246, 0.2); color: var(--primary); border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+        .btn-exam { background: linear-gradient(135deg, #ef4444, #b91c1c); border: none; color: white; }
+        .btn-exam:hover { background: #dc2626; box-shadow: 0 4px 20px rgba(239, 68, 68, 0.4); color: white; transform: translateY(-2px); }
 
-        /* KHUNG CHỨA ẢNH - CHỈ HIỆN PHẦN CÂU HỎI */
-        .img-hard-cut-box {
-            position: relative;
-            width: 90%;
-            /* CHIỀU CAO CỐ ĐỊNH: Chỉ vừa đủ cho câu hỏi và 5 lựa chọn */
-            height: 320px; 
-            overflow: hidden; /* QUAN TRỌNG: Cắt bỏ hoàn toàn phần thừa */
-            border-radius: 8px;
-            background: #fff; /* Nền trắng cho ảnh đề */
-            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            transition: height 0.3s ease; /* Hiệu ứng khi mở rộng */
-        }
+        .header-section { text-align: center; padding: 20px 20px 40px; }
+        .super-title { font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; text-transform: uppercase; letter-spacing: -1px; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.2)); }
+        .vip-badge { display: inline-block; background: linear-gradient(45deg, #8b5cf6, #d946ef); color: #fff; padding: 4px 12px; border-radius: 20px; font-weight: 900; font-size: 0.9rem; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
 
+        .progress-wrapper { max-width: 400px; margin: 20px auto 30px; text-align: left; }
+        .progress-text { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; }
+        .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+
+        .search-container { max-width: 400px; margin: 0 auto; position: relative; }
+        .search-container i { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
+        .search-input { width: 100%; padding: 16px 16px 16px 45px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; color: white; font-size: 1rem; transition: var(--transition); outline: none; }
+        .search-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
+
+        .gallery-container { max-width: 1400px; margin: 0 auto; padding: 0 20px 60px; display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; z-index: 10; }
+        .img-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: var(--transition); position: relative; display: flex; flex-direction: column; backdrop-filter: blur(10px); }
+        .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
+        .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center; }
+        
+        .img-card img { 
+            width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; 
+            image-rendering: -webkit-optimize-contrast; 
+            image-rendering: crisp-edges;
+        }
+        .img-card img.loaded { opacity: 1; }
+        .img-card:hover img { opacity: 1; transform: scale(1.05); }
+
+        .img-info { padding: 16px; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
+        .img-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
+        .img-badge { background: var(--primary); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; transition: var(--transition); }
+
+        .img-card.learned { border-color: var(--accent); background: rgba(16, 185, 129, 0.05); }
+        .img-card.learned .img-badge { background: var(--accent); color: white; }
+        .img-card.learned .img-badge::before { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-right: 4px; }
+        .learned-overlay { position: absolute; inset: 0; background: rgba(16, 185, 129, 0.2); display: flex; justify-content: center; align-items: center; opacity: 0; transition: var(--transition); pointer-events: none; }
+        .img-card.learned .learned-overlay { opacity: 1; }
+        .learned-overlay i { font-size: 3rem; color: rgba(255,255,255,0.8); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+
+        .modal { position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
+        .modal.active { opacity: 1; visibility: visible; }
+        .modal-content { position: relative; width: 100%; max-width: 1200px; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; touch-action: none; }
+        
         .modal-img { 
-            width: 100%;
-            height: auto;
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        /* KHI HIỆN ĐÁP ÁN (REVEAL) */
-        /* Mở rộng chiều cao khung để hiện phần còn lại của ảnh */
-        .reveal-answer .img-hard-cut-box { 
-            height: auto; /* Tự động theo chiều cao ảnh */
-            max-height: calc(100vh - 150px); /* Không vượt quá màn hình */
-            overflow-y: auto; /* Cho phép cuộn nếu ảnh quá dài */
-        }
-
-        .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: none; color: white; width: 45px; height: 45px; border-radius: 50%; cursor: pointer; z-index: 20; font-size: 1.2rem; }
-        .btn-prev { left: 15px; } .btn-next { right: 15px; }
-        .btn-close { position: absolute; top: 15px; right: 15px; color: rgba(255,255,255,0.5); font-size: 2rem; background: none; border: none; cursor: pointer; z-index: 100; }
-        .btn-close:hover { color: #fff; }
-
-        .modal-footer { 
-            margin-top: 15px;
-            background: #111;
-            border: 1px solid #222; 
-            padding: 12px 25px; 
-            border-radius: 100px; 
-            display: flex; 
-            align-items: center; 
-            gap: 15px; 
-            z-index: 60;
+            max-width: 100%; 
+            max-height: calc(100vh - 160px); 
+            margin-bottom: 70px; 
+            border-radius: 8px; 
+            box-shadow: 0 0 40px rgba(0,0,0,0.5); 
+            object-fit: contain; 
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 1; 
+            transform: translate(0px, 0px) scale(1);
+            transform-origin: center center;
+            cursor: grab;
+            image-rendering: -webkit-optimize-contrast; 
+            image-rendering: crisp-edges;
+            transform: translateZ(0); 
+            backface-visibility: hidden;
         }
         
-        .quiz-mode-controls { display: none; gap: 8px; }
-        .btn-option { 
-            width: 40px; height: 40px; border-radius: 50%; background: #1f1f23; 
-            border: 1px solid #333; color: #fff; font-weight: 800; cursor: pointer;
-        }
-        .btn-option.correct { background: var(--accent); color: #000; border-color: var(--accent); }
-        .btn-option.wrong { background: #ef4444; color: #fff; border-color: #ef4444; }
+        .modal-img:active { cursor: grabbing; }
 
+        body.quiz-mode-active .modal-img { clip-path: inset(0 0 15% 0); }
+
+        body.quiz-mode-active .modal-img.reveal-answer {
+            clip-path: inset(0 0 0 0); 
+            box-shadow: 0 15px 50px rgba(139, 92, 246, 0.5);
+        }
+
+        .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; width: 56px; height: 56px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 10; }
+        .modal-btn:hover { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+        .btn-prev { left: 20px; } .btn-next { right: 20px; }
+        
+        .btn-close { position: absolute; top: 20px; right: 20px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); width: 48px; height: 48px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 100; }
+        .btn-close:hover { background: #f43f5e; color: white; transform: rotate(90deg); }
+        
+        .modal-footer { 
+            position: absolute; bottom: 25px; width: max-content; min-width: 300px; max-width: 95%;
+            background: rgba(20,20,25,0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); 
+            padding: 10px 25px; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
+            display: flex; justify-content: center; align-items: center; gap: 20px; z-index: 60;
+        }
+        
+        .modal-counter { color: var(--text-muted); font-weight: 600; font-size: 1rem; letter-spacing: 1px; min-width: auto; }
+        
+        .quiz-mode-controls { display: none; gap: 12px; justify-content: center; flex: 1; }
+        .btn-option { 
+            width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 800; font-size: 1.1rem; 
+            cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            display: flex; justify-content: center; align-items: center;
+        }
+        .btn-option:active { transform: scale(0.9); } 
+        .btn-option:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
+        
+        @keyframes popCorrect {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.25); box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); }
+            100% { transform: scale(1.1); }
+        }
+        .btn-option.correct { 
+            background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); animation: popCorrect 0.4s ease forwards; 
+        }
+
+        @keyframes shakeWrong {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-6px) rotate(-5deg); }
+            75% { transform: translateX(6px) rotate(5deg); }
+        }
+        .btn-option.wrong { 
+            background: var(--danger, #ef4444); border-color: var(--danger, #ef4444); color: #fff; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: shakeWrong 0.3s ease forwards;
+        }
+
+        .btn-option.selected { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 0 20px var(--primary-glow); transform: scale(1.1); }
+
+        .action-controls { display: flex; gap: 10px; align-items: center; }
+        .btn-mark, .btn-submit, .btn-auto { padding: 8px 16px; font-size: 0.9rem; background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px; white-space: nowrap;}
+        .btn-mark:hover, .btn-auto:hover { background: rgba(255,255,255,0.2); }
+        .btn-mark.active { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+
+        .btn-auto { display: none; }
+        body.quiz-mode-active .btn-auto { display: flex; }
+        .btn-auto.active { background: var(--primary); border-color: var(--primary); color: #fff; box-shadow: 0 0 15px var(--primary-glow); }
+
+        .btn-submit { display: none; background: var(--accent); color: #000; border: none; box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+        .btn-submit:hover { filter: brightness(1.1); background: var(--accent); }
+
+        .result-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 10000; display: none; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(10px); }
+        .result-box { background: var(--surface); padding: 50px; border-radius: 24px; border: 2px solid var(--primary); text-align: center; box-shadow: 0 0 50px var(--primary-glow); animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        @keyframes scaleUp { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        .result-title { font-size: 2rem; color: var(--primary); margin-bottom: 20px; font-weight: 900; text-transform: uppercase; }
+        .result-score { font-size: 4rem; color: #fff; font-weight: 900; margin-bottom: 10px; }
+        .result-detail { color: var(--text-muted); font-size: 1.2rem; margin-bottom: 30px; }
+        .result-mark { font-size: 1.5rem; color: var(--accent); font-weight: 700; display: block; margin-top: 10px; }
+
+        .avatar-group { display: inline-flex; align-items: center; margin-top: 15px; padding: 8px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .avatar-text { font-size: 0.9rem; color: var(--text-muted); margin-right: 12px; font-weight: 600; }
+        .avatar-list { display: flex; align-items: center; }
+        .avatar { width: 38px; height: 38px; border-radius: 50%; border: 2px solid var(--bg-dark); margin-left: -12px; display: flex; align-items: center; justify-content: center; font-weight: 700; color: white; font-size: 1rem; box-shadow: 0 2px 5px rgba(0,0,0,0.3); position: relative; overflow: hidden; transition: 0.2s ease; }
+        .avatar:hover { transform: translateY(-5px); z-index: 20; }
+        .avatar:first-child { margin-left: 0; }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar.c1 { background: #5D4037; border-color: #00838F; border-width: 3px; z-index: 5; }
+        .avatar.c2 { background: #689F38; border-color: #1B5E20; border-width: 3px; z-index: 4; }
+        .avatar.c3 { background: #AB47BC; border-color: #8E24AA; border-width: 3px; z-index: 3; }
+        .avatar.c4 { border-color: #1565C0; border-width: 3px; z-index: 2; }
+        .avatar-more { background: #f3e8ff; color: #7e22ce; font-size: 0.95rem; border: 2px solid var(--bg-dark); z-index: 1; display: inline-block; }
+
+        @media (max-width: 1024px) { .btn-prev { left: 10px; } .btn-next { right: 10px; } }
         @media (max-width: 768px) {
-            .img-hard-cut-box { width: 95%; height: 260px; } /* Mobile cắt sát hơn */
-            .modal-footer { width: 95%; flex-wrap: wrap; justify-content: center; border-radius: 20px; bottom: 10px; gap: 10px; padding: 10px;}
+            .top-bar { flex-direction: column; gap: 15px; text-align: center; }
+            .top-actions { flex-wrap: wrap; justify-content: center; }
+            .modal-img { max-height: calc(100vh - 200px); margin-bottom: 90px; border-radius: 8px; }
             .modal-btn { display: none; }
+            .modal-footer { bottom: 15px; width: 95%; flex-wrap: wrap; padding: 15px 20px; border-radius: 20px; gap: 15px; justify-content: space-between; }
+            .quiz-mode-controls { width: 100%; justify-content: space-evenly; gap: 15px; } 
+            .btn-option { width: 42px; height: 42px; font-size: 1.1rem; } 
+            .action-controls { width: 100%; justify-content: center; flex-wrap: wrap;}
+            .modal-counter { order: -1; text-align: center; font-size: 1rem; width: 100%; margin-bottom: -5px;}
+            .result-box { width: 90%; padding: 30px; }
+        }
+
+        @media (orientation: landscape) and (max-height: 600px) {
+            .modal-img { max-height: calc(100vh - 100px); margin-bottom: 60px; }
+            .modal-footer { bottom: 5px; padding: 5px 15px; flex-direction: row; flex-wrap: nowrap; gap: 15px; border-radius: 15px; }
+            .modal-counter { width: auto; order: 0; font-size: 0.9rem; margin: 0; }
+            .quiz-mode-controls { width: auto; gap: 8px; flex: none; }
+            .btn-option { width: 35px; height: 35px; font-size: 1rem; }
+            .action-controls { width: auto; }
+            .btn-mark, .btn-submit, .btn-auto { padding: 5px 12px; font-size: 0.8rem; }
+            .btn-close { top: 10px; right: 10px; width: 40px; height: 40px; font-size: 1.2rem; }
         }
     </style>
 </head>
 <body>
+    <div class="ambient-bg"></div>
+    <div class="bg-grid"></div>
+
+    <div class="result-overlay" id="resultOverlay">
+        <div class="result-box">
+            <h2 class="result-title">Hoàn Thành Bài Thi</h2>
+            <div class="result-score" id="scoreText">45/50</div>
+            <div class="result-detail">Số câu trả lời đúng <br> <span class="result-mark" id="pointText">Điểm: 9.0</span></div>
+            <button class="btn-glass" id="btnCloseResult" style="background: var(--primary); color: #fff;"><i class="fa-solid fa-rotate-right"></i> Làm Đề Khác</button>
+            <button class="btn-glass" id="btnExitResult" style="margin-top: 15px;"><i class="fa-solid fa-xmark"></i> Thoát Chế Độ Thi</button>
+        </div>
+    </div>
+
+    <div id="youtubePlayer" style="display: none;"></div>
+
     <div class="top-bar">
-        <a href="#" class="btn-glass"><i class="fa-solid fa-home"></i></a>
+        <a href="index.html" class="btn-glass"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</a>
         <div class="top-actions">
-            <button id="btnToggleQuiz" class="btn-glass btn-quiz"><i class="fa-solid fa-gamepad"></i> <span>Luyện Thi</span></button>
+            <button id="btnExamMode" class="btn-glass btn-exam"><i class="fa-solid fa-file-signature"></i> <span>Thi Thử (50 Câu)</span></button>
+            <button id="btnToggleQuiz" class="btn-glass btn-quiz"><i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span></button>
+            <button id="btnMusic" class="btn-glass btn-music"><i class="fa-solid fa-music"></i> <span>Lo-Fi: TẮT</span></button>
         </div>
     </div>
 
     <header class="header-section">
-        <h1 class="super-title">SWE202c VIP HARD-CUT</h1>
+        <div class="vip-badge"><i class="fa-brands fa-java"></i> GÓI VIP SWE202c</div>
+        <h1 class="super-title">KHO TÀI LIỆU SWE202C KIMOCHI</h1>
+        <p style="color: var(--text-muted); font-size: 1.1rem;">Coded by <b style="color: white;">Lữ Chí Vỹ</b> • Chúc AE học tốt nhá</p>
+        
+        <div class="avatar-group">
+            <span class="avatar-text">Đang onl:</span>
+            <div class="avatar-list">
+                <div class="avatar c1">H</div>
+                <div class="avatar c2">P</div>
+                <div class="avatar c3">L</div>
+                <div class="avatar c4">
+                    <img src="https://i.pravatar.cc/100?img=11" alt="user">
+                </div>
+                <div class="avatar avatar-more" id="moreCount">+12</div>
+            </div>
+        </div>
+
+        <div class="progress-wrapper">
+            <div class="progress-text"><span>Tiến độ hoàn thành:</span><span id="progressPercent">0%</span></div>
+            <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+        <div class="search-container">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="number" id="searchInput" class="search-input" placeholder="Tìm nhanh đến câu hỏi số (VD: 45)...">
+        </div>
     </header>
 
     <main class="gallery-container" id="galleryContainer"></main>
 
     <div class="modal" id="imageModal">
-        <button class="btn-close" id="btnClose">&times;</button>
-        
-        <div class="modal-content-wrapper" id="modalContent">
+        <button class="btn-close" id="btnClose"><i class="fa-solid fa-xmark"></i></button>
+        <div class="modal-content" id="swipeArea">
             <button class="modal-btn btn-prev" id="btnPrev"><i class="fa-solid fa-chevron-left"></i></button>
-            
-            <div class="img-hard-cut-box">
-                <img id="modalImg" class="modal-img" src="">
-            </div>
-
+            <img id="modalImg" class="modal-img" src="" alt="SWE202c VIP Document">
             <button class="modal-btn btn-next" id="btnNext"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
         
         <div class="modal-footer">
-            <div id="modalCounter" style="font-weight: bold; font-size: 0.9rem;">1 / 215</div>
+            <div class="modal-counter" id="modalCounter">1 / 215</div>
             
             <div class="quiz-mode-controls" id="quizModeControls">
                 <button class="btn-option" data-opt="A">A</button>
@@ -146,79 +285,408 @@
                 <button class="btn-option" data-opt="D">D</button>
                 <button class="btn-option" data-opt="E">E</button>
             </div>
+
+            <div class="action-controls">
+                <button class="btn-auto" id="btnAutoNext"><i class="fa-solid fa-forward"></i> <span>Auto: TẮT</span></button>
+                <button class="btn-mark" id="btnMarkLearned"><i class="fa-solid fa-check"></i> <span>Đã hiểu</span></button>
+                <button class="btn-submit" id="btnSubmitExam"><i class="fa-solid fa-paper-plane"></i> Nộp Bài</button>
+            </div>
         </div>
     </div>
 
 <script>
+    const soundCorrect = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
+    soundCorrect.volume = 0.5;
+
+    const RAW_ANSWERS = "C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D"; 
+    const ANSWERS_ARRAY = RAW_ANSWERS.trim().toUpperCase().split(/\s+/);
+    
     const TOTAL_IMAGES = 215; 
     const IMAGE_FOLDER = "img-swe";
     const IMAGE_PREFIX = "swe";
 
-    // Đáp án (Cập nhật đáp án thật vào đây)
-    const RAW_ANSWERS = "C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D C B A D"; 
-    const ANSWERS_ARRAY = RAW_ANSWERS.trim().split(/\s+/);
-
     document.addEventListener('DOMContentLoaded', () => {
+        const STORAGE_KEY = 'swe202c_vip_items'; 
+        
         const gallery = document.getElementById('galleryContainer');
+        const searchInput = document.getElementById('searchInput');
+        let learnedItems = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
+
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
-        const modalContent = document.getElementById('modalContent');
-        const btnToggleQuiz = document.getElementById('btnToggleQuiz');
-        const quizModeControls = document.getElementById('quizModeControls');
+        const modalCounter = document.getElementById('modalCounter');
+        const swipeArea = document.getElementById('swipeArea');
         
         let currentIndex = 1;
         let isQuizMode = false;
+        let isExamMode = false;
+        let isAutoNext = false;
+        let autoNextTimeout;
 
-        // Render Gallery
-        for (let i = 1; i <= TOTAL_IMAGES; i++) {
-            const card = document.createElement('div');
-            card.className = 'img-card';
-            card.innerHTML = `<div class="img-wrapper"><img src="${IMAGE_FOLDER}/${IMAGE_PREFIX} (${i}).jpg" loading="lazy"></div><div class="img-info"><span>Câu ${i}</span></div>`;
-            card.onclick = () => openModal(i);
-            gallery.appendChild(card);
+        let currentScale = 1;
+        let panX = 0, panY = 0;
+        let isDragging = false;
+        let startPanX = 0, startPanY = 0;
+
+        let examSequence = [];
+        let currentExamStep = 0; 
+        let userExamAnswers = {}; 
+        let currentQuizSelections = new Set(); 
+
+        const moreCountEl = document.getElementById('moreCount');
+        let totalOnline = Math.floor(Math.random() * (70 - 30 + 1)) + 30; 
+        moreCountEl.textContent = `+${totalOnline - 4}`;
+
+        setInterval(() => {
+            const change = Math.floor(Math.random() * 9) - 3; 
+            totalOnline += change;
+            if (totalOnline < 15) totalOnline = 15;
+            moreCountEl.textContent = `+${totalOnline - 4}`;
+            moreCountEl.style.transition = "transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+            moreCountEl.style.transform = "scale(1.2)";
+            setTimeout(() => { moreCountEl.style.transform = "scale(1)"; }, 200);
+        }, 180000); 
+
+        const btnToggleQuiz = document.getElementById('btnToggleQuiz');
+        const btnExamMode = document.getElementById('btnExamMode');
+        const btnSubmitExam = document.getElementById('btnSubmitExam');
+        const btnMarkLearned = document.getElementById('btnMarkLearned');
+        const btnAutoNext = document.getElementById('btnAutoNext');
+        const progressFill = document.getElementById('progressFill');
+        const progressPercent = document.getElementById('progressPercent');
+        const quizModeControls = document.getElementById('quizModeControls');
+
+        var tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+        var player; let isPlaying = false;
+        window.onYouTubeIframeAPIReady = function() {
+            player = new YT.Player('youtubePlayer', { 
+                height: '0', 
+                width: '0', 
+                videoId: 'v-92I1wtJV4',
+                playerVars: { 
+                    'autoplay': 0, 
+                    'controls': 0, 
+                    'loop': 1, 
+                    'playlist': 'v-92I1wtJV4', 
+                    'start': 765 
+                }, 
+                events: { 
+                    'onReady': () => { player.setVolume(30); } 
+                } 
+            });
         }
-
-        // Toggle Luyện Thi
-        btnToggleQuiz.onclick = () => {
-            isQuizMode = !isQuizMode;
-            btnToggleQuiz.classList.toggle('active', isQuizMode);
-            quizModeControls.style.display = isQuizMode ? 'flex' : 'none';
-        };
-
-        function openModal(index) {
-            currentIndex = index;
-            modalImg.src = `${IMAGE_FOLDER}/${IMAGE_PREFIX} (${currentIndex}).jpg`;
-            modalContent.classList.remove('reveal-answer'); // Luôn che khi mở câu mới
-            resetOptions();
-            document.getElementById('modalCounter').innerText = `${currentIndex} / ${TOTAL_IMAGES}`;
-            modal.classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function resetOptions() {
-            document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('correct', 'wrong'));
-        }
-
-        // Check đáp án
-        document.querySelectorAll('.btn-option').forEach(btn => {
-            btn.onclick = (e) => {
-                const selected = e.target.dataset.opt;
-                const correct = ANSWERS_ARRAY[currentIndex - 1];
-
-                if (selected === correct) {
-                    btn.classList.add('correct');
-                    modalContent.classList.add('reveal-answer'); 
-                } else {
-                    btn.classList.add('wrong');
-                    document.querySelector(`[data-opt="${correct}"]`).classList.add('correct');
-                    modalContent.classList.add('reveal-answer'); 
-                }
-            };
+        
+        document.getElementById('btnMusic').addEventListener('click', function() {
+            if (!player || !player.playVideo) return alert("Đang tải nhạc, chờ xíu!");
+            if (isPlaying) { player.pauseVideo(); this.innerHTML = '<i class="fa-solid fa-music"></i> <span>Lo-Fi: TẮT</span>'; this.classList.remove('playing'); } 
+            else { player.playVideo(); this.innerHTML = '<i class="fa-solid fa-headphones"></i> <span>Đang Chill...</span>'; this.classList.add('playing'); }
+            isPlaying = !isPlaying;
         });
 
-        document.getElementById('btnClose').onclick = () => { modal.classList.remove('active'); document.body.style.overflow = 'auto'; }
-        document.getElementById('btnNext').onclick = () => openModal(currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1);
-        document.getElementById('btnPrev').onclick = () => openModal(currentIndex > 1 ? currentIndex - 1 : TOTAL_IMAGES);
+        btnAutoNext.addEventListener('click', () => {
+            isAutoNext = !isAutoNext;
+            if (isAutoNext) {
+                btnAutoNext.classList.add('active');
+                btnAutoNext.innerHTML = '<i class="fa-solid fa-forward"></i> <span>Auto: BẬT</span>';
+            } else {
+                btnAutoNext.classList.remove('active');
+                btnAutoNext.innerHTML = '<i class="fa-solid fa-forward"></i> <span>Auto: TẮT</span>';
+            }
+        });
+
+        function startExam() {
+            let maxQuestions = TOTAL_IMAGES < 50 ? TOTAL_IMAGES : 50;
+            let arr = Array.from({length: TOTAL_IMAGES}, (_, i) => i + 1).sort(() => Math.random() - 0.5);
+            examSequence = arr.slice(0, maxQuestions);
+            isExamMode = true; currentExamStep = 0; userExamAnswers = {};
+            btnMarkLearned.style.display = 'none'; 
+            btnSubmitExam.style.display = 'block'; 
+            document.body.classList.add('quiz-mode-active'); 
+            quizModeControls.style.display = 'flex';
+            openModal(examSequence[currentExamStep]);
+        }
+
+        btnExamMode.addEventListener('click', () => { if(confirm(`Hệ thống sẽ trộn ngẫu nhiên 50 câu. Bạn đã sẵn sàng thi chưa?`)) startExam(); });
+
+        btnSubmitExam.addEventListener('click', () => {
+            let score = 0; let totalQ = examSequence.length;
+            if(Object.keys(userExamAnswers).length < totalQ && !confirm(`Chưa làm xong. Có muốn nộp bài sớm không?`)) return;
+            for (let i = 0; i < totalQ; i++) {
+                let qIndex = examSequence[i];
+                let userAns = userExamAnswers[qIndex];
+                let correctAns = ANSWERS_ARRAY[qIndex - 1];
+                if (userAns && correctAns && correctAns.includes(userAns)) score++;
+            }
+            document.getElementById('scoreText').innerText = `${score}/${totalQ}`;
+            document.getElementById('pointText').innerText = `Điểm: ${((score / totalQ) * 10).toFixed(1)}`;
+            document.getElementById('resultOverlay').style.display = 'flex';
+        });
+
+        document.getElementById('btnCloseResult').addEventListener('click', () => { document.getElementById('resultOverlay').style.display = 'none'; closeModal(); startExam(); });
+        document.getElementById('btnExitResult').addEventListener('click', () => { document.getElementById('resultOverlay').style.display = 'none'; closeModal(); exitExamMode(); });
+
+        function exitExamMode() {
+            isExamMode = false; 
+            btnMarkLearned.style.display = 'flex'; 
+            btnSubmitExam.style.display = 'none'; 
+            if(!isQuizMode) { document.body.classList.remove('quiz-mode-active'); quizModeControls.style.display = 'none'; }
+        }
+
+        btnToggleQuiz.addEventListener('click', () => {
+            if(isExamMode) return alert("Đang Thi Thử. Không thể tắt chế độ này!");
+            isQuizMode = !isQuizMode;
+            document.body.classList.toggle('quiz-mode-active', isQuizMode);
+            if (isQuizMode) {
+                btnToggleQuiz.classList.add('active'); 
+                btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: BẬT</span>';
+                quizModeControls.style.display = 'flex'; 
+                resetQuizButtons();
+            } else {
+                btnToggleQuiz.classList.remove('active'); 
+                btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span>';
+                quizModeControls.style.display = 'none'; 
+                modalImg.classList.remove('reveal-answer');
+                currentQuizSelections.clear();
+            }
+        });
+
+        document.querySelectorAll('.btn-option').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const selectedOpt = e.target.dataset.opt;
+
+                if (isExamMode) {
+                    userExamAnswers[currentIndex] = selectedOpt;
+                    resetQuizButtons(); 
+                    e.target.classList.add('selected');
+                } else {
+                    const correctOpt = ANSWERS_ARRAY[currentIndex - 1];
+                    if (!correctOpt) return alert(`Câu ${currentIndex} Admin chưa cập nhật đáp án!`);
+                    
+                    if (modalImg.classList.contains('reveal-answer')) return;
+                    
+                    if (correctOpt.includes(selectedOpt)) {
+                        currentQuizSelections.add(selectedOpt);
+                        e.target.classList.add('correct');
+                        
+                        if (currentQuizSelections.size === correctOpt.length) {
+                            
+                            soundCorrect.play().catch(e=>console.log("Audio needs user interaction first"));
+                            if (navigator.vibrate) navigator.vibrate(50); 
+
+                            modalImg.classList.add('reveal-answer'); 
+                            
+                            if (!learnedItems.has(currentIndex)) { 
+                                learnedItems.add(currentIndex); 
+                                localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
+                                updateProgress(); 
+                                document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
+                                document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
+                            }
+
+                            if (isAutoNext) {
+                                clearTimeout(autoNextTimeout);
+                                autoNextTimeout = setTimeout(() => {
+                                    nextImage();
+                                }, 1000); 
+                            }
+                        }
+                    } else {
+                        e.target.classList.add('wrong');
+                        if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
+
+                        modalImg.classList.add('reveal-answer'); 
+                        for(let char of correctOpt) {
+                            const correctBtn = document.querySelector(`.btn-option[data-opt="${char}"]`);
+                            if(correctBtn) correctBtn.classList.add('correct');
+                        }
+                    }
+                }
+            });
+        });
+
+        function resetQuizButtons() { document.querySelectorAll('.btn-option').forEach(b => b.classList.remove('correct', 'wrong', 'selected')); }
+
+        function updateProgress() {
+            const count = learnedItems.size; const percent = ((count / TOTAL_IMAGES) * 100).toFixed(1);
+            progressPercent.textContent = `${count}/${TOTAL_IMAGES} (${percent}%)`; progressFill.style.width = `${percent}%`;
+        }
+
+        const fragment = document.createDocumentFragment();
+        for (let i = 1; i <= TOTAL_IMAGES; i++) {
+            const card = document.createElement('div');
+            card.className = `img-card ${learnedItems.has(i) ? 'learned' : ''}`;
+            card.dataset.index = i;
+            card.innerHTML = `<div class="img-wrapper"><div class="learned-overlay"><i class="fa-solid fa-circle-check"></i></div><img src="${IMAGE_FOLDER}/${IMAGE_PREFIX} (${i}).jpg" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1e293b/fff?text=Loi+Anh+${i}'" alt="Câu ${i}"></div><div class="img-info"><span class="img-title">Câu ${i}</span><span class="img-badge">${learnedItems.has(i) ? 'Đã học' : 'VIP'}</span></div>`;
+            card.addEventListener('click', () => { if(isExamMode) return alert("Đang Thi Thử, không được chọn câu tự do!"); openModal(i); });
+            fragment.appendChild(card);
+        }
+        gallery.appendChild(fragment); updateProgress();
+
+        searchInput.addEventListener('input', (e) => {
+            const val = e.target.value.trim();
+            document.querySelectorAll('.img-card').forEach(card => card.style.display = (val === '' || card.dataset.index === val) ? 'flex' : 'none');
+        });
+
+        btnMarkLearned.addEventListener('click', (e) => {
+            e.stopPropagation(); const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`); const badge = card.querySelector('.img-badge');
+            if (learnedItems.has(currentIndex)) { learnedItems.delete(currentIndex); card.classList.remove('learned'); badge.textContent = 'VIP'; } 
+            else { learnedItems.add(currentIndex); card.classList.add('learned'); badge.textContent = 'Đã học'; }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); updateMarkButtonUI(); updateProgress();
+        });
+
+        function updateMarkButtonUI() {
+            if (learnedItems.has(currentIndex)) { btnMarkLearned.classList.add('active'); btnMarkLearned.innerHTML = `<i class="fa-solid fa-check-double"></i> <span>Hoàn thành</span>`; } 
+            else { btnMarkLearned.classList.remove('active'); btnMarkLearned.innerHTML = `<i class="fa-solid fa-check"></i> <span>Đã hiểu</span>`; }
+        }
+
+        function resetZoom() {
+            currentScale = 1;
+            panX = 0; panY = 0;
+            modalImg.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            modalImg.style.transform = `translate(0px, 0px) scale(1)`;
+        }
+
+        function slideImage(direction) {
+            resetZoom();
+            clearTimeout(autoNextTimeout);
+            modalImg.style.opacity = '0';
+            modalImg.style.transform = `translateX(${direction === 'next' ? '50px' : '-50px'})`;
+            setTimeout(() => {
+                modalImg.src = `${IMAGE_FOLDER}/${IMAGE_PREFIX} (${currentIndex}).jpg`;
+                modalImg.onload = () => {
+                    modalImg.style.opacity = '1';
+                    modalImg.style.transform = 'translate(0px, 0px) scale(1)';
+                }
+            }, 150);
+        }
+
+        function openModal(index) { currentIndex = index; updateModalView(true); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeModal() { if(isExamMode && !confirm("Đang Thi Thử. Thoát sẽ mất điểm. Chắc chưa?")) return; if(isExamMode) exitExamMode(); resetZoom(); clearTimeout(autoNextTimeout); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
+        
+        function updateModalView(initialLoad = false) { 
+            if(initialLoad) modalImg.src = `${IMAGE_FOLDER}/${IMAGE_PREFIX} (${currentIndex}).jpg`;
+            resetQuizButtons();
+            modalImg.classList.remove('reveal-answer'); 
+            currentQuizSelections.clear(); 
+            resetZoom();
+            
+            if (isExamMode) {
+                modalCounter.textContent = `Câu ${currentExamStep + 1} / ${examSequence.length}`;
+                if(userExamAnswers[currentIndex]) document.querySelector(`.btn-option[data-opt="${userExamAnswers[currentIndex]}"]`).classList.add('selected');
+            } else {
+                modalCounter.textContent = `Câu ${currentIndex} / ${TOTAL_IMAGES}`; 
+                updateMarkButtonUI(); 
+            }
+        }
+
+        function prevImage() { 
+            if(isExamMode) { if(currentExamStep > 0) { currentExamStep--; currentIndex = examSequence[currentExamStep]; slideImage('prev'); updateModalView(); } } 
+            else { currentIndex = currentIndex > 1 ? currentIndex - 1 : TOTAL_IMAGES; slideImage('prev'); updateModalView(); } 
+        }
+        function nextImage() { 
+            if(isExamMode) { if(currentExamStep < examSequence.length - 1) { currentExamStep++; currentIndex = examSequence[currentExamStep]; slideImage('next'); updateModalView(); } } 
+            else { currentIndex = currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1; slideImage('next'); updateModalView(); } 
+        }
+
+        document.getElementById('btnClose').addEventListener('click', closeModal); 
+        document.getElementById('btnPrev').addEventListener('click', e => { e.stopPropagation(); prevImage(); }); 
+        document.getElementById('btnNext').addEventListener('click', e => { e.stopPropagation(); nextImage(); });
+        document.addEventListener('keydown', e => { if(!modal.classList.contains('active')) return; if(e.key === 'ArrowLeft') prevImage(); if(e.key === 'ArrowRight') nextImage(); if(e.key === 'Escape') closeModal(); if(e.key === ' ' && !isExamMode) { e.preventDefault(); btnMarkLearned.click(); } });
+
+        let touchstartX = 0; let touchstartY = 0;
+        let lastTapTime = 0;
+
+        swipeArea.addEventListener('touchstart', e => { 
+            if(e.touches.length > 1) return;
+            touchstartX = e.touches[0].clientX; 
+            touchstartY = e.touches[0].clientY;
+            
+            if (currentScale > 1) {
+                isDragging = true;
+                startPanX = touchstartX - panX;
+                startPanY = touchstartY - panY;
+                modalImg.style.transition = 'none'; 
+            }
+        }, {passive: false});
+
+        swipeArea.addEventListener('touchmove', e => { 
+            if (currentScale > 1 && isDragging) {
+                e.preventDefault(); 
+                panX = e.touches[0].clientX - startPanX;
+                panY = e.touches[0].clientY - startPanY;
+                modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+            }
+        }, {passive: false});
+
+        swipeArea.addEventListener('touchend', e => { 
+            isDragging = false;
+            modalImg.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)'; 
+            
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTapTime;
+            const moveDistX = Math.abs(e.changedTouches[0].clientX - touchstartX);
+            
+            if (tapLength < 300 && tapLength > 0 && moveDistX < 20) {
+                if (currentScale === 1) {
+                    currentScale = 2.5; 
+                } else {
+                    currentScale = 1;
+                    panX = 0; panY = 0;
+                }
+                modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+                e.preventDefault();
+                return;
+            }
+            lastTapTime = currentTime;
+
+            if (currentScale === 1) {
+                let touchendX = e.changedTouches[0].clientX; 
+                if(touchendX < touchstartX - 40) nextImage(); 
+                if(touchendX > touchstartX + 40) prevImage(); 
+            }
+        }, {passive: false});
+
+        swipeArea.addEventListener('mousedown', e => {
+            if (currentScale > 1) {
+                isDragging = true;
+                startPanX = e.clientX - panX;
+                startPanY = e.clientY - panY;
+                modalImg.style.transition = 'none';
+            }
+        });
+
+        swipeArea.addEventListener('mousemove', e => {
+            if (currentScale > 1 && isDragging) {
+                e.preventDefault();
+                panX = e.clientX - startPanX;
+                panY = e.clientY - startPanY;
+                modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+            }
+        });
+
+        swipeArea.addEventListener('mouseup', () => {
+            isDragging = false;
+            modalImg.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        });
+
+        swipeArea.addEventListener('mouseleave', () => {
+            isDragging = false;
+            modalImg.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        });
+
+        modalImg.addEventListener('dblclick', () => {
+            if (currentScale === 1) {
+                currentScale = 2.5;
+            } else {
+                currentScale = 1;
+                panX = 0; panY = 0;
+            }
+            modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
+        });
     });
 </script>
 </body>
