@@ -100,12 +100,23 @@
             border-radius: 12px; 
             color: #334155; 
             font-size: 1rem; font-family: inherit; font-weight: 600; 
-            cursor: pointer; /* Cho phép click lại */
+            cursor: pointer; 
             line-height: 1.5;
             transition: all 0.2s ease;
         }
         .option-btn:hover { background: #f1f5f9; border-color: #94a3b8; }
-        .option-btn.selected { background: rgba(139, 92, 246, 0.1); border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
+        
+        /* Hiệu ứng khi chọn đúng/sai */
+        .option-btn.correct {
+            background: rgba(16, 185, 129, 0.15);
+            border-color: var(--accent);
+            color: #059669;
+        }
+        .option-btn.incorrect {
+            background: rgba(239, 68, 68, 0.15);
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
 
         /* THANH REVEAL ANSWER */
         .reveal-btn {
@@ -304,7 +315,6 @@
     </div>
 
 <script>
-    // BẠN DÁN TOÀN BỘ DATA SUỘC CỦA BẠN VÀO ĐÂY NHƯ BÌNH THƯỜNG
     const rawData = `
 Question 1: How do developers interact with Generative Al tools? Select all that apply.
 A. Letting the Al infer tasks without direction.
@@ -336,7 +346,6 @@ B. Writing boilerplate code for APIs.
 C. Detecting vulnerabilities in deployed systems.
 D. Deploying applications directly.
 A. Explaining Java-specific design patterns. | B. Writing boilerplate code for APIs.
-
 
 
 Question 5: How does Generative Al impact the code review process?
@@ -701,7 +710,7 @@ A. Ensuring data privacy and protection.
 B. Ensuring the Al system is completely autonomous.
 C. Automating every process without human oversight.
 D. Using only publicly available data for training.
-A. Ensuring data privacy and protection. [cite: 414, 420]
+A. Ensuring data privacy and protection.
 
 
 Question 52: What is the primary goal of the course Generative Al in Software Development?
@@ -709,7 +718,7 @@ A. To study the history of artificial intelligence in software.
 B. To explore how Generative Al can assist in creating software, solving problems, and increasing productivity.
 C. To develop manual code optimization skills.
 D. To teach advanced programming techniques in Java.
-B. To explore how Generative Al can assist in creating software, solving problems, and increasing productivity. [cite: 422, 428]
+B. To explore how Generative Al can assist in creating software, solving problems, and increasing productivity.
 
 
 Question 53: Generative Al generates new outputs by learning from training data.
@@ -717,7 +726,7 @@ A. Patterns and relationships
 B. Rules and syntax explicitly programmed into the system
 C. Random values unrelated to the data
 D. Fixed decisions
-A. Patterns and relationships [cite: 430, 436]
+A. Patterns and relationships
 
 
 Question 54: A developer uses a generative Al tool to build a program. Which of the following tasks can the tool assist with? Select all that apply.
@@ -725,7 +734,7 @@ A. Deploying the program to production automatically.
 B. Providing suggestions based on comments in the code.
 C. Debugging and improving an existing code snippet.
 D. Completing a partially written function.
-B. Providing suggestions based on comments in the code. | C. Debugging and improving an existing code snippet. | D. Completing a partially written function. [cite: 438, 445]
+B. Providing suggestions based on comments in the code. | C. Debugging and improving an existing code snippet. | D. Completing a partially written function.
 
 
 Question 55: One significant ethical issue with Generative Al is
@@ -733,7 +742,7 @@ A. The risk of spreading misinformation or creating deepfakes.
 B. The guarantee of accuracy in creating unbiased content,
 C. Its inability to learn from large datasets.
 D. Its high consumption of electricity.
-A. The risk of spreading misinformation or creating deepfakes. [cite: 448, 454]
+A. The risk of spreading misinformation or creating deepfakes.
 
 
 Question 56: Fill in the blanks (indicated by ______). Generative Al improves Java development by ______
@@ -741,7 +750,7 @@ A. Suggesting repetitive boilerplate code
 B. Eliminating the need for human review of code
 C. Writing complex programs without user input
 D. Automating software testing in all environments
-A. Suggesting repetitive boilerplate code [cite: 456, 462]
+A. Suggesting repetitive boilerplate code
 
 
 Question 57: What is the purpose of prompt engineering in Generative Al?
@@ -749,7 +758,7 @@ A. To improve the Al's speed of computation.
 B. To analyze data automatically.
 C. To optimize the GenAl's responses by crafting effective input instructions.
 D. To design training for GenAl models.
-C. To optimize the GenAl's responses by crafting effective input instructions. [cite: 465, 470]
+C. To optimize the GenAl's responses by crafting effective input instructions.
 
 
 Question 58: A decision tree is used to predict whether students pass or fail based on their attendance and study hours. Which of the following describes the tree's inner workings? Select all that apply.
@@ -757,7 +766,7 @@ A. It splits data based on attendance and study hours.
 B. The leaf nodes show outcomes like "Pass" or "Fail."
 C. It sometimes reaches a conclusion at a branch without reaching a leaf node.
 D. Each branch represents a decision rule.
-A. It splits data based on attendance and study hours. | B. The leaf nodes show outcomes like "Pass" or "Fail." | D. Each branch represents a decision rule. [cite: 472, 479]
+A. It splits data based on attendance and study hours. | B. The leaf nodes show outcomes like "Pass" or "Fail." | D. Each branch represents a decision rule.
 
 
 Question 59: What is the key advantage of using random forests over a single decision tree?
@@ -765,7 +774,7 @@ A. Random forests always generate a single, static model.
 B. Random forests are simpler to interpret than decision trees.
 C. Random forests require no data to make predictions.
 D. Random forests reduce overfitting by combining multiple decision trees.
-D. Random forests reduce overfitting by combining multiple decision trees. [cite: 482, 488]
+D. Random forests reduce overfitting by combining multiple decision trees.
 
 
 Question 60: A neural network is trained to recognize an apple. Which of the following describes how the neural network works? Select all that apply.
@@ -773,7 +782,7 @@ A. Combining patterns learned in earlier layers to identify the apple.
 B. Adjusting weights to minimize prediction errors.
 C. Extracting features like color, size and shape.
 D. Checking all the features, at once, simultaneously without breaking them into parts ever.
-A. Combining patterns learned in earlier layers to identify the apple. | B. Adjusting weights to minimize prediction errors. | C. Extracting features like color, size and shape. [cite: 490, 497]
+A. Combining patterns learned in earlier layers to identify the apple. | B. Adjusting weights to minimize prediction errors. | C. Extracting features like color, size and shape.
 
 
 Question 61: Which of the following technologies is commonly associated with driving digital transformation?
@@ -781,7 +790,7 @@ A. Internet of Things (IoT)
 B. Virtual reality (VR)
 C. Manual filing systems
 D. Blockchain
-A. Internet of Things (IoT) [cite: 500, 506]
+A. Internet of Things (IoT)
 
 
 Question 62: An Al-powered CRM system provides chatbots for customer support, recommends products based on purchase history, and predicts customer churn. Which benefits of Al in CRM are demonstrated? Select all that apply.
@@ -789,15 +798,15 @@ A. Enhancing customer engagement through personalized recommendations.
 B. Predicting customer needs and improving satisfaction.
 C. Providing 24/7 customer support.
 D. Replacing all human involvement in customer service.
-A. Enhancing customer engagement through personalized recommendations. | B. Predicting customer needs and improving satisfaction. | C. Providing 24/7 customer support. [cite: 508, 515]
+A. Enhancing customer engagement through personalized recommendations. | B. Predicting customer needs and improving satisfaction. | C. Providing 24/7 customer support.
 
 
 Question 63: A company introduces Al into its supply chain management system. What challenges might it face during integration? Select all that apply.
 A. Eliminating all existing workflows to accommodate the Al system.
-B. Ensuring that the Al system works seamlessly with legacy software.
+B. Ensuring that the Al system works seamlessly với legacy software.
 C. Customizing the Al system to meet the company's specific needs.
 D. Employee training to use Al-powered tools.
-B. Ensuring that the Al system works seamlessly with legacy software. | C. Customizing the Al system to meet the company's specific needs. | D. Employee training to use Al-powered tools. [cite: 518, 525]
+B. Ensuring that the Al system works seamlessly with legacy software. | C. Customizing the Al system to meet the company's specific needs. | D. Employee training to use Al-powered tools.
 
 
 Question 64: A company plans to deploy an Al tool that processes customer data. Which ethical and regulatory challenges should it consider? Select all that apply.
@@ -805,7 +814,7 @@ A. Relying solely on internal policies to speed up deployment.
 B. Mitigating biases in Al-generated decisions.
 C. Protecting data privacy and preventing misuse.
 D. Ensuring customer consent for data usage.
-B. Mitigating biases in Al-generated decisions. | C. Protecting data privacy and preventing misuse. | D. Ensuring customer consent for data usage. [cite: 528, 535]
+B. Mitigating biases in Al-generated decisions. | C. Protecting data privacy and preventing misuse. | D. Ensuring customer consent for data usage.
 
 
 Question 65: When scaling Al systems, businesses must focus on balancing and leveraging
@@ -813,7 +822,7 @@ A. Use of cloud computing only.
 B. Manual processes and automation.
 C. Data usage and user feedback.
 D. Advanced infrastructure, algorithms, and cloud computing.
-D. Advanced infrastructure, algorithms, and cloud computing. [cite: 537, 543]
+D. Advanced infrastructure, algorithms, and cloud computing.
 
 
 Question 66: Interpretability in Al is essential because it allows users to
@@ -821,7 +830,7 @@ A. Understand how decisions are made.
 B. Guarantee that the Al is 100% accurate.
 C. Remove all biases from the data.
 D. Use the Al system without training.
-A. Understand how decisions are made. [cite: 545, 551]
+A. Understand how decisions are made.
 
 
 Question 67: A bank uses an Al model to approve loan applications. Which methods can improve the model's transparency? Select all that apply.
@@ -829,7 +838,7 @@ A. Applying LIME to explain individual loan decisions.
 B. Using SHAP (SHapley Additive exPlanations) to understand feature importance
 C. Using a black-box model with no explanation capabilities.
 D. Providing clear documentation of how the model works.
-A. Applying LIME to explain individual loan decisions. | B. Using SHAP (SHapley Additive exPlanations) to understand feature importance | D. Providing clear documentation of how the model works. [cite: 553, 560]
+A. Applying LIME to explain individual loan decisions. | B. Using SHAP (SHapley Additive exPlanations) to understand feature importance | D. Providing clear documentation of how the model works.
 
 
 Question 68: Generative Al supports software developers by
@@ -837,7 +846,7 @@ A. Automating code suggestions, debugging, and completions.
 B. Eliminating human oversight in software projects.
 C. Writing and testing complete applications independently.
 D. Automating deployment processes without customization.
-A. Automating code suggestions, debugging, and completions. [cite: 563, 569]
+A. Automating code suggestions, debugging, and completions.
 
 
 Question 69: A team uses Amazon Q Developer to complete boilerplate code for a web application. Which tasks might the tool assist with? Select all that apply.
@@ -845,7 +854,7 @@ A. Identifying and resolving syntax errors.
 B. Generating code templates for common tasks like authentication.
 C. Designing the entire software architecture autonomously.
 D. Suggesting fixes for incomplete code snippets.
-A. Identifying and resolving syntax errors. | B. Generating code templates for common tasks like authentication. | D. Suggesting fixes for incomplete code snippets. [cite: 571, 578]
+A. Identifying and resolving syntax errors. | B. Generating code templates for common tasks like authentication. | D. Suggesting fixes for incomplete code snippets.
 
 
 Question 70: A company trains a neural network to detect diseases from medical images. Why is it important to validate the model on unseen data? Select all that apply.
@@ -853,7 +862,7 @@ A. To test the neural network's ability to process noisy inputs.
 B. To identify biases or inaccuracies in its predictions.
 C. To ensure the model generalizes well to new cases.
 D. To confirm that the model memorized all training examples.
-B. To identify biases or inaccuracies in its predictions. | C. To ensure the model generalizes well to new cases. [cite: 581, 588]
+B. To identify biases or inaccuracies in its predictions. | C. To ensure the model generalizes well to new cases.
 
 
 Question 71: A business is deploying an Al system to analyze customer data for personalized recommendations. Which ethical considerations should they address? Select all that apply.
@@ -861,7 +870,7 @@ A. Offering an option for customers to opt out of data sharing or usage.
 B. Ensuring transparency in how the Al makes decisions.
 C. Obtaining informed consent from customers.
 D. Collecting all customer data for unrestricted use by the Al system.
-A. Offering an option for customers to opt out of data sharing or usage. | B. Ensuring transparency in how the Al makes decisions. | C. Obtaining informed consent from customers. [cite: 590, 597]
+A. Offering an option for customers to opt out of data sharing or usage. | B. Ensuring transparency in how the Al makes decisions. | C. Obtaining informed consent from customers.
 
 
 Question 72: Which of the following examples demonstrates the capabilities of Generative Al? Select all that apply.
@@ -869,7 +878,7 @@ A. Completing a program in Java with suggested enhancements and explanations.
 B. Producing a unique painting from a text prompt.
 C. Writing a new story without any human prompt.
 D. Writing a new story based on a theme.
-A. Completing a program in Java with suggested enhancements and explanations. | B. Producing a unique painting from a text prompt. | D. Writing a new story based on a theme. [cite: 600, 606]
+A. Completing a program in Java with suggested enhancements and explanations. | B. Producing a unique painting from a text prompt. | D. Writing a new story based on a theme.
 
 
 Question 73: A developer uses Amazon Q Developer for a Java project. Which tasks can this tool help with? Select all that apply.
@@ -877,7 +886,7 @@ A. Autocompleting repetitive code patterns.
 B. Debugging incomplete code snippets.
 C. Suggesting solutions for common coding errors.
 D. Writing detailed software documentation automatically without the need for user direction.
-A. Autocompleting repetitive code patterns. | B. Debugging incomplete code snippets. | C. Suggesting solutions for common coding errors. [cite: 609, 616]
+A. Autocompleting repetitive code patterns. | B. Debugging incomplete code snippets. | C. Suggesting solutions for common coding errors.
 
 
 Question 74: Random forests improve prediction accuracy by combining
@@ -885,7 +894,7 @@ A. Multiple decision trees using techniques like bagging.
 B. The outputs of unrelated algorithms.
 C. Predefined answers to every scenario possible.
 D. The results of exactly two decision trees.
-A. Multiple decision trees using techniques like bagging. [cite: 618, 624]
+A. Multiple decision trees using techniques like bagging.
 
 
 Question 75: What is the primary purpose of a neural network in machine learning?
@@ -893,7 +902,7 @@ A. To combine the results of multiple trees into an averaged result.
 B. To make decisions based on rules put in the programming, resulting in a leaf node.
 C. To teach new information to humans using videos and the internet.
 D. To process inputs and learn patterns for making predictions or decisions.
-D. To process inputs and learn patterns for making predictions or decisions. [cite: 626, 632]
+D. To process inputs and learn patterns for making predictions or decisions.
 
 
 Question 76: A business integrates Al tools, uses data to analyze trends, improves workflows, and trains employees to adapt to new tools. Which domains of digital transformation does this example represent? Select all that apply.
@@ -901,7 +910,7 @@ A. Cybersecurity
 B. Technology
 C. Data
 D. Change management
-B. Technology | C. Data | D. Change management [cite: 634, 641]
+B. Technology | C. Data | D. Change management
 
 
 Question 77: A company adopts Al to personalize customer experiences, loT devices to monitor inventory, and cloud platforms to manage operations. Which aspects of digital transformation are evident in this example? Select all that apply.
@@ -909,7 +918,7 @@ A. Enhancing customer experiences through data-driven insights.
 B. Optimizing workflows using digital solutions.
 C. Leveraging advanced technologies to improve efficiency.
 D. Eliminating the need for human involvement in all processes.
-A. Enhancing customer experiences through data-driven insights. | B. Optimizing workflows using digital solutions. | C. Leveraging advanced technologies to improve efficiency. [cite: 643, 650]
+A. Enhancing customer experiences through data-driven insights. | B. Optimizing workflows using digital solutions. | C. Leveraging advanced technologies to improve efficiency.
 
 
 Question 78: Al systems must comply with regulations like ______ to protect data privacy.
@@ -917,7 +926,7 @@ A. FCC (Federal Communications Commission)
 B. FDA (Food and Drug Administration)
 C. GDPR (General Data Protection Regulation)
 D. FAA (Federal Aviation Administration)
-C. GDPR (General Data Protection Regulation) [cite: 653, 659]
+C. GDPR (General Data Protection Regulation)
 
 
 Question 79: Why is interpretability important in Al systems?
@@ -925,7 +934,7 @@ A. It ensures that Al systems function without requiring human oversight.
 B. It allows users to understand how decisions are made, especially in critical applications.
 C. It guarantees that Al systems will always produce 100% accurate results.
 D. It eliminates the need for data-driven decision-making.
-B. It allows users to understand how decisions are made, especially in critical applications. [cite: 661, 667]
+B. It allows users to understand how decisions are made, especially in critical applications.
 
 
 Question 80: Techniques like LIME and SHAP are used in Al to
@@ -933,7 +942,7 @@ A. Explain predictions and enhance model transparency.
 B. Increase the randomness of model outputs.
 C. Remove all biases in Al systems.
 D. Eliminate the need for feature selection.
-A. Explain predictions and enhance model transparency. [cite: 669, 675]
+A. Explain predictions and enhance model transparency.
 
 
 Question 81: Why is compliance important when deploying Al systems in businesses?
@@ -941,7 +950,7 @@ A. To avoid the use of training data in Al systems.
 B. To ensure the Al system generates random outputs.
 C. To align with legal regulations and protect data privacy.
 D. To eliminate the need for human oversight in decision-making.
-C. To align with legal regulations and protect data privacy. [cite: 677, 683]
+C. To align with legal regulations and protect data privacy.
 
 
 Question 82: A company uses a decision tree to predict employee retention based on hours worked, job satisfaction, and age. How can they improve its accuracy? Select all that apply.
@@ -949,17 +958,17 @@ A. Use random feature selection for splits.
 B. Use random forests.
 C. Increase the number of leaf nodes indefinitely.
 D. Add more diverse training data.
-B. Use random forests. | D. Add more diverse training data. [cite: 685, 692]
+B. Use random forests. | D. Add more diverse training data.
 
 
 Question 83: True or False: One of the major ethical concerns when using Al in business is ensuring fairness and avoiding bias in the decision-making process.
 A. True
 B. False
-A. True [cite: 694, 698]
+A. True
 
 
 Question 84: As a measure of software complexity, MLOC stands for ______
-million lines of code [cite: 700, 702]
+million lines of code
 
 
 Question 85: Rank the following in descending order of software complexity (in terms of estimated MLOC incorporated in the products): Facebook, Mac OS X, Boeing 787.
@@ -968,7 +977,7 @@ B. Facebook > Mac OS X > Boeing 787
 C. Mac OS X > Boeing 787 > Facebook
 D. Facebook > Boeing 787 > Mac OS X
 E. Mac OS X > Facebook > Boeing 787
-E. Mac OS X > Facebook > Boeing 787 [cite: 704, 711]
+E. Mac OS X > Facebook > Boeing 787
 
 
 Question 86: Which statement is NOT true about software engineering?
@@ -977,7 +986,7 @@ B. It should build a quality system.
 C. It requires a team effort.
 D. It is an ad-hoc development effort.
 E. It deals with multiple versions of the software.
-D. It is an ad-hoc development effort. [cite: 713, 720]
+D. It is an ad-hoc development effort.
 
 
 Question 87: Which of the following is NOT a software engineering activity?
@@ -986,7 +995,7 @@ B. rationale management
 C. hiring programmers
 D. modeling
 E. problem solving
-C. hiring programmers [cite: 722, 729]
+C. hiring programmers
 
 
 Question 88: Which of the following is NOT a characteristics of software quality?
@@ -995,7 +1004,7 @@ B. correct
 C. reusable
 D. portable
 E. profitable
-E. profitable [cite: 731, 738]
+E. profitable
 
 
 Question 89: Which statement about the UML (Unified Modeling Language) is true?
@@ -1004,7 +1013,7 @@ B. The UML can be used to model only software systems.
 C. The UML can be used for only object-oriented software systems.
 D. The UML is a software development process.
 E. The UML provides a fixed set of modeling elements.
-A. The UML makes us think about the world in a certain way. [cite: 740, 747]
+A. The UML makes us think about the world in a certain way.
 
 
 Question 90: Which of the following UML concepts is not a classifier?
@@ -1013,7 +1022,7 @@ B. operation
 C. association
 D. method
 E. attribute
-D. method [cite: 749, 756]
+D. method
 
 
 Question 91: Which of the following is NOT a property of an attribute in the UML?
@@ -1022,7 +1031,7 @@ B. multiplicity
 C. visibility
 D. signature
 E. changeability
-D. signature [cite: 758, 765]
+D. signature
 
 
 Question 92: In the UML, a class is a description of a group of objects that have common
@@ -1031,7 +1040,7 @@ B. identity, operations, relationships and semantics.
 C. attributes, operations, roles and semantics.
 D. attributes, operations, relationships and multiplicity.
 E. attributes, coverage, relationships and semantics.
-A. attributes, operations, relationships and semantics. [cite: 767, 774]
+A. attributes, operations, relationships and semantics.
 
 
 Question 93: In the UML, the interface of an object contains only
@@ -1040,7 +1049,7 @@ B. values.
 C. data types.
 D. operations.
 E. variables.
-D. operations. [cite: 776, 783]
+D. operations.
 
 
 Question 94: When is an association class needed?
@@ -1049,7 +1058,7 @@ B. When the relationship is unidirectional.
 C. When the relationship has properties.
 D. When the relationship is mandatory.
 E. When the relationship is optional.
-C. When the relationship has properties. [cite: 785, 792]
+C. When the relationship has properties.
 
 
 Question 95: Is it possible for there to be more than one association between any two classes?
@@ -1058,7 +1067,7 @@ B. Yes, but only for binary and higher order associations.
 C. Yes, if the multiplicity is many to many (N:M).
 D. No, no way.
 E. Gee, I don't know!
-A. Yes, always. [cite: 794, 801]
+A. Yes, always.
 
 
 Question 96: Which of the following statements is not true about an association relationship?
@@ -1067,7 +1076,7 @@ B. It can be restricted to be only unidirectional.
 C. It represents an instance of the relationship.
 D. It can normally only be read meaningfully in one direction.
 E. It is a description of a group of instances of the relationship.
-C. It represents an instance of the relationship. [cite: 803, 810]
+C. It represents an instance of the relationship.
 
 
 Question 97: The incomplete coverage constraint for a generalization relationship means that:
@@ -1076,7 +1085,7 @@ B. some subclass instance is not a member of any superclass.
 C. a superclass instance can be a member of at most one of the subclasses.
 D. each superclass instance is a member of some subclass.
 E. some superclass instance is not a member of any subclass.
-E. some superclass instance is not a member of any subclass. [cite: 812, 819]
+E. some superclass instance is not a member of any subclass.
 
 
 Question 98: Which of the following is a generalization coverage constraint?
@@ -1085,7 +1094,7 @@ B. disunion
 C. overloaded
 D. common
 E. disjoint
-E. disjoint [cite: 821, 828]
+E. disjoint
 
 
 Question 99: Which of the following is NOT an issue when considering "programming-in-the-large"?
@@ -1094,7 +1103,7 @@ B. Applying appropriate software development processes
 C. Building models of a system
 D. Validating user input.
 E. Making design trade-offs
-D. Validating user input. [cite: 830, 837]
+D. Validating user input.
 
 
 Question 100: Which of the following is NOT a way to deal with risks in software development?
@@ -1103,7 +1112,7 @@ B. ignore (act as if it won't happen)
 C. mitigate (devise tests to see if it occurs)
 D. confine (restrict the scope of its effect)
 E. monitor (constantly be on the lookout for it)
-B. ignore (act as if it won't happen) [cite: 839]
+B. ignore (act as if it won't happen)
 
 
 Question 101: Which reason for the failure of or problems with software development is NOT related to requirements capture?
@@ -1562,7 +1571,7 @@ B. that move into and out of a database.
 C. that pass through a user interface.
 D. of program variables.
 E. output by a program.
-D. of program variables. [cite: 1006]
+D. of program variables.
 
 
 Question 152: When testing a nested loop, we initially test the inner loop while holding the outer loop at
@@ -1571,7 +1580,7 @@ B. its middle value.
 C. its maximum value.
 D. both its minimum and maximum value.
 E. any value.
-A. its minimum value. [cite: 1007]
+A. its minimum value.
 
 
 Question 153: When testing a simple loop, what is the minimum number of test cases required?
@@ -1580,7 +1589,7 @@ B. 3
 C. 4
 D. 5
 E. 7
-E. 7 [cite: 1011]
+E. 7
 
 
 Question 154: The purpose of an acceptance test plan is to
@@ -1589,7 +1598,7 @@ B. specify the criteria for determining whether the system is finished.
 C. list all the requirements for the system.
 D. define the scope of the system development.
 E. define the goals of the system.
-B. specify the criteria for determining whether the system is finished. [cite: 1013]
+B. specify the criteria for determining whether the system is finished.
 
 
 Question 155: The cyclomatic complexity of a program can tell us something about which of the following external attributes (design goals) of software quality?
@@ -1598,7 +1607,7 @@ B. learnability - how easy it is to learn how to use
 C. safety - how likely it is to be error free
 D. integrity - how well it prevents unauthorized access
 E. installability - how easy it is to install
-C. safety - how likely it is to be error free [cite: 1017]
+C. safety - how likely it is to be error free
 
 
 Question 156: Integration testing focuses on
@@ -1607,7 +1616,7 @@ B. the logical conditions in a component.
 C. validating user requirements.
 D. the interaction among the components.
 E. integrating a database with the software system.
-D. the interaction among the components. [cite: 1020]
+D. the interaction among the components.
 
 
 Question 157: Which statement is true about system testing and acceptance testing?
@@ -1616,7 +1625,7 @@ B. System testing is done by the developers; acceptance testing is done by the c
 C. System testing is done at the client's site; acceptance testing is done at the developer's site.
 D. System testing is done by the client; acceptance testing is done by the developers.
 E. None of the above is true.
-B. System testing is done by the developers; acceptance testing is done by the client. [cite: 1027]
+B. System testing is done by the developers; acceptance testing is done by the client.
 
 
 Question 158: Behavioral testing is
@@ -1625,7 +1634,7 @@ B. white box testing
 C. red box testing
 D. green box testing
 E. blue box testing
-A. black box testing [cite: 1028]
+A. black box testing
 
 
 Question 159: A state machine diagram describes the behaviour of
@@ -1634,7 +1643,7 @@ B. a use case.
 C. an operation.
 D. an actor.
 E. a class.
-A. an object. [cite: 1029]
+A. an object.
 
 
 Question 160: A state machine diagram responds to every event that
@@ -1643,7 +1652,7 @@ B. occurs provided it is not processing an activity.
 C. changes a value of the object's attributes.
 D. triggers a transition.
 E. sends a message.
-D. triggers a transition. [cite: 1033]
+D. triggers a transition.
 
 
 Question 161: An event on a state machine diagram can represent
@@ -1652,7 +1661,7 @@ B. a return from a message send.
 C. exiting a state.
 D. the passage of a designated period of time.
 E. a guard becoming true.
-D. the passage of a designated period of time. [cite: 1037]
+D. the passage of a designated period of time.
 
 
 Question 162: Which statement is NOT true about a state in a state machine diagram?
@@ -1661,7 +1670,7 @@ B. It can be anonymous (unnamed).
 C. It can only be entered by the triggering of an event.
 D. It may be characterized by the value of one or more attributes.
 E. It may be characterized by the existence of a link to another object.
-C. It can only be entered by the triggering of an event. [cite: 1044]
+C. It can only be entered by the triggering of an event.
 
 
 Question 163: One purpose of system analysis and design is to
@@ -1670,7 +1679,7 @@ B. determine the time required to implement the system.
 C. capture the system's nonfunctional requirements.
 D. adapt the requirements to the implementation environment.
 E. obtain the client's approval for developing the system.
-D. adapt the requirements to the implementation environment. [cite: 1047]
+D. adapt the requirements to the implementation environment.
 
 
 Question 164: A design class is most cohesive when it
@@ -1679,7 +1688,7 @@ B. does not require database access.
 C. has few dependencies to other classes.
 D. is used in only one scenario of a use case.
 E. has responsibilities that are closely related.
-E. has responsibilities that are closely related. [cite: 1052]
+E. has responsibilities that are closely related.
 
 
 Question 165: The Observer design pattern is used to
@@ -1688,7 +1697,7 @@ B. provide a placeholder for another object.
 C. notify other objects about updates.
 D. encapsulate how a set of objects interact.
 E. decouple an abstraction from its implementation.
-C. notify other objects about updates. [cite: 1054]
+C. notify other objects about updates.
 
 
 Question 166: Which of the following is NOT true about design patterns?
@@ -1697,7 +1706,7 @@ B. They are described using program code.
 C. They represent a solution to a problem in a context.
 D. They can be used to handle nonfunctional requirements.
 E. They make extensive use of inheritance and delegation.
-B. They are described using program code. [cite: 1061]
+B. They are described using program code.
 
 
 Question 167: In the Model-View-Controller (MVC) architectural pattern, the Model represents
@@ -1706,7 +1715,7 @@ B. the process control mechanism used by the system.
 C. the controls with which the user interacts.
 D. the data viewed and manipulated by the user.
 E. the business logic of the application.
-D. the data viewed and manipulated by the user. [cite: 1065]
+D. the data viewed and manipulated by the user.
 
 
 Question 168: According to the best practices of analysis object interaction, which one of the following interactions should NOT be allowed?
@@ -1715,7 +1724,7 @@ B. interactions between two control objects
 C. interactions between a boundary object and an entity object
 D. interactions between two boundary objects
 E. interactions between a control object and an entity object
-E. interactions between a control object and an entity object [cite: 1068]
+E. interactions between a control object and an entity object
 
 
 Question 169: The Bridge design pattern is used to
@@ -1724,7 +1733,7 @@ B. decouple an abstraction from its implementation.provide a placeholder for ano
 C. decouple an abstraction from its implementation.
 D. restrict a class to have only one instance.
 E. defer instantiation of a class to its subclasses.
-C. decouple an abstraction from its implementation. [cite: 1071]
+C. decouple an abstraction from its implementation.
 
 
 Question 170: The Mediator design pattern is used to
@@ -1733,7 +1742,7 @@ B. provide a placeholder for another object.
 C. decouple an abstraction from its implementation.
 D. restrict a class to have only one instance.
 E. encapsulate how a set of objects interact.
-E. encapsulate how a set of objects interact. [cite: 1076]
+E. encapsulate how a set of objects interact.
 
 
 Question 171: The Strategy design pattern is used to
@@ -1742,7 +1751,7 @@ B. provide a placeholder for another object.
 C. decouple an abstraction from its implementation.
 D. restrict a class to have only one instance.
 E. encapsulate an interchangeable family of algorithms.
-E. encapsulate an interchangeable family of algorithms. [cite: 1079]
+E. encapsulate an interchangeable family of algorithms.
 
 
 Question 172: System analysis and design deals with the implementation environment by
@@ -1751,7 +1760,7 @@ B. ignoring it (i.e., not taking it into account).
 C. re-engineering it to fit the design.
 D. delaying consideration of it until implementation.
 E. encapsulating it so as to isolate it from application classes.
-E. encapsulating it so as to isolate it from application classes. [cite: 1083]
+E. encapsulating it so as to isolate it from application classes.
 
 
 Question 173: Which pattern prevents one from creating more than one instance of a variable?
@@ -1760,7 +1769,7 @@ B. Mediator Pattern
 C. Observer Pattern
 D. Proxy Pattern
 E. Singleton Pattern
-E. Singleton Pattern [cite: 1086]
+E. Singleton Pattern
 
 
 Question 174: Which of the following IS NOT a software quality assurance activity?
@@ -1769,7 +1778,7 @@ B. program testing
 C. artifact reviews
 D. software configuration management
 E. people training
-E. people training [cite: 1088]
+E. people training
 
 
 Question 175: In terms of software quality assurance, the purpose of both the SEI Process Capability Maturity Model (SEI-CMM) and the People Capability Maturity Model (PCMM) is to:
@@ -1778,7 +1787,7 @@ B. provide feedback on current practices.
 C. assess and improve current practices.
 D. develop best practices.
 E. improve the standards handbook.
-C. assess and improve current practices. [cite: 1090]
+C. assess and improve current practices.
 
 
 Question 176: If an organization has a standards handbook for software development, then which probably is NOT true?
@@ -1787,7 +1796,7 @@ B. A project can decide to ignore a standard.
 C. A project can decide to use a standard as is.
 D. A project can decide to modify a standard.
 E. A project can decide to create a new standard.
-A. A project can decide to not follow any standards. [cite: 1098]
+A. A project can decide to not follow any standards.
 
 
 Question 177: Test cases for state-based testing can be derived from the
@@ -1796,7 +1805,7 @@ B. state machine diagrams.
 C. basis paths.
 D. domain model.
 E. nonfunctional requirements.
-B. state machine diagrams. [cite: 1101]
+B. state machine diagrams.
 
 
 Question 178: The degree to which the design specifications are followed during manufacturing is known as
@@ -1805,7 +1814,7 @@ B. quality of conformance.
 C. quality of design.
 D. quality of performance.
 E. quality of testing.
-B. quality of conformance. [cite: 1104]
+B. quality of conformance.
 
 
 Question 179: In system analysis and design, an entity class represents
@@ -1814,7 +1823,7 @@ B. information that is persistent.
 C. system dependencies on actors.
 D. information that is transient.
 E. coordination, sequencing, transactions and control of other objects.
-B. information that is persistent. [cite: 1108]
+B. information that is persistent.
 
 
 Question 180: System analysis and design distributes functionality into boundary, entity and control classes because
@@ -1823,7 +1832,7 @@ B. these classes are easier to test.
 C. we want to isolate specific types of changes to specific types of classes.
 D. state machine diagrams use these classes.
 E. object interaction is more easily described using these classes.
-C. we want to isolate specific types of changes to specific types of classes. [cite: 1112]
+C. we want to isolate specific types of changes to specific types of classes.
 
 
 Question 181: Which of the following CANNOT be shown on a Gantt chart?
@@ -1841,7 +1850,7 @@ B. 7
 C. 8
 D. 9
 E. 10
-C. 8 [cite: 1116]
+C. 8
 
 
 Question 183: What would be most effective in reducing the complexity of designing a software system?
@@ -1850,7 +1859,7 @@ B. having refined work breakdown structure
 C. having right level of communication
 D. having sufficient budget
 E. having timely administrative support
-A. having clear design goals [cite: 1118]
+A. having clear design goals
 
 
 Question 184: Which prompting techniques are commonly applied in Generative AI tools? Select all that apply.
@@ -1858,7 +1867,7 @@ A. Implicit prompting - No input
 B. Role-based prompting
 C. Zero-shot prompting
 D. Contextual prompts
-B. Role-based prompting | C. Zero-shot prompting | D. Contextual prompts [cite: 1120, 1121]
+B. Role-based prompting | C. Zero-shot prompting | D. Contextual prompts
 
 
 Question 185: What are the main features of Amazon Q Developer? Select all that apply.
@@ -1866,7 +1875,7 @@ A. Debugging runtime errors automatically.
 B. Code generation.
 C. Automating production deployment.
 D. Explaining existing code logic.
-B. Code generation. | D. Explaining existing code logic. [cite: 1124, 1125]
+B. Code generation. | D. Explaining existing code logic.
 
 
 Question 186: What approach does Generative AI use to develop coding capabilities?
@@ -1874,7 +1883,7 @@ A. By guessing the logic for code execution.
 B. By relying on manual instructions for every task.
 C. By analyzing patterns in training data.
 D. By copying code from online repositories.
-C. By analyzing patterns in training data. [cite: 1128]
+C. By analyzing patterns in training data.
 
 
 Question 187: How can AI enhance the quality of code reviews? Select all that apply.
@@ -1882,7 +1891,7 @@ A. By eliminating all manual errors automatically.
 B. By suggesting modularization for large functions.
 C. By reducing review times significantly.
 D. By enforcing coding best practices.
-B. By suggesting modularization for large functions. | C. By reducing review times significantly. | D. By enforcing coding best practices. [cite: 1133]
+B. By suggesting modularization for large functions. | C. By reducing review times significantly. | D. By enforcing coding best practices.
 
 
 Question 188: How does Amazon Q Developer assist in refactoring Java code?
@@ -1890,7 +1899,7 @@ A. Ensuring code is entirely free of bugs after refactoring.
 B. Managing application deployment pipelines alongside refactoring.
 C. Automatically rewriting the entire application without developer input.
 D. Suggesting changes to refactor verbose switch statements into cleaner enum-based methods.
-D. Suggesting changes to refactor verbose switch statements into cleaner enum-based methods. [cite: 1138]
+D. Suggesting changes to refactor verbose switch statements into cleaner enum-based methods.
 
 
 Question 189: What is one major benefit of using Generative AI in software development?
@@ -1898,7 +1907,7 @@ A. Reducing repetitive coding tasks.
 B. Guaranteeing bug-free applications.
 C. Writing entire applications without user input.
 D. Handling hardware configurations automatically.
-A. Reducing repetitive coding tasks. [cite: 1142]
+A. Reducing repetitive coding tasks.
 
 
 Question 190: What is one advantage of using Generative AI for code reviews?
@@ -1906,13 +1915,13 @@ A. Generating detailed project documentation.
 B. Refactoring code without developer input.
 C. Replacing developers for manual code reviews.
 D. Automating the identification of potential bugs.
-D. Automating the identification of potential bugs. [cite: 1146]
+D. Automating the identification of potential bugs.
 
 
 Question 191: True or false: AI tools can only generate boilerplate code for specific programming languages.
 A. True
 B. False
-B. False [cite: 1148]
+B. False
 
 
 Question 192: What is a benefit of AI-assisted code refactoring?
@@ -1920,7 +1929,7 @@ A. Guaranteeing optimal runtime performance.
 B. Ensuring code follows industry standards without review.
 C. Automatically rewriting all project code.
 D. Improving code readability and maintainability.
-D. Improving code readability and maintainability. [cite: 1152]
+D. Improving code readability and maintainability.
 
 
 Question 193: How can Generative AI tools assist developers? Select all that apply.
@@ -1928,7 +1937,7 @@ A. By explaining code logic in simpler terms.
 B. By debugging runtime errors automatically.
 C. By managing CI/CD pipelines directly.
 D. By generating reusable code snippets.
-A. By explaining code logic in simpler terms. | D. By generating reusable code snippets. [cite: 1156]
+A. By explaining code logic in simpler terms. | D. By generating reusable code snippets.
 
 
 Question 194: What is one way Generative AI improves the code review process?
@@ -1936,7 +1945,7 @@ A. By replacing human reviewers entirely.
 B. By removing the need for testing after review.
 C. By identifying areas of inefficiency in the code.
 D. By rewriting the entire application logic automatically.
-C. By identifying areas of inefficiency in the code. [cite: 1160]
+C. By identifying areas of inefficiency in the code.
 
 
 Question 195: What enables Generative AI to suggest solutions to coding problems?
@@ -1944,7 +1953,7 @@ A. Human intervention during runtime.
 B. Direct internet searches embedded in the model.
 C. Pre-configured responses for every scenario.
 D. Pattern recognition from extensive training data.
-D. Pattern recognition from extensive training data. [cite: 1164]
+D. Pattern recognition from extensive training data.
 
 
 Question 196: What aspects of code reviews can AI automate? Select all that apply.
@@ -1952,7 +1961,7 @@ A. Identifying inefficiencies in algorithms.
 B. Highlighting security vulnerabilities.
 C. Ensuring compliance with coding standards.
 D. Writing complete fixes without input.
-A. Identifying inefficiencies in algorithms. | B. Highlighting security vulnerabilities. | C. Ensuring compliance with coding standards. [cite: 1168]
+A. Identifying inefficiencies in algorithms. | B. Highlighting security vulnerabilities. | C. Ensuring compliance with coding standards.
 
 
 Question 197: What is a benefit of AI-assisted code refactoring?
@@ -1960,7 +1969,7 @@ A. Guaranteeing optimal runtime performance.
 B. Automatically rewriting all project code.
 C. Ensuring code follows industry standards without review.
 D. Improving code readability and maintainability.
-D. Improving code readability and maintainability. [cite: 1172]
+D. Improving code readability and maintainability.
 
 
 Question 198: Which of the following are the key domains of digital transformation? Select all that apply.
@@ -1968,7 +1977,7 @@ A. Random Forests
 B. Data
 C. Change management
 D. Technology
-B. Data | C. Change management | D. Technology [cite: 1174, 1175]
+B. Data | C. Change management | D. Technology
 
 
 Question 199: Which of the following are key benefits of digital transformation? Select all that apply.
@@ -1976,7 +1985,7 @@ A. Innovation in business models
 B. Improved operational efficiency
 C. Faster manual processes
 D. Enhanced customer experiences
-A. Innovation in business models | B. Improved operational efficiency | D. Enhanced customer experiences [cite: 1177, 1178]
+A. Innovation in business models | B. Improved operational efficiency | D. Enhanced customer experiences
 
 
 Question 200: A neural network classifies digit "8". Output probabilities: 0 (0.02), 1 (0.01), 8 (0.95), 9 (0.02). What is the classification?
@@ -1984,7 +1993,7 @@ A. 9
 B. 1
 C. 8
 D. 0
-C. 8 [cite: 1181]
+C. 8
 
 
 Question 201: A smart city uses connected devices to monitor traffic and optimize public transportation. What technology is primarily enabling this transformation?
@@ -1992,7 +2001,7 @@ A. Internet of Things (IoT)
 B. Data
 C. Cloud computing
 D. Artificial Intelligence (AI)
-A. Internet of Things (IoT) [cite: 1182, 1183]
+A. Internet of Things (IoT)
 
 
 Question 202: Netflix uses data to recommend shows and movies to users based on their viewing history. This is an example of ______.
@@ -2000,7 +2009,7 @@ A. IoT
 B. Data analytics
 C. Artificial Intelligence (AI)
 D. Cloud computing
-B. Data analytics [cite: 1185, 1186, 1187]
+B. Data analytics
 
 
 Question 203: What is the purpose of the hidden layer in a neural network?
@@ -2008,7 +2017,7 @@ A. To pass data unchanged to the output layer.
 B. To store training data for reuse.
 C. To generate final predictions.
 D. To extract and learn features from input data.
-D. To extract and learn features from input data. [cite: 1188, 1190, 1191]
+D. To extract and learn features from input data.
 
 
 Question 204: A decision tree predicts the result for a new student who studied for 6 hours and attended 80% of classes. (Criteria: >8h & >90% Pass; >4h & >70% Pass). What is the output?
@@ -2016,13 +2025,13 @@ A. Fail
 B. Cannot determine
 C. Stuck
 D. Pass
-D. Pass [cite: 1194, 1195, 1198]
+D. Pass
 
 
 Question 205: True or False: A company introducing AI-based chatbots to improve customer support is an example of digital transformation.
 A. True
 B. False
-A. True [cite: 1199, 1200]
+A. True
 
 
 Question 206: A company is building a system that learns from historical data to predict future trends in sales. This system is an example of ______.
@@ -2030,7 +2039,7 @@ A. Generative AI (GenAI)
 B. Artificial Intelligence (AI)
 C. Machine Learning (ML)
 D. Deep Fakes
-C. Machine Learning (ML) [cite: 1201, 1202, 1203]
+C. Machine Learning (ML)
 
 
 Question 207: What is the role of neurons in a neural network?
@@ -2038,13 +2047,13 @@ A. Neurons process inputs and pass the output to the next layer.
 B. Neurons determine the structure of the entire network.
 C. Neurons store data for future analysis.
 D. Neurons provide feedback to the user.
-A. Neurons process inputs and pass the output to the next layer. [cite: 1204, 1205, 1207]
+A. Neurons process inputs and pass the output to the next layer.
 
 
 Question 208: True or False: In a Random Forest, each tree is trained on a random subset of data, and the final prediction is based on the majority vote or the average.
 A. True
 B. False
-A. True [cite: 1208, 1209]
+A. True
 
 
 Question 209: A hospital adopts cloud computing as part of its digital transformation strategy. What is the primary benefit?
@@ -2052,13 +2061,13 @@ A. Providing secure, scalable storage for patient medical records.
 B. Deep Fakes
 C. Artificial Intelligence (AI)
 D. Generative AI (GenAI)
-A. Providing secure, scalable storage for patient medical records. [cite: 1210, 1212, 1213]
+A. Providing secure, scalable storage for patient medical records.
 
 
 Question 210: True or False: A neural network gives output in the hidden layer.
 A. True
 B. False
-B. False [cite: 1214, 1215]
+B. False
 
 
 Question 211: Generative AI in software development primarily aims to ______.
@@ -2066,7 +2075,7 @@ A. Replace all manual coding processes.
 B. Assist developers in creating software solutions and improving productivity.
 C. Create new AI languages.
 D. Create full Java software by just stating the requirements.
-B. Assist developers in creating software solutions and improving productivity. [cite: 1216, 1217, 1219]
+B. Assist developers in creating software solutions and improving productivity.
 
 
 Question 212: Which of the following is a key ethical concern associated with generative AI?
@@ -2074,7 +2083,7 @@ A. The risk of diminishing human creativity due to AI's ability to compose songs
 B. The potential for bias in AI-generated content.
 C. The concern about developers profiting significantly.
 D. Its inability to automate tasks without human input.
-B. The potential for bias in AI-generated content. [cite: 1220, 1222, 1224]
+B. The potential for bias in AI-generated content.
 
 
 Question 213: What is one key benefit of using generative AI tools in Java development?
@@ -2082,7 +2091,7 @@ A. Automatically deploying Java applications to production.
 B. Enhancing coding efficiency by generating boilerplate code.
 C. Completely replacing debugging and testing processes.
 D. Eliminating the need for developers to learn Java.
-B. Enhancing coding efficiency by generating boilerplate code. [cite: 1225, 1226, 1228]
+B. Enhancing coding efficiency by generating boilerplate code.
 
 
 Question 214: GitHub Copilot supports software developers by the ______.
@@ -2090,7 +2099,7 @@ A. Auto-completing of code and suggesting snippets.
 B. Writing of entire software programs, autonomously.
 C. Debugging of runtime errors automatically.
 D. Replacing manual testing procedures.
-A. Auto-completing of code and suggesting snippets. [cite: 1229, 1230, 1232]
+A. Auto-completing of code and suggesting snippets.
 
 
 Question 215: Machine Learning (ML) is a subset of Artificial Intelligence (AI) that ______.
@@ -2098,7 +2107,7 @@ A. Learns from data and improves without explicit programming.
 B. Makes decisions based solely on predefined rules.
 C. Learns from the prompt given by the user.
 D. Makes decisions based solely on the programming logic.
-A. Learns from data and improves without explicit programming. [cite: 1233, 1234, 1238]
+A. Learns from data and improves without explicit programming.
 
 
 Question 216: In a decision tree, the internal nodes represent ______.
@@ -2106,7 +2115,7 @@ A. Features or attributes of the data.
 B. Final outcomes of the decision.
 C. Random guesses made by the model.
 D. Neurons of the human brain.
-A. Features or attributes of the data. [cite: 1239, 1240, 1242]
+A. Features or attributes of the data.
 
 
 Question 217: A company implements cloud computing, AI for insights, and new workflows. Which aspects of digital transformation are highlighted? Select all that apply.
@@ -2114,7 +2123,7 @@ A. Automating all business functions without human input.
 B. Leveraging technology to enhance operations.
 C. Improving workflows for greater efficiency.
 D. Analyzing data for better decision-making.
-B. Leveraging technology to enhance operations. | C. Improving workflows for greater efficiency. | D. Analyzing data for better decision-making. [cite: 1243, 1245, 1246, 1247]
+B. Leveraging technology to enhance operations. | C. Improving workflows for greater efficiency. | D. Analyzing data for better decision-making.
 
 
 Question 218: A developer uses Amazon Q Developer to fix an incorrect variable type. What benefits does this provide?
@@ -2122,7 +2131,7 @@ A. Debugging becomes faster and more efficient.
 B. The tool eliminates all future bugs.
 C. The developer can ignore error-prone sections.
 D. The developer doesn't need to validate the output.
-A. Debugging becomes faster and more efficient. [cite: 1248, 1250, 1253]
+A. Debugging becomes faster and more efficient.
 
 
 Question 219: Generative AI is a branch of artificial intelligence that ______.
@@ -2130,7 +2139,7 @@ A. Predicts future trends using past data.
 B. Mimics human thinking to classify information.
 C. Focuses on creating new content from learned patterns.
 D. Develops software without any human input.
-C. Focuses on creating new content from learned patterns. [cite: 1254, 1256, 1257]
+C. Focuses on creating new content from learned patterns.
 
 
 Question 220: Which concepts describe how AI creates content like recipes and songs? Select all that apply.
@@ -2138,7 +2147,7 @@ A. Identifying patterns in large datasets and creating new outputs based on thos
 B. Generating outputs based on learned patterns without large datasets.
 C. Use of explicit instructions like if, for, switch.
 D. Pattern recognition from large datasets.
-A. Identifying patterns in large datasets and creating new outputs based on those patterns. | D. Pattern recognition from large datasets. [cite: 1258, 1260, 1263, 1264]
+A. Identifying patterns in large datasets and creating new outputs based on those patterns. | D. Pattern recognition from large datasets.
 
 
 Question 221: How does Generative AI, like Amazon Q Developer, assist in software development?
@@ -2146,7 +2155,7 @@ A. Replacing all programming languages with spoken English.
 B. Fully automating the process without human involvement.
 C. Directly deploying applications to the cloud.
 D. By suggesting code snippets, completing code, and generating functions based on descriptions.
-D. By suggesting code snippets, completing code, and generating functions based on descriptions. [cite: 1265, 1269, 1270]
+D. By suggesting code snippets, completing code, and generating functions based on descriptions.
 
 
 Question 222: When a neural network processes input data, it learns patterns by ______.
@@ -2154,7 +2163,7 @@ A. Adjusting weights and biases through training.
 B. Memorizing every input-output pair.
 C. Ignoring input features and calculating outputs with AI algorithms.
 D. Overwriting its entire structure for each prediction.
-A. Adjusting weights and biases through training. [cite: 1271, 1272]
+A. Adjusting weights and biases through training.
 
 
 Question 223: A company identifies buying patterns, optimizes inventory, and improves workflows. What aspects of digital transformation does this highlight? Select all that apply.
@@ -2162,7 +2171,7 @@ A. Improving operational efficiency.
 B. Using technology to replace all manual tasks.
 C. Enhancing customer experience through personalization.
 D. Leveraging data for actionable insights.
-A. Improving operational efficiency. | C. Enhancing customer experience through personalization | D. Leveraging data for actionable insights. [cite: 1275, 1276, 1278, 1279]
+A. Improving operational efficiency. | C. Enhancing customer experience through personalization | D. Leveraging data for actionable insights.
 
 
 Question 224: AI enhances CRM by analyzing customer data to ______.
@@ -2170,7 +2179,7 @@ A. Provide personalized experiences and predict customer needs.
 B. Eliminate human interaction in customer service.
 C. Generate marketing strategies to sell to the best market.
 D. Ignore trends and ensure accounting books are correct.
-A. Provide personalized experiences and predict customer needs. [cite: 1280, 1281, 1284]
+A. Provide personalized experiences and predict customer needs.
 
 
 Question 225: Which prompt engineering techniques could help generate a detailed essay? Select all that apply.
@@ -2178,13 +2187,13 @@ A. Provide clear instructions (e.g., "Write a 500-word essay...").
 B. Offering examples of the desired output.
 C. Using vague terms like "Give me something interesting".
 D. Specifying role play and the target audience.
-A. Provide clear instructions. | B. Offering examples of the desired output. | D. Specifying role play and the target audience. [cite: 1285, 1287, 1288, 1290, 1291, 1292]
+A. Provide clear instructions. | B. Offering examples of the desired output. | D. Specifying role play and the target audience.
 
 
 Question 226: True or False: Networking is one of the four key domains of digital transformation.
 A. True
 B. False
-A. True [cite: 1293, 1294]
+A. True
 
 
 Question 227: In digital transformation, data is primarily used to ______.
@@ -2192,7 +2201,7 @@ A. Provide insights that guide decision-making and improve efficiency.
 B. Store historical records without analysis.
 C. Automate every business function.
 D. Predict the future with guaranteed 100% accuracy.
-A. Provide insights that guide decision-making and improve efficiency. [cite: 1295, 1296, 1298]
+A. Provide insights that guide decision-making and improve efficiency.
 
 
 Question 228: A company plans to scale its AI system to millions of users. What are possible solutions? Select all that apply.
@@ -2200,7 +2209,7 @@ A. Elasticity.
 B. Load balancing.
 C. Optimizing the AI model and the neural network.
 D. Completely eliminating manual oversight.
-A. Elasticity. | B. Load balancing. | C. Optimizing the AI model and the neural network. [cite: 1299, 1300, 1301, 1302, 1303]
+A. Elasticity. | B. Load balancing. | C. Optimizing the AI model and the neural network.
 
 
 Question 229: A decision tree overfitted training data and performs poorly on new data. What could be the cause? Select all that apply.
@@ -2208,7 +2217,7 @@ A. Features (age and income) are irrelevant.
 B. Capturing noise in the training data.
 C. Not enough leaf nodes.
 D. The training dataset is too small.
-B. Capturing noise in the training data. | D. The training dataset is too small. [cite: 1304, 1306, 1307, 1308]
+B. Capturing noise in the training data. | D. The training dataset is too small.
 
 
 Question 230: What role does Generative AI play in automating code reviews?
@@ -2216,7 +2225,7 @@ A. Automatically merging reviewed code.
 B. Guaranteeing compliance with all standards.
 C. Highlighting inefficiencies and suggesting improvements.
 D. Performing reviews without any developer input.
-C. Highlighting inefficiencies and suggesting improvements. [cite: 1309, 1311, 1312]
+C. Highlighting inefficiencies and suggesting improvements.
 
 
 Question 231: When setting up an Amazon Q Developer account, what is the initial step?
@@ -2224,13 +2233,13 @@ A. Install the IDE plugin directly.
 B. Start using the AI tool without setup.
 C. Link a GitHub repository before registering.
 D. Register on the Amazon Q Developer portal.
-D. Register on the Amazon Q Developer portal. [cite: 1313, 1315, 1316]
+D. Register on the Amazon Q Developer portal.
 
 
 Question 232: True or false: AI tools guarantee error-free boilerplate code for all projects.
 A. True
 B. False
-B. False [cite: 1317, 1318]
+B. False
 
 
 Question 233: What is one key feature of GitHub Copilot that enhances Java development in IntelliJ?
@@ -2238,7 +2247,7 @@ A. Automatically generating production-ready Java apps without input.
 B. Managing deployment pipelines directly from IntelliJ.
 C. Automatically deploying Java applications to production.
 D. Writing comprehensive test cases without developer intervention.
-C. Automatically deploying Java applications to production. [cite: 1319, 1321, 1322]
+C. Automatically deploying Java applications to production.
 
 
 Question 234: What is a feature of AI-powered refactoring tools?
@@ -2246,7 +2255,7 @@ A. Rewriting business logic without input.
 B. Automating integration testing.
 C. Detecting redundant code for removal.
 D. Guaranteeing compatibility across systems.
-C. Detecting redundant code for removal. [cite: 1323, 1325, 1326]
+C. Detecting redundant code for removal.
 
 
 Question 235: Which of the following correctly describes the purpose of weights in a neural network?
@@ -2254,13 +2263,13 @@ A. Weights are the output of the neural network.
 B. Weights are irrelevant to a neural network.
 C. Weights store the input data.
 D. Weights determine the connections between neurons and influence data flow.
-D. Weights determine the connections between neurons and influence how data flows through the network. [cite: 1327, 1331, 1332]
+D. Weights determine the connections between neurons and influence how data flows through the network.
 
 
 Question 236: True or False: A neural network is created to mimic how computer chips work on a deeper level and some biological concepts.
 A. True
 B. False
-B. False [cite: 1333, 1334]
+B. False
 
 
 Question 237: What is the role of "features" in a decision tree?
@@ -2268,7 +2277,7 @@ A. Features store the labels.
 B. Features are only used in Random Forests.
 C. Features are used to split the data and make decisions at each node.
 D. Features represent the outcome.
-C. Features are used to split the data and make decisions at each node. [cite: 1335, 1338, 1340]
+C. Features are used to split the data and make decisions at each node.
 
 
 Question 238: Which of the following statements about Random Forests are true? Select all that apply.
@@ -2276,7 +2285,7 @@ A. Random Forests are inherently biased.
 B. Random Forests reduce overfitting compared to a single decision tree.
 C. Random Forests combine predictions from multiple trees to improve accuracy.
 D. Random Forests use a bagging technique.
-B. Random Forests reduce overfitting. | C. Random Forests combine predictions from multiple trees. | D. Random Forests use a bagging technique. [cite: 1341, 1343, 1344, 1345, 1346, 1347, 1348]
+B. Random Forests reduce overfitting. | C. Random Forests combine predictions from multiple trees. | D. Random Forests use a bagging technique.
 
 
 Question 239: Which examples showcase machine learning (ML) as a subset of Artificial Intelligence (AI)? Select all that apply.
@@ -2284,7 +2293,7 @@ A. Brightening an image without learning.
 B. AI system classifying spam emails based on patterns.
 C. Chatbot predicting user responses based on historical conversations.
 D. AI adjusting its performance over time using data.
-B. AI classifying spam. | C. Chatbot predicting responses. | D. AI adjusting performance using data. [cite: 1349, 1351, 1352, 1353, 1354, 1355]
+B. AI classifying spam. | C. Chatbot predicting responses. | D. AI adjusting performance using data.
 
 
 Question 240: A neural network is used for image recognition. Which of the following describes its process? Select all that apply.
@@ -2292,7 +2301,7 @@ A. Each neuron processes multiple features with specific weights.
 B. It uses multiple trees for different features.
 C. It uses layers of neurons to learn different features.
 D. The maximum probability wins.
-A. Each neuron processes features with weights. | C. It uses layers of neurons to learn features. | D. The maximum probability wins. [cite: 1356, 1358, 1360, 1361, 1362]
+A. Each neuron processes features with weights. | C. It uses layers of neurons to learn features. | D. The maximum probability wins.
 
 
 Question 241: What is the primary goal of digital transformation in businesses?
@@ -2300,7 +2309,7 @@ A. To integrate digital technologies to improve efficiency and deliver value.
 B. To use digital tools for marketing purposes.
 C. To focus solely on creating new software applications.
 D. To focus on creating a digital virtual reality space.
-A. To integrate digital technologies to improve efficiency and deliver value. [cite: 1363, 1364, 1368]
+A. To integrate digital technologies to improve efficiency and deliver value.
 
 
 Question 242: Compliance in AI ensures that systems adhere to ______.
@@ -2308,7 +2317,7 @@ A. Legal and ethical standards, like GDPR.
 B. All decision-making frameworks.
 C. Rules that remove all biases.
 D. Techniques that eliminate the need for data privacy.
-A. Legal and ethical standards, like GDPR. [cite: 1369, 1370, 1372]
+A. Legal and ethical standards, like GDPR.
 
 
 Question 243: Which of the following best summarizes the role of Generative AI in software development?
@@ -2316,7 +2325,7 @@ A. Replacing human developers in all aspects.
 B. Generating entirely new programming languages.
 C. Automating the deployment of all software.
 D. Assisting developers with code suggestions, completion, and debugging.
-D. Assisting developers with tasks like code suggestions, completion, and debugging. [cite: 1373, 1376, 1377]
+D. Assisting developers with tasks like code suggestions, completion, and debugging.
 
 
 Question 244: What is the primary function of Amazon Q Developer in software development?
@@ -2324,7 +2333,7 @@ A. To help code in Java only.
 B. To suggest, complete, and debug code within an IDE.
 C. To help the debugging process only.
 D. To help create software without any input.
-B. To suggest, complete, and debug code within an IDE. [cite: 1378, 1379, 1381]
+B. To suggest, complete, and debug code within an IDE.
 
 
 Question 245: When integrating AI into existing systems, businesses must address ______.
@@ -2332,7 +2341,7 @@ A. Compatibility with legacy software and workflows.
 B. Elimination of all manual processes.
 C. Constant system updates regardless of functionality.
 D. Rejection of any customization to existing tools.
-A. Compatibility with legacy software and workflows. [cite: 1382, 1383, 1385]
+A. Compatibility with legacy software and workflows.
 
 
 Question 246: What is the primary difference between Generative AI and Discriminative AI?
@@ -2340,13 +2349,13 @@ A. Both focus only on data classification.
 B. Generative AI predicts outcomes, while Discriminative AI generates new content.
 C. Generative AI creates new data, while Discriminative AI predicts or classifies existing data.
 D. Discriminative AI is faster than Generative AI in creating content.
-C. Generative AI creates new data, while Discriminative AI predicts or classifies existing data. [cite: 1386, 1389, 1391]
+C. Generative AI creates new data, while Discriminative AI predicts or classifies existing data.
 
 
 Question 247: True or False: Generating a new piece of music in the style of Beethoven is a task that Generative AI can accomplish.
 A. True
 B. False
-A. True [cite: 1392, 1393]
+A. True
 
 
 Question 248: Why is bias in GenAI a concern?
@@ -2354,7 +2363,7 @@ A. It slows down the model's ability to learn.
 B. It can lead to outputs that reinforce harmful societal stereotypes.
 C. It causes GenAI to prioritize certain types of data.
 D. It prevents the AI from producing any content.
-B. It can lead to outputs that reinforce harmful societal stereotypes. [cite: 1394, 1396, 1399]
+B. It can lead to outputs that reinforce harmful societal stereotypes.
 
 
 Question 249: What is a significant risk associated with deepfake video technology?
@@ -2362,7 +2371,7 @@ A. Creating strain on computer hardware.
 B. Crashing financial systems.
 C. Corrupting data integrity in AI models.
 D. Creating realistic but false videos, potentially leading to fraud or misinformation.
-D. It can create realistic but false videos, potentially leading to fraud or misinformation. [cite: 1400, 1403, 1404]
+D. It can create realistic but false videos, potentially leading to fraud or misinformation.
 
 
 Question 250: Which law is designed to regulate the use of high-risk AI applications?
@@ -2370,7 +2379,7 @@ A. China's AI Regulations (2024)
 B. United States' AI Bill of Rights (2024)
 C. European Union's AI Act (2024)
 D. United Nations AI Regulations (2024)
-C. European Union's AI Act (2024) [cite: 1405, 1406]
+C. European Union's AI Act (2024)
 
 
 Question 251: When using Generative AI tools for coding, few-shot prompting is often employed to achieve better results. What does few-shot prompting involve?
@@ -2639,7 +2648,6 @@ A. The neural network has memorized the training data instead of generalizing. |
     }
 
     function parseQuestions(text) {
-        // Tẩy sạch cite trước khi xử lý
         const cleanText = text.replace(/\]+\]/g, "");
         const blocks = cleanText.split(/Question \d+:/).filter(b => b.trim() !== '');
         
@@ -2680,6 +2688,7 @@ A. The neural network has memorized the training data instead of generalizing. |
         const qCorrectAnswerEl = document.getElementById('qCorrectAnswer');
         
         let currentIndex = 1;
+        let autoNextTimeout; // Thêm biến toàn cục quản lý thời gian chờ tự chuyển câu
 
         const classicExamContainer = document.getElementById('classicExamContainer');
         let examSequence = [];
@@ -2740,11 +2749,14 @@ A. The neural network has memorized the training data instead of generalizing. |
         }
 
         function closeStudyModal() {
+            clearTimeout(autoNextTimeout); // Xóa chờ nếu người dùng đóng màn hình
             studyModal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
 
         function updateStudyModal() {
+            clearTimeout(autoNextTimeout); // Reset bộ đếm auto-next khi qua câu mới
+            
             const q = quizData[currentIndex - 1];
             qTextEl.textContent = `Câu ${currentIndex}: ${q.question}`;
             modalCounter.textContent = `Câu ${currentIndex} / ${TOTAL_QUESTIONS}`;
@@ -2752,26 +2764,58 @@ A. The neural network has memorized the training data instead of generalizing. |
 
             qOptionsEl.innerHTML = '';
             let correctTexts = [];
+            let correctSelectedCount = 0; // Biến đếm số đáp án ĐÚNG đã click
 
             q.options.forEach(optText => {
                 const btn = document.createElement('div');
                 btn.className = 'option-btn';
                 btn.textContent = optText;
                 
-                // NÚT BẤM CHO PHÉP CLICK CHỌN
+                const optKey = extractKey(optText);
+
+                // NÚT BẤM CHO PHÉP CLICK CHỌN VÀ HIỆN ĐÁP ÁN
                 btn.addEventListener('click', () => {
-                    btn.classList.toggle('selected');
+                    // Nếu nút đã được chọn rồi thì bỏ qua không đếm đúp
+                    if (btn.classList.contains('correct') || btn.classList.contains('incorrect')) return;
+
+                    const isCorrect = q.answers.includes(optKey);
+                    
+                    if (isCorrect) {
+                        btn.classList.add('correct');
+                        btn.classList.remove('incorrect');
+                        btn.innerHTML = `<i class="fa-solid fa-check" style="margin-right: 8px;"></i>${optText}`;
+                        correctSelectedCount++; // Cộng dồn số đáp án đúng đã tìm thấy
+                    } else {
+                        btn.classList.add('incorrect');
+                        btn.classList.remove('correct');
+                        btn.innerHTML = `<i class="fa-solid fa-xmark" style="margin-right: 8px;"></i>${optText}`;
+                    }
+
+                    // TỰ ĐỘNG HIỆN ĐÁP ÁN KHI:
+                    // 1. Lỡ bấm nhầm đáp án sai (game over, xem đáp án luôn)
+                    // 2. Đã bấm đủ tất cả các đáp án đúng của câu hỏi đó (Win)
+                    if (!isCorrect || correctSelectedCount === q.answers.length) {
+                        if (btnRevealAnswer.style.display !== 'none') {
+                            btnRevealAnswer.click();
+                        }
+                        
+                        // Khóa click tất cả các nút để tránh bấm nhầm trong lúc chờ qua câu
+                        document.querySelectorAll('.option-btn').forEach(b => b.style.pointerEvents = 'none');
+
+                        // Đợi 1.5 giây (1500ms) để xem đáp án rồi tự động qua câu tiếp theo
+                        autoNextTimeout = setTimeout(() => {
+                            nextQuestion();
+                        }, 1500);
+                    }
                 });
 
                 qOptionsEl.appendChild(btn);
                 
-                const optKey = extractKey(optText);
                 if(q.answers.includes(optKey)) {
                     correctTexts.push(optText);
                 }
             });
 
-            // SETUP THANH REVEAL ĐÁP ÁN
             btnRevealAnswer.style.display = 'block';
             qCorrectAnswerEl.style.display = 'none';
             
@@ -2782,12 +2826,10 @@ A. The neural network has memorized the training data instead of generalizing. |
             `;
         }
 
-        // SỰ KIỆN CLICK ĐỂ HIỆN ĐÁP ÁN
         btnRevealAnswer.addEventListener('click', () => {
             btnRevealAnswer.style.display = 'none';
             qCorrectAnswerEl.style.display = 'block';
             
-            // Đánh dấu câu đã học sau khi xem đáp án
             if (!learnedItems.has(currentIndex)) { 
                 learnedItems.add(currentIndex); 
                 localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
@@ -2805,18 +2847,17 @@ A. The neural network has memorized the training data instead of generalizing. |
         document.getElementById('btnPrev').addEventListener('click', prevQuestion);
         document.getElementById('btnNext').addEventListener('click', nextQuestion);
 
-        // PHÍM MŨI TÊN CHUYỂN CÂU VÀ PHÍM SPACE ĐỂ HIỆN ĐÁP ÁN NHANH
         document.addEventListener('keydown', e => {
             if (studyModal.classList.contains('active')) {
                 if (e.key === 'ArrowLeft') prevQuestion();
                 if (e.key === 'ArrowRight') nextQuestion();
                 if (e.key === 'Escape') closeStudyModal();
                 if (e.key === ' ' || e.code === 'Space') {
-                    e.preventDefault(); // Ngăn cuộn trang
+                    e.preventDefault(); 
                     if(btnRevealAnswer.style.display === 'block') {
                         btnRevealAnswer.click();
                     } else {
-                        nextQuestion(); // Ấn Space thêm lần nữa sẽ qua câu tiếp theo
+                        nextQuestion(); 
                     }
                 }
             }
