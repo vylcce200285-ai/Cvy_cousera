@@ -66,7 +66,7 @@
         .img-card.learned .img-badge { background: var(--accent); color: white; }
         .img-card.learned::after { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; font-size: 6rem; color: rgba(16, 185, 129, 0.1); top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1; pointer-events: none;}
 
-        /* === MODAL HỌC THUỘC (NỀN TRẮNG - TƯƠNG TÁC ĐẦY ĐỦ) === */
+        /* === MODAL HỌC THUỘC === */
         .modal { position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.95); display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s ease; }
         .modal.active { opacity: 1; visibility: visible; }
         
@@ -80,7 +80,7 @@
         /* Style Giao Diện Nền Trắng Cho Khung Học */
         .question-container {
             flex: 1;
-            background: #ffffff; /* Nền trắng */
+            background: #ffffff; 
             border: 1px solid #e2e8f0;
             border-radius: 16px;
             padding: 35px;
@@ -90,40 +90,60 @@
             transition: all 0.3s ease;
         }
 
-        .question-text { font-size: 1.25rem; font-weight: 700; margin-bottom: 25px; line-height: 1.6; color: #0f172a; /* Chữ đen */ }
-        .multiple-hint { display: inline-block; font-size: 0.9rem; color: #8b5cf6; background: rgba(139, 92, 246, 0.1); padding: 4px 10px; border-radius: 6px; margin-bottom: 15px; font-weight: 600;}
+        .question-text { font-size: 1.25rem; font-weight: 700; margin-bottom: 25px; line-height: 1.6; color: #0f172a; }
         
-        .options-grid { display: flex; flex-direction: column; gap: 12px; }
+        .options-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 25px; }
         .option-btn {
             width: 100%; text-align: left; padding: 18px 20px; 
-            background: #f8fafc; /* Màu xám nhạt */
+            background: #f8fafc; 
             border: 1px solid #cbd5e1; 
             border-radius: 12px; 
             color: #334155; 
-            font-size: 1rem; font-family: inherit; font-weight: 600; cursor: pointer; transition: all 0.2s ease; position: relative;
+            font-size: 1rem; font-family: inherit; font-weight: 600; 
+            cursor: pointer; /* Cho phép click lại */
+            line-height: 1.5;
+            transition: all 0.2s ease;
         }
         .option-btn:hover { background: #f1f5f9; border-color: #94a3b8; }
-        .option-btn:active { transform: scale(0.98); }
-        
-        /* Interactive States trên nền trắng */
         .option-btn.selected { background: rgba(139, 92, 246, 0.1); border-color: var(--primary); box-shadow: 0 0 0 1px var(--primary); }
-        
-        @keyframes popCorrect { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
-        .option-btn.correct { background: #d1fae5; border-color: #10b981; color: #065f46; animation: popCorrect 0.4s ease forwards; pointer-events: none;}
-        .option-btn.correct::after { content: '\f00c'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 20px; color: #10b981; font-size: 1.2rem;}
 
-        @keyframes shakeWrong { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-4px); } 75% { transform: translateX(4px); } }
-        .option-btn.wrong { background: #fee2e2; border-color: #ef4444; color: #991b1b; animation: shakeWrong 0.3s ease forwards; pointer-events: none;}
-        .option-btn.wrong::after { content: '\f00d'; font-family: 'Font Awesome 6 Free'; font-weight: 900; position: absolute; right: 20px; color: #ef4444; font-size: 1.2rem;}
+        /* THANH REVEAL ANSWER */
+        .reveal-btn {
+            width: 100%;
+            background: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            color: #475569;
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .reveal-btn:hover { background: #e2e8f0; border-color: #94a3b8; color: #1e293b;}
+        
+        /* HIỂN THỊ ĐÁP ÁN ĐÚNG Ở DƯỚI CÙNG */
+        .correct-answer-box {
+            background: #ecfdf5;
+            border-left: 6px solid #10b981;
+            border-radius: 8px;
+            padding: 18px 20px;
+            color: #065f46;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.1);
+            animation: fadeIn 0.4s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Footer Pill */
         .footer-pill { position: absolute; bottom: 30px; background: #1a1a1a; border: 1px solid rgba(255,255,255,0.1); padding: 10px 25px; border-radius: 100px; display: flex; align-items: center; gap: 20px; z-index: 60; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .modal-counter { color: var(--text-muted); font-weight: 600; font-size: 1rem; }
         .action-controls { display: flex; gap: 10px; }
-        .btn-mark, .btn-auto { padding: 8px 16px; font-size: 0.9rem; background: rgba(255,255,255,0.05); border: 1px solid transparent; color: white; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px;}
-        .btn-mark:hover, .btn-auto:hover { background: rgba(255,255,255,0.15); }
+        .btn-mark { padding: 8px 16px; font-size: 0.9rem; background: rgba(255,255,255,0.05); border: 1px solid transparent; color: white; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 8px;}
+        .btn-mark:hover { background: rgba(255,255,255,0.15); }
         .btn-mark.active { background: rgba(16, 185, 129, 0.2); color: var(--accent); border-color: var(--accent); }
-        .btn-auto.active { background: rgba(139, 92, 246, 0.2); color: var(--primary); border-color: var(--primary);}
 
         /* === CHẾ ĐỘ THI THỬ (CLASSIC EOS/PE) === */
         #classicExamContainer { 
@@ -224,8 +244,13 @@
             
             <div class="question-container" id="questionBox">
                 <div class="question-text" id="qText"></div>
-                <div class="multiple-hint" id="qHint" style="display: none;">(Câu hỏi này có nhiều đáp án đúng, hãy chọn đủ)</div>
                 <div class="options-grid" id="qOptions"></div>
+                
+                <div id="btnRevealAnswer" class="reveal-btn">
+                    <i class="fa-solid fa-eye"></i> Nhấn vào đây để xem đáp án
+                </div>
+                
+                <div id="qCorrectAnswer" class="correct-answer-box" style="display: none;"></div>
             </div>
 
             <button class="modal-btn btn-next" id="btnNext"><i class="fa-solid fa-chevron-right"></i></button>
@@ -234,7 +259,6 @@
         <div class="footer-pill">
             <div class="modal-counter" id="modalCounter">Câu 1 / 40</div>
             <div class="action-controls">
-                <button class="btn-auto" id="btnAutoNext"><i class="fa-solid fa-forward"></i> <span>Auto: TẮT</span></button>
                 <button class="btn-mark" id="btnMarkLearned"><i class="fa-solid fa-check"></i> <span>Đã hiểu</span></button>
             </div>
         </div>
@@ -280,7 +304,7 @@
     </div>
 
 <script>
-    // DÁN DATA SUỘC VÀO ĐÂY
+    // BẠN DÁN TOÀN BỘ DATA SUỘC CỦA BẠN VÀO ĐÂY NHƯ BÌNH THƯỜNG
     const rawData = `
 Question 1: How do developers interact with Generative Al tools? Select all that apply.
 A. Letting the Al infer tasks without direction.
@@ -312,6 +336,7 @@ B. Writing boilerplate code for APIs.
 C. Detecting vulnerabilities in deployed systems.
 D. Deploying applications directly.
 A. Explaining Java-specific design patterns. | B. Writing boilerplate code for APIs.
+
 
 
 Question 5: How does Generative Al impact the code review process?
@@ -2605,15 +2630,30 @@ D. The network does not have enough hidden layers.
 A. The neural network has memorized the training data instead of generalizing. | B. The input features were irrelevant or noisy. | C. The training data contained too few examples of the misclassified flower.
     `;
 
-    // THUẬT TOÁN LỌC SẠCH DATA
+    // 🚀 HÀM TRÍCH XUẤT ĐÁP ÁN SIÊU CHUẨN
+    function extractKey(text) {
+        let clean = text.replace(/\]+\]/g, "").trim();
+        const match = clean.match(/^([A-Z])\./i);
+        if (match) return match[1].toUpperCase();
+        return clean.toLowerCase().replace(/\.$/, "");
+    }
+
     function parseQuestions(text) {
-        const blocks = text.split(/Question \d+:/).filter(b => b.trim() !== '');
+        // Tẩy sạch cite trước khi xử lý
+        const cleanText = text.replace(/\]+\]/g, "");
+        const blocks = cleanText.split(/Question \d+:/).filter(b => b.trim() !== '');
+        
         return blocks.map((block, index) => {
             const lines = block.split('\n').map(l => l.trim()).filter(l => l !== '');
             const qText = lines.shift(); 
-            const answerString = lines.pop(); // Lọc bỏ dòng đáp án ở cuối tránh bị trùng
-            const correctAnswers = answerString.split('|').map(s => s.trim().replace(/\.$/, "").toLowerCase());
-            const options = lines.filter(l => /^[A-Z]\./.test(l));
+            const answerString = lines.pop(); // Dòng đáp án cuối cùng
+            
+            const correctAnswers = answerString.split('|').map(s => extractKey(s));
+            let options = lines.filter(l => /^[A-Z]\./i.test(l));
+
+            if(options.length === 0) {
+                 options = [answerString.trim()];
+            }
 
             return { id: index + 1, question: qText, options, answers: correctAnswers };
         });
@@ -2623,43 +2663,29 @@ A. The neural network has memorized the training data instead of generalizing. |
     const TOTAL_QUESTIONS = quizData.length;
 
     document.addEventListener('DOMContentLoaded', () => {
-        // === CORE STATE & AUDIO ===
         const STORAGE_KEY = 'swe202c_text_vip'; 
         let learnedItems = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
-        const soundCorrect = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
-        soundCorrect.volume = 0.5;
 
-        // === DOM ELEMENTS ===
         const mainContainer = document.getElementById('mainContainer');
         const gallery = document.getElementById('galleryContainer');
         const progressFill = document.getElementById('progressFill');
         const progressPercent = document.getElementById('progressPercent');
         
-        // Study Modal
         const studyModal = document.getElementById('studyModal');
         const qTextEl = document.getElementById('qText');
         const qOptionsEl = document.getElementById('qOptions');
-        const qHintEl = document.getElementById('qHint');
         const modalCounter = document.getElementById('modalCounter');
         const btnMarkLearned = document.getElementById('btnMarkLearned');
-        const btnAutoNext = document.getElementById('btnAutoNext');
+        const btnRevealAnswer = document.getElementById('btnRevealAnswer');
+        const qCorrectAnswerEl = document.getElementById('qCorrectAnswer');
         
         let currentIndex = 1;
-        let currentQuizSelections = []; 
-        
-        // BẬT SẴN AUTO NEXT THEO YÊU CẦU
-        let isAutoNext = true; 
-        btnAutoNext.classList.add('active');
-        btnAutoNext.innerHTML = '<i class="fa-solid fa-forward"></i> <span>Auto: BẬT</span>';
-        let autoNextTimeout;
 
-        // Classic Exam
         const classicExamContainer = document.getElementById('classicExamContainer');
         let examSequence = [];
         let currentExamStep = 0; 
         let userAnswers = {}; 
 
-        // === YOUTUBE LO-FI ===
         var tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         var firstScriptTag = document.getElementsByTagName('script')[0];
@@ -2678,7 +2704,6 @@ A. The neural network has memorized the training data instead of generalizing. |
             isPlaying = !isPlaying;
         });
 
-        // === RENDER TRANG CHỦ VIP ===
         function updateProgress() {
             const count = learnedItems.size; const percent = ((count / TOTAL_QUESTIONS) * 100).toFixed(1);
             progressPercent.textContent = `${count}/${TOTAL_QUESTIONS} (${percent}%)`; progressFill.style.width = `${percent}%`;
@@ -2707,7 +2732,6 @@ A. The neural network has memorized the training data instead of generalizing. |
             document.querySelectorAll('.img-card').forEach(card => card.style.display = (val === '' || card.dataset.index === val) ? 'flex' : 'none');
         });
 
-        // === MODAL HỌC THUỘC (INTERACTIVE WHITE THEME) ===
         function openStudyModal(index) {
             currentIndex = index;
             updateStudyModal();
@@ -2716,7 +2740,6 @@ A. The neural network has memorized the training data instead of generalizing. |
         }
 
         function closeStudyModal() {
-            clearTimeout(autoNextTimeout);
             studyModal.classList.remove('active');
             document.body.style.overflow = 'auto';
         }
@@ -2724,71 +2747,56 @@ A. The neural network has memorized the training data instead of generalizing. |
         function updateStudyModal() {
             const q = quizData[currentIndex - 1];
             qTextEl.textContent = `Câu ${currentIndex}: ${q.question}`;
-            qHintEl.style.display = q.answers.length > 1 ? 'inline-block' : 'none';
             modalCounter.textContent = `Câu ${currentIndex} / ${TOTAL_QUESTIONS}`;
-            currentQuizSelections = []; 
             updateMarkButtonUI();
 
             qOptionsEl.innerHTML = '';
+            let correctTexts = [];
+
             q.options.forEach(optText => {
-                const btn = document.createElement('button');
+                const btn = document.createElement('div');
                 btn.className = 'option-btn';
                 btn.textContent = optText;
-                const cleanOpt = optText.trim().replace(/\.$/, "").toLowerCase();
                 
+                // NÚT BẤM CHO PHÉP CLICK CHỌN
                 btn.addEventListener('click', () => {
-                    if (btn.classList.contains('correct') || btn.classList.contains('wrong')) return; // Ngăn click lại
-                    
-                    const isMultiple = q.answers.length > 1;
-                    if (isMultiple) {
-                        btn.classList.toggle('selected');
-                        if (btn.classList.contains('selected') && !currentQuizSelections.includes(cleanOpt)) currentQuizSelections.push(cleanOpt);
-                        else currentQuizSelections = currentQuizSelections.filter(v => v !== cleanOpt);
-                        
-                        if (currentQuizSelections.length === q.answers.length) checkAnswer(q.answers);
-                    } else {
-                        currentQuizSelections = [cleanOpt];
-                        checkAnswer(q.answers);
-                    }
+                    btn.classList.toggle('selected');
                 });
+
                 qOptionsEl.appendChild(btn);
+                
+                const optKey = extractKey(optText);
+                if(q.answers.includes(optKey)) {
+                    correctTexts.push(optText);
+                }
             });
+
+            // SETUP THANH REVEAL ĐÁP ÁN
+            btnRevealAnswer.style.display = 'block';
+            qCorrectAnswerEl.style.display = 'none';
+            
+            let ansHtml = correctTexts.length > 0 ? correctTexts.join('<br><br>') : q.answers.join(' | ');
+            qCorrectAnswerEl.innerHTML = `
+                <div style="margin-bottom: 8px;"><i class="fa-solid fa-circle-check"></i> <b style="font-size: 1.15rem;">ĐÁP ÁN ĐÚNG:</b></div>
+                <div style="margin-left: 22px;">${ansHtml}</div>
+            `;
         }
 
-        function checkAnswer(correctAnswers) {
-            let isAllCorrect = true;
-            document.querySelectorAll('.option-btn').forEach(btn => {
-                const optVal = btn.textContent.trim().replace(/\.$/, "").toLowerCase();
-                if (currentQuizSelections.includes(optVal)) {
-                    if (correctAnswers.includes(optVal)) { btn.classList.add('correct'); btn.classList.remove('selected'); } 
-                    else { btn.classList.add('wrong'); btn.classList.remove('selected'); isAllCorrect = false; }
-                } else if (correctAnswers.includes(optVal)) {
-                    btn.classList.add('correct'); // Bôi xanh những câu bị sót
-                }
-            });
-
-            if (isAllCorrect) {
-                soundCorrect.play().catch(e=>console.log("Audio needs user interaction"));
-                if (navigator.vibrate) navigator.vibrate(50);
-                
-                if (!learnedItems.has(currentIndex)) { 
-                    learnedItems.add(currentIndex); 
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
-                    updateProgress(); 
-                    document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
-                    document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
-                    updateMarkButtonUI();
-                }
-                
-                // TỰ ĐỘNG CHUYỂN CÂU NẾU BẬT AUTO
-                if (isAutoNext) { 
-                    clearTimeout(autoNextTimeout); 
-                    autoNextTimeout = setTimeout(() => { nextQuestion(); }, 1000); 
-                }
-            } else {
-                if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        // SỰ KIỆN CLICK ĐỂ HIỆN ĐÁP ÁN
+        btnRevealAnswer.addEventListener('click', () => {
+            btnRevealAnswer.style.display = 'none';
+            qCorrectAnswerEl.style.display = 'block';
+            
+            // Đánh dấu câu đã học sau khi xem đáp án
+            if (!learnedItems.has(currentIndex)) { 
+                learnedItems.add(currentIndex); 
+                localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
+                updateProgress(); 
+                document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
+                document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
+                updateMarkButtonUI();
             }
-        }
+        });
 
         function prevQuestion() { currentIndex = currentIndex > 1 ? currentIndex - 1 : TOTAL_QUESTIONS; updateStudyModal(); }
         function nextQuestion() { currentIndex = currentIndex < TOTAL_QUESTIONS ? currentIndex + 1 : 1; updateStudyModal(); }
@@ -2797,19 +2805,21 @@ A. The neural network has memorized the training data instead of generalizing. |
         document.getElementById('btnPrev').addEventListener('click', prevQuestion);
         document.getElementById('btnNext').addEventListener('click', nextQuestion);
 
-        // LẮNG NGHE PHÍM TẮT TRÊN BÀN PHÍM ĐỂ CHUYỂN CÂU
+        // PHÍM MŨI TÊN CHUYỂN CÂU VÀ PHÍM SPACE ĐỂ HIỆN ĐÁP ÁN NHANH
         document.addEventListener('keydown', e => {
             if (studyModal.classList.contains('active')) {
                 if (e.key === 'ArrowLeft') prevQuestion();
                 if (e.key === 'ArrowRight') nextQuestion();
                 if (e.key === 'Escape') closeStudyModal();
+                if (e.key === ' ' || e.code === 'Space') {
+                    e.preventDefault(); // Ngăn cuộn trang
+                    if(btnRevealAnswer.style.display === 'block') {
+                        btnRevealAnswer.click();
+                    } else {
+                        nextQuestion(); // Ấn Space thêm lần nữa sẽ qua câu tiếp theo
+                    }
+                }
             }
-        });
-
-        btnAutoNext.addEventListener('click', () => {
-            isAutoNext = !isAutoNext;
-            if (isAutoNext) { btnAutoNext.classList.add('active'); btnAutoNext.innerHTML = '<i class="fa-solid fa-forward"></i> <span>Auto: BẬT</span>'; } 
-            else { btnAutoNext.classList.remove('active'); btnAutoNext.innerHTML = '<i class="fa-solid fa-forward"></i> <span>Auto: TẮT</span>'; }
         });
 
         btnMarkLearned.addEventListener('click', () => {
@@ -2825,7 +2835,6 @@ A. The neural network has memorized the training data instead of generalizing. |
             else { btnMarkLearned.classList.remove('active'); btnMarkLearned.innerHTML = `<i class="fa-solid fa-check"></i> <span>Đã hiểu</span>`; }
         }
 
-        // Swipe Mobile
         let touchstartX = 0;
         document.getElementById('swipeArea').addEventListener('touchstart', e => { touchstartX = e.touches[0].clientX; }, {passive: true});
         document.getElementById('swipeArea').addEventListener('touchend', e => { 
@@ -2903,22 +2912,22 @@ A. The neural network has memorized the training data instead of generalizing. |
             const isMultiple = q.answers.length > 1;
 
             q.options.forEach((opt, i) => {
-                const cleanOpt = opt.trim().replace(/\.$/, "").toLowerCase();
+                const optKey = extractKey(opt);
                 const lbl = document.createElement('label');
                 lbl.className = 'classic-opt-item';
                 
                 const inp = document.createElement('input');
                 inp.type = isMultiple ? 'checkbox' : 'radio';
                 inp.name = `exam_opt_${q.id}`;
-                if (userAnswers[q.id] && userAnswers[q.id].includes(cleanOpt)) inp.checked = true;
+                if (userAnswers[q.id] && userAnswers[q.id].includes(optKey)) inp.checked = true;
 
                 inp.addEventListener('change', (e) => {
                     if (!userAnswers[q.id]) userAnswers[q.id] = [];
                     if (!isMultiple) {
-                        userAnswers[q.id] = [cleanOpt];
+                        userAnswers[q.id] = [optKey];
                     } else {
-                        if(e.target.checked) userAnswers[q.id].push(cleanOpt);
-                        else userAnswers[q.id] = userAnswers[q.id].filter(v => v !== cleanOpt);
+                        if(e.target.checked) userAnswers[q.id].push(optKey);
+                        else userAnswers[q.id] = userAnswers[q.id].filter(v => v !== optKey);
                     }
                     const gridBtn = document.getElementById('classicGrid').children[index];
                     if (userAnswers[q.id].length > 0) gridBtn.classList.add('answered');
@@ -2956,7 +2965,7 @@ A. The neural network has memorized the training data instead of generalizing. |
 
         document.getElementById('btnCloseResult').addEventListener('click', () => {
             document.getElementById('resultOverlay').style.display = 'none';
-            btnExitExam.click(); // Thoát về màn chính
+            btnExitExam.click(); 
         });
     });
 </script>
