@@ -274,7 +274,7 @@
         <button class="btn-close" id="btnClose"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-content" id="swipeArea">
             <button class="modal-btn btn-prev" id="btnPrev"><i class="fa-solid fa-chevron-left"></i></button>
-            <img id="modalImg" class="modal-img" src="" alt="JPD113 VIP Document">
+            <img id="modalImg" class="modal-img" src="" alt="PRO192 VIP Document">
             <button class="modal-btn btn-next" id="btnNext"><i class="fa-solid fa-chevron-right"></i></button>
         </div>
         
@@ -307,7 +307,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         const TOTAL_IMAGES = 383; 
-        const STORAGE_KEY = 'jpd113_vip_items'; 
+        const STORAGE_KEY = 'pro192_vip_items';
         
         const gallery = document.getElementById('galleryContainer');
         const searchInput = document.getElementById('searchInput');
@@ -542,7 +542,7 @@
             modalImg.style.opacity = '0';
             modalImg.style.transform = `translateX(${direction === 'next' ? '50px' : '-50px'})`;
             setTimeout(() => {
-                modalImg.src = `img-jpd/jpd (${currentIndex}).png`;
+                modalImg.src = `img-pro/pro (${currentIndex}).png`;
                 modalImg.onload = () => {
                     modalImg.style.opacity = '1';
                     modalImg.style.transform = 'translate(0px, 0px) scale(1)';
@@ -554,7 +554,7 @@
         function closeModal() { if(isExamMode && !confirm("Đang Thi Thử. Thoát sẽ mất điểm. Chắc chưa?")) return; if(isExamMode) exitExamMode(); resetZoom(); clearTimeout(autoNextTimeout); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
         
         function updateModalView(initialLoad = false) { 
-            if(initialLoad) modalImg.src = `img-jpd/jpd (${currentIndex}).png`;
+            if(initialLoad) modalImg.src = `img-pro/pro (${currentIndex}).png`;
             resetQuizButtons();
             modalImg.classList.remove('reveal-answer'); 
             currentQuizSelections.clear(); 
