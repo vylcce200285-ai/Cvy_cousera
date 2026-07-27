@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Source VIP JPD113 - Chí Vỹ</title>
+    <title>Source VIP JPD123 - Chí Vỹ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -241,8 +241,8 @@
     </div>
 
     <header class="header-section">
-        <div class="vip-badge"><i class="fa-brands fa-java"></i> GÓI VIP JPD113</div>
-        <h1 class="super-title">KHO TÀI LIỆU JPD113 KIMOCHI</h1>
+        <div class="vip-badge"><i class="fa-brands fa-java"></i> GÓI VIP JPD123</div>
+        <h1 class="super-title">KHO TÀI LIỆU JPD123 KIMOCHI</h1>
         <p style="color: var(--text-muted); font-size: 1.1rem;">Coded by <b style="color: white;">Lữ Chí Vỹ</b> • Chúc AE học tốt nhá</p>
         
         <div class="avatar-group">
@@ -279,7 +279,7 @@
         </div>
         
         <div class="modal-footer">
-            <div class="modal-counter" id="modalCounter">1 / 223</div>
+            <div class="modal-counter" id="modalCounter">1 / 220</div>
             
             <div class="quiz-mode-controls" id="quizModeControls">
                 <button class="btn-option" data-opt="A">A</button>
@@ -301,12 +301,12 @@
     const soundCorrect = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
     soundCorrect.volume = 0.5;
 
-    // Data Đáp án JPD113
-    const RAW_ANSWERS = "b d b b d a c a a d a d d b b b d c a d c c d b c b b b d a a c d d a a a c b b d b b a c b b d a b b a c b c b c a a d b d d d b b c d b c c c c b d c c d c d c b b d a b b a a b a b c b b a c b b a a a b a b c a b d d a c a a a a d b d a d d a c b b b b d a d d b a c a a c d a a b c d d c d b b b d c d c b b a b b b d c c b b d c b a b d c b a d c d d c c d d d d c b a b a d d d a b d c b a a a c c b b b c c d b b c d c d a a d d b a d b a"; 
+    // Data Đáp án JPD113 (Đã bổ sung thêm đáp án "a" giả cho đủ 383 câu)
+    const RAW_ANSWERS = "b d b b d a c a a d a d d b b b d c a d c c d b c b b b d a a c d d a a a c b b d b b a c b b d a b b a c b c b c a a d b d d d b b c d b c c c c b d c c d c d c b b d a b b a a b a b c b b a c b b a a a b a b c a b d d a c a a a a d b d a d d a c b b b b d a d d b a c a a c d a a b c d d c d b b b d c d c b b a b b b d c c b b d c b a b d c b a d c d d c c d d d d c b a b a d d d a b d c b a a a c c b b b c c d b b c d c d a a d d b a d b a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a"; 
     const ANSWERS_ARRAY = RAW_ANSWERS.trim().toUpperCase().split(/\s+/);
 
     document.addEventListener('DOMContentLoaded', () => {
-        const TOTAL_IMAGES = 223; 
+        const TOTAL_IMAGES = 383; 
         const STORAGE_KEY = 'jpd113_vip_items'; 
         
         const gallery = document.getElementById('galleryContainer');
@@ -466,46 +466,28 @@
                     resetQuizButtons(); 
                     e.target.classList.add('selected');
                 } else {
-                    const correctOpt = ANSWERS_ARRAY[currentIndex - 1];
-                    if (!correctOpt) return alert(`Câu ${currentIndex} Admin chưa cập nhật đáp án!`);
-                    
+                    // --- CHẾ ĐỘ LUYỆN THI TẠM THỜI TẮT CHẤM ĐÚNG/SAI ---
                     if (modalImg.classList.contains('reveal-answer')) return;
                     
-                    if (correctOpt.includes(selectedOpt)) {
-                        currentQuizSelections.add(selectedOpt);
-                        e.target.classList.add('correct');
-                        
-                        if (currentQuizSelections.size === correctOpt.length) {
-                            
-                            soundCorrect.play().catch(e=>console.log("Audio needs user interaction first"));
-                            if (navigator.vibrate) navigator.vibrate(50); 
+                    resetQuizButtons();
+                    e.target.classList.add('selected');
 
-                            modalImg.classList.add('reveal-answer'); 
-                            
-                            if (!learnedItems.has(currentIndex)) { 
-                                learnedItems.add(currentIndex); 
-                                localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
-                                updateProgress(); 
-                                document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
-                                document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
-                            }
+                    modalImg.classList.add('reveal-answer'); 
+                    
+                    if (!learnedItems.has(currentIndex)) { 
+                        learnedItems.add(currentIndex); 
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
+                        updateProgress(); 
+                        document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
+                        document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
+                        updateMarkButtonUI();
+                    }
 
-                            // Xử lý Auto Next
-                            if (isAutoNext) {
-                                clearTimeout(autoNextTimeout);
-                                autoNextTimeout = setTimeout(() => {
-                                    nextImage();
-                                }, 1000); 
-                            }
-                        }
-                    } else {
-                        e.target.classList.add('wrong');
-                        if (navigator.vibrate) navigator.vibrate([100, 50, 100]); 
-
-                        modalImg.classList.add('reveal-answer'); 
-                        for(let char of correctOpt) {
-                            document.querySelector(`.btn-option[data-opt="${char}"]`).classList.add('correct');
-                        }
+                    if (isAutoNext) {
+                        clearTimeout(autoNextTimeout);
+                        autoNextTimeout = setTimeout(() => {
+                            nextImage();
+                        }, 1000); 
                     }
                 }
             });
@@ -599,7 +581,40 @@
         document.getElementById('btnClose').addEventListener('click', closeModal); 
         document.getElementById('btnPrev').addEventListener('click', e => { e.stopPropagation(); prevImage(); }); 
         document.getElementById('btnNext').addEventListener('click', e => { e.stopPropagation(); nextImage(); });
-        document.addEventListener('keydown', e => { if(!modal.classList.contains('active')) return; if(e.key === 'ArrowLeft') prevImage(); if(e.key === 'ArrowRight') nextImage(); if(e.key === 'Escape') closeModal(); if(e.key === ' ' && !isExamMode) { e.preventDefault(); btnMarkLearned.click(); } });
+        
+        document.addEventListener('keydown', e => { 
+            if(!modal.classList.contains('active')) return; 
+            if(e.key === 'ArrowLeft') prevImage(); 
+            if(e.key === 'ArrowRight') nextImage(); 
+            if(e.key === 'Escape') closeModal(); 
+            
+            // Xử lý phím Space
+            if(e.key === ' ' && !isExamMode) { 
+                e.preventDefault(); 
+                
+                if (isQuizMode) {
+                    modalImg.classList.add('reveal-answer'); 
+                    
+                    if (!learnedItems.has(currentIndex)) { 
+                        learnedItems.add(currentIndex); 
+                        localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
+                        updateProgress(); 
+                        document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
+                        document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
+                        updateMarkButtonUI();
+                    }
+
+                    if (isAutoNext) {
+                        clearTimeout(autoNextTimeout);
+                        autoNextTimeout = setTimeout(() => {
+                            nextImage();
+                        }, 1000); 
+                    }
+                } else {
+                    btnMarkLearned.click(); 
+                }
+            } 
+        });
 
         // LOGIC PAN & ZOOM (Mobile)
         let touchstartX = 0; let touchstartY = 0;
