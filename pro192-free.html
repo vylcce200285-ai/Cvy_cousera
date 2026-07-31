@@ -57,12 +57,7 @@
         .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
         .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; display: flex; justify-content: center; align-items: center; }
         
-        /* Cải thiện độ sắc nét của ảnh thumbnail */
-        .img-card img { 
-            width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; 
-            image-rendering: -webkit-optimize-contrast; 
-            image-rendering: crisp-edges;
-        }
+        .img-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; }
         .img-card img.loaded { opacity: 1; }
         .img-card:hover img { opacity: 1; transform: scale(1.05); }
 
@@ -81,33 +76,11 @@
         .modal.active { opacity: 1; visibility: visible; }
         .modal-content { position: relative; width: 100%; max-width: 1200px; height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; touch-action: none; }
         
-        /* Cải thiện độ nét của ảnh khi xem to và zoom */
-        .modal-img { 
-            max-width: 100%; 
-            max-height: calc(100vh - 160px); 
-            margin-bottom: 70px; 
-            border-radius: 8px; 
-            box-shadow: 0 0 40px rgba(0,0,0,0.5); 
-            object-fit: contain; 
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 1; 
-            transform: translate(0px, 0px) scale(1);
-            transform-origin: center center;
-            cursor: grab;
-            image-rendering: -webkit-optimize-contrast; 
-            image-rendering: crisp-edges;
-            transform: translateZ(0); /* Kích hoạt tăng tốc phần cứng */
-            backface-visibility: hidden;
-        }
-        
+        .modal-img { max-width: 100%; max-height: calc(100vh - 160px); margin-bottom: 70px; border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 1; transform: translate(0px, 0px) scale(1); transform-origin: center center; cursor: grab; image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges; transform: translateZ(0); backface-visibility: hidden; }
         .modal-img:active { cursor: grabbing; }
 
         body.quiz-mode-active .modal-img { clip-path: inset(0 0 15% 0); }
-
-        body.quiz-mode-active .modal-img.reveal-answer {
-            clip-path: inset(0 0 0 0); 
-            box-shadow: 0 15px 50px rgba(249, 115, 22, 0.5);
-        }
+        body.quiz-mode-active .modal-img.reveal-answer { clip-path: inset(0 0 0 0); box-shadow: 0 15px 50px rgba(249, 115, 22, 0.5); }
 
         .modal-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white; width: 56px; height: 56px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 10; }
         .modal-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
@@ -116,42 +89,19 @@
         .btn-close { position: absolute; top: 20px; right: 20px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3); width: 48px; height: 48px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 100; }
         .btn-close:hover { background: #f43f5e; color: white; transform: rotate(90deg); }
         
-        .modal-footer { 
-            position: absolute; bottom: 25px; width: max-content; min-width: 300px; max-width: 95%;
-            background: rgba(20,20,25,0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); 
-            padding: 10px 25px; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); 
-            display: flex; justify-content: center; align-items: center; gap: 20px; z-index: 60;
-        }
-        
+        .modal-footer { position: absolute; bottom: 25px; width: max-content; min-width: 300px; max-width: 95%; background: rgba(20,20,25,0.85); backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.1); padding: 10px 25px; border-radius: 100px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center; gap: 20px; z-index: 60; }
         .modal-counter { color: var(--text-muted); font-weight: 600; font-size: 1rem; letter-spacing: 1px; min-width: auto; }
         
         .quiz-mode-controls { display: none; gap: 12px; justify-content: center; flex: 1; }
-        .btn-option { 
-            width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.05); 
-            border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 800; font-size: 1.1rem; 
-            cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-            display: flex; justify-content: center; align-items: center;
-        }
+        .btn-option { width: 42px; height: 42px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); display: flex; justify-content: center; align-items: center; }
         .btn-option:active { transform: scale(0.9); } 
         .btn-option:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
         
-        @keyframes popCorrect {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.25); box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); }
-            100% { transform: scale(1.1); }
-        }
-        .btn-option.correct { 
-            background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); animation: popCorrect 0.4s ease forwards; 
-        }
+        @keyframes popCorrect { 0% { transform: scale(1); } 50% { transform: scale(1.25); box-shadow: 0 0 30px rgba(16, 185, 129, 0.8); } 100% { transform: scale(1.1); } }
+        .btn-option.correct { background: var(--accent); border-color: var(--accent); color: #000; box-shadow: 0 0 20px rgba(16, 185, 129, 0.6); animation: popCorrect 0.4s ease forwards; }
 
-        @keyframes shakeWrong {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px) rotate(-5deg); }
-            75% { transform: translateX(6px) rotate(5deg); }
-        }
-        .btn-option.wrong { 
-            background: var(--danger, #ef4444); border-color: var(--danger, #ef4444); color: #fff; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: shakeWrong 0.3s ease forwards;
-        }
+        @keyframes shakeWrong { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px) rotate(-5deg); } 75% { transform: translateX(6px) rotate(5deg); } }
+        .btn-option.wrong { background: var(--danger, #ef4444); border-color: var(--danger, #ef4444); color: #fff; box-shadow: 0 0 20px rgba(239, 68, 68, 0.6); animation: shakeWrong 0.3s ease forwards; }
 
         .btn-option.selected { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); transform: scale(1.1); }
 
@@ -171,9 +121,8 @@
         .result-box { background: var(--surface); padding: 50px; border-radius: 24px; border: 2px solid var(--primary); text-align: center; box-shadow: 0 0 50px var(--primary-glow); animation: scaleUp 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         @keyframes scaleUp { 0% { transform: scale(0.5); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .result-title { font-size: 2rem; color: var(--primary); margin-bottom: 20px; font-weight: 900; text-transform: uppercase; }
-        .result-score { font-size: 4rem; color: #fff; font-weight: 900; margin-bottom: 10px; }
-        .result-detail { color: var(--text-muted); font-size: 1.2rem; margin-bottom: 30px; }
-        .result-mark { font-size: 1.5rem; color: var(--accent); font-weight: 700; display: block; margin-top: 10px; }
+        
+        .result-detail { color: var(--text-main); font-size: 1.2rem; margin-bottom: 30px; line-height: 1.6; }
 
         .avatar-group { display: inline-flex; align-items: center; margin-top: 15px; padding: 8px 16px; background: var(--surface); border: 1px solid var(--border); border-radius: 100px; backdrop-filter: blur(10px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         .avatar-text { font-size: 0.9rem; color: var(--text-muted); margin-right: 12px; font-weight: 600; }
@@ -201,8 +150,6 @@
             .modal-counter { order: -1; text-align: center; font-size: 1rem; width: 100%; margin-bottom: -5px;}
             .result-box { width: 90%; padding: 30px; }
         }
-
-        /* Hỗ trợ xoay ngang trên Mobile */
         @media (orientation: landscape) and (max-height: 600px) {
             .modal-img { max-height: calc(100vh - 100px); margin-bottom: 60px; }
             .modal-footer { bottom: 5px; padding: 5px 15px; flex-direction: row; flex-wrap: nowrap; gap: 15px; border-radius: 15px; }
@@ -222,8 +169,10 @@
     <div class="result-overlay" id="resultOverlay">
         <div class="result-box">
             <h2 class="result-title">Hoàn Thành Bài Thi</h2>
-            <div class="result-score" id="scoreText">45/50</div>
-            <div class="result-detail">Số câu trả lời đúng <br> <span class="result-mark" id="pointText">Điểm: 9.0</span></div>
+            <!-- Thay đổi phần chấm điểm thành xem lại -->
+            <div class="result-detail" id="resultDetailText">Bạn đã trả lời xong các câu hỏi.<br>Hãy xem lại đáp án bạn đã chọn và tự đối chiếu nhé!</div>
+            
+            <button class="btn-glass" id="btnReviewExam" style="background: var(--accent); color: #000; margin-bottom: 15px;"><i class="fa-solid fa-eye"></i> Xem Lại Bài Làm</button><br>
             <button class="btn-glass" id="btnCloseResult" style="background: var(--primary); color: #000;"><i class="fa-solid fa-rotate-right"></i> Làm Đề Khác</button>
             <button class="btn-glass" id="btnExitResult" style="margin-top: 15px;"><i class="fa-solid fa-xmark"></i> Thoát Chế Độ Thi</button>
         </div>
@@ -297,13 +246,8 @@
     </div>
 
 <script>
-    // Audio báo đúng
     const soundCorrect = new Audio('https://assets.mixkit.co/active_storage/sfx/2013/2013-preview.mp3');
     soundCorrect.volume = 0.5;
-
-    // Data Đáp án JPD113 (Đã bổ sung thêm đáp án "a" giả cho đủ 383 câu)
-    const RAW_ANSWERS = "b d b b d a c a a d a d d b b b d c a d c c d b c b b b d a a c d d a a a c b b d b b a c b b d a b b a c b c b c a a d b d d d b b c d b c c c c b d c c d c d c b b d a b b a a b a b c b b a c b b a a a b a b c a b d d a c a a a a d b d a d d a c b b b b d a d d b a c a a c d a a b c d d c d b b b d c d c b b a b b b d c c b b d c b a b d c b a d c d d c c d d d d c b a b a d d d a b d c b a a a c c b b b c c d b b c d c d a a d d b a d b a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a a"; 
-    const ANSWERS_ARRAY = RAW_ANSWERS.trim().toUpperCase().split(/\s+/);
 
     document.addEventListener('DOMContentLoaded', () => {
         const TOTAL_IMAGES = 383; 
@@ -321,10 +265,10 @@
         let currentIndex = 1;
         let isQuizMode = false;
         let isExamMode = false;
+        let isReviewMode = false; // Biến trạng thái mới cho chức năng xem lại
         let isAutoNext = false;
         let autoNextTimeout;
 
-        // Biến phục vụ Zoom và Pan
         let currentScale = 1;
         let panX = 0, panY = 0;
         let isDragging = false;
@@ -369,16 +313,8 @@
                 height: '0', 
                 width: '0', 
                 videoId: 'v-92I1wtJV4',
-                playerVars: { 
-                    'autoplay': 0, 
-                    'controls': 0, 
-                    'loop': 1, 
-                    'playlist': 'v-92I1wtJV4', 
-                    'start': 765 
-                }, 
-                events: { 
-                    'onReady': () => { player.setVolume(30); } 
-                } 
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'v-92I1wtJV4', 'start': 765 }, 
+                events: { 'onReady': () => { player.setVolume(30); } } 
             });
         }
         
@@ -389,7 +325,6 @@
             isPlaying = !isPlaying;
         });
 
-        // Nút Auto Next
         btnAutoNext.addEventListener('click', () => {
             isAutoNext = !isAutoNext;
             if (isAutoNext) {
@@ -405,7 +340,10 @@
             let maxQuestions = TOTAL_IMAGES < 50 ? TOTAL_IMAGES : 50;
             let arr = Array.from({length: TOTAL_IMAGES}, (_, i) => i + 1).sort(() => Math.random() - 0.5);
             examSequence = arr.slice(0, maxQuestions);
-            isExamMode = true; currentExamStep = 0; userExamAnswers = {};
+            isExamMode = true; 
+            isReviewMode = false;
+            currentExamStep = 0; 
+            userExamAnswers = {};
             btnMarkLearned.style.display = 'none'; 
             btnSubmitExam.style.display = 'block'; 
             document.body.classList.add('quiz-mode-active'); 
@@ -415,18 +353,25 @@
 
         btnExamMode.addEventListener('click', () => { if(confirm(`Hệ thống sẽ trộn ngẫu nhiên 50 câu. Bạn đã sẵn sàng thi chưa?`)) startExam(); });
 
+        // LOGIC MỚI: Bấm Nộp Bài sẽ không chấm điểm nữa
         btnSubmitExam.addEventListener('click', () => {
-            let score = 0; let totalQ = examSequence.length;
-            if(Object.keys(userExamAnswers).length < totalQ && !confirm(`Chưa làm xong. Có muốn nộp bài sớm không?`)) return;
-            for (let i = 0; i < totalQ; i++) {
-                let qIndex = examSequence[i];
-                let userAns = userExamAnswers[qIndex];
-                let correctAns = ANSWERS_ARRAY[qIndex - 1];
-                if (userAns && correctAns && correctAns.includes(userAns)) score++;
-            }
-            document.getElementById('scoreText').innerText = `${score}/${totalQ}`;
-            document.getElementById('pointText').innerText = `Điểm: ${((score / totalQ) * 10).toFixed(1)}`;
+            let totalQ = examSequence.length;
+            let answeredQ = Object.keys(userExamAnswers).length;
+            
+            if(answeredQ < totalQ && !confirm(`Bạn mới làm ${answeredQ}/${totalQ} câu. Chắc chắn muốn nộp bài sớm không?`)) return;
+            
+            document.getElementById('resultDetailText').innerHTML = `Bạn đã chọn đáp án cho <b>${answeredQ}/${totalQ}</b> câu.<br>Hãy xem lại đáp án bạn đã chọn và tự đối chiếu nhé!`;
             document.getElementById('resultOverlay').style.display = 'flex';
+        });
+
+        // Nút mới: Kích hoạt chế độ Xem Lại sau khi nộp
+        document.getElementById('btnReviewExam').addEventListener('click', () => {
+            document.getElementById('resultOverlay').style.display = 'none';
+            isReviewMode = true; // Bật cờ Review
+            currentExamStep = 0;
+            currentIndex = examSequence[currentExamStep];
+            updateModalView();
+            btnSubmitExam.style.display = 'none'; // Ẩn nút Nộp bài trong lúc xem lại
         });
 
         document.getElementById('btnCloseResult').addEventListener('click', () => { document.getElementById('resultOverlay').style.display = 'none'; closeModal(); startExam(); });
@@ -434,6 +379,7 @@
 
         function exitExamMode() {
             isExamMode = false; 
+            isReviewMode = false;
             btnMarkLearned.style.display = 'flex'; 
             btnSubmitExam.style.display = 'none'; 
             if(!isQuizMode) { document.body.classList.remove('quiz-mode-active'); quizModeControls.style.display = 'none'; }
@@ -459,6 +405,8 @@
 
         document.querySelectorAll('.btn-option').forEach(btn => {
             btn.addEventListener('click', (e) => {
+                if (isReviewMode) return; // Không cho phép đổi đáp án khi đang ở chế độ xem lại
+
                 const selectedOpt = e.target.dataset.opt;
 
                 if (isExamMode) {
@@ -466,12 +414,9 @@
                     resetQuizButtons(); 
                     e.target.classList.add('selected');
                 } else {
-                    // --- CHẾ ĐỘ LUYỆN THI TẠM THỜI TẮT CHẤM ĐÚNG/SAI ---
                     if (modalImg.classList.contains('reveal-answer')) return;
-                    
                     resetQuizButtons();
                     e.target.classList.add('selected');
-
                     modalImg.classList.add('reveal-answer'); 
                     
                     if (!learnedItems.has(currentIndex)) { 
@@ -528,7 +473,6 @@
             else { btnMarkLearned.classList.remove('active'); btnMarkLearned.innerHTML = `<i class="fa-solid fa-check"></i> <span>Đã hiểu</span>`; }
         }
 
-        // Tắt Zoom
         function resetZoom() {
             currentScale = 1;
             panX = 0; panY = 0;
@@ -551,20 +495,41 @@
         }
 
         function openModal(index) { currentIndex = index; updateModalView(true); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
-        function closeModal() { if(isExamMode && !confirm("Đang Thi Thử. Thoát sẽ mất điểm. Chắc chưa?")) return; if(isExamMode) exitExamMode(); resetZoom(); clearTimeout(autoNextTimeout); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); }
+        
+        function closeModal() { 
+            // Nếu đang thi thử nhưng chưa nộp bài, thì cảnh báo
+            if(isExamMode && !isReviewMode && !confirm("Đang Thi Thử. Thoát sẽ mất bài làm. Bạn có chắc không?")) return; 
+            if(isExamMode) exitExamMode(); 
+            resetZoom(); clearTimeout(autoNextTimeout); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); 
+        }
         
         function updateModalView(initialLoad = false) { 
             if(initialLoad) modalImg.src = `img-pro/pro (${currentIndex}).png`;
             resetQuizButtons();
-            modalImg.classList.remove('reveal-answer'); 
             currentQuizSelections.clear(); 
             resetZoom();
             
             if (isExamMode) {
                 modalCounter.textContent = `Câu ${currentExamStep + 1} / ${examSequence.length}`;
-                if(userExamAnswers[currentIndex]) document.querySelector(`.btn-option[data-opt="${userExamAnswers[currentIndex]}"]`).classList.add('selected');
+                
+                // NẾU ĐANG LÀ CHẾ ĐỘ XEM LẠI BÀI
+                if (isReviewMode) {
+                    modalImg.classList.add('reveal-answer'); // Mở khóa ảnh để xem phần đáp án bên dưới
+                    if(userExamAnswers[currentIndex]) {
+                        // Sáng nút mà User đã chọn
+                        document.querySelector(`.btn-option[data-opt="${userExamAnswers[currentIndex]}"]`).classList.add('selected');
+                    }
+                } 
+                // NẾU ĐANG LÀM BÀI BÌNH THƯỜNG
+                else {
+                    modalImg.classList.remove('reveal-answer'); // Giấu đáp án
+                    if(userExamAnswers[currentIndex]) {
+                        document.querySelector(`.btn-option[data-opt="${userExamAnswers[currentIndex]}"]`).classList.add('selected');
+                    }
+                }
             } else {
                 modalCounter.textContent = `Câu ${currentIndex} / ${TOTAL_IMAGES}`; 
+                modalImg.classList.remove('reveal-answer'); 
                 updateMarkButtonUI(); 
             }
         }
@@ -588,27 +553,18 @@
             if(e.key === 'ArrowRight') nextImage(); 
             if(e.key === 'Escape') closeModal(); 
             
-            // Xử lý phím Space
             if(e.key === ' ' && !isExamMode) { 
                 e.preventDefault(); 
-                
                 if (isQuizMode) {
                     modalImg.classList.add('reveal-answer'); 
-                    
                     if (!learnedItems.has(currentIndex)) { 
-                        learnedItems.add(currentIndex); 
-                        localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
-                        updateProgress(); 
-                        document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
-                        document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; 
-                        updateMarkButtonUI();
+                        learnedItems.add(currentIndex); localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems])); 
+                        updateProgress(); document.querySelector(`.img-card[data-index="${currentIndex}"]`).classList.add('learned'); 
+                        document.querySelector(`.img-card[data-index="${currentIndex}"] .img-badge`).textContent = 'Đã học'; updateMarkButtonUI();
                     }
-
                     if (isAutoNext) {
                         clearTimeout(autoNextTimeout);
-                        autoNextTimeout = setTimeout(() => {
-                            nextImage();
-                        }, 1000); 
+                        autoNextTimeout = setTimeout(() => { nextImage(); }, 1000); 
                     }
                 } else {
                     btnMarkLearned.click(); 
@@ -616,7 +572,7 @@
             } 
         });
 
-        // LOGIC PAN & ZOOM (Mobile)
+        // LOGIC PAN & ZOOM (Mobile & PC)
         let touchstartX = 0; let touchstartY = 0;
         let lastTapTime = 0;
 
@@ -654,12 +610,10 @@
                 if (currentScale === 1) {
                     currentScale = 2.5; 
                 } else {
-                    currentScale = 1;
-                    panX = 0; panY = 0;
+                    currentScale = 1; panX = 0; panY = 0;
                 }
                 modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
-                e.preventDefault();
-                return;
+                e.preventDefault(); return;
             }
             lastTapTime = currentTime;
 
@@ -670,7 +624,6 @@
             }
         }, {passive: false});
 
-        // LOGIC PAN & ZOOM (PC Mouse)
         swipeArea.addEventListener('mousedown', e => {
             if (currentScale > 1) {
                 isDragging = true;
@@ -703,8 +656,7 @@
             if (currentScale === 1) {
                 currentScale = 2.5;
             } else {
-                currentScale = 1;
-                panX = 0; panY = 0;
+                currentScale = 1; panX = 0; panY = 0;
             }
             modalImg.style.transform = `translate(${panX}px, ${panY}px) scale(${currentScale})`;
         });
