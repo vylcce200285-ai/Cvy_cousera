@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Source NWC204 - Lữ Chí Vỹ</title>
+    <title>Source CSD201 - Lữ Chí Vỹ</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 1. BIẾN CSS CHUẨN --- */
         :root {
             --bg-dark: #09090b;
             --primary: #00d2ff;
             --primary-glow: rgba(0, 210, 255, 0.5);
-            --accent: #10b981; /* Màu xanh lá cho trạng thái Đã học */
+            --accent: #10b981;
+            --warning: #f59e0b;
             --surface: rgba(255, 255, 255, 0.03);
             --surface-hover: rgba(255, 255, 255, 0.08);
             --border: rgba(255, 255, 255, 0.1);
@@ -42,14 +42,22 @@
             filter: blur(40px);
         }
 
-        /* --- HEADER & TOOLBAR --- */
-        .top-bar { padding: 20px; max-width: 1400px; margin: 0 auto; }
+        /* --- THUẬT TOÁN CHE ĐÁP ÁN --- */
+        /* Cắt 15% chiều cao từ dưới lên để che dòng text đỏ */
+        .hide-bottom { clip-path: inset(0 0 15% 0) !important; }
+
+        /* --- TOOLBAR & HEADER --- */
+        .top-bar { padding: 20px; max-width: 1400px; margin: 0 auto; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 15px; }
         .btn-glass {
             background: var(--surface); backdrop-filter: blur(12px); border: 1px solid var(--border);
-            color: var(--text-main); padding: 10px 20px; border-radius: 100px; text-decoration: none;
+            color: var(--text-main); padding: 10px 20px; border-radius: 100px; cursor: pointer; text-decoration: none;
             font-weight: 600; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px; transition: var(--transition);
         }
         .btn-glass:hover { background: var(--surface-hover); border-color: var(--primary); box-shadow: 0 4px 20px var(--primary-glow); }
+        
+        .btn-quiz.active { background: rgba(0, 210, 255, 0.2); color: var(--primary); border-color: var(--primary); box-shadow: 0 0 20px var(--primary-glow); }
+        .btn-exam { background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); color: var(--warning); }
+        .btn-exam:hover { background: var(--warning); color: #000; border-color: var(--warning); box-shadow: 0 4px 20px rgba(245, 158, 11, 0.4); }
 
         .header-section { text-align: center; padding: 20px 20px 40px; }
         .super-title {
@@ -58,7 +66,6 @@
             margin-bottom: 10px; filter: drop-shadow(0 0 20px rgba(0, 210, 255, 0.2));
         }
 
-        /* --- TIẾN ĐỘ HỌC (PROGRESS BAR) --- */
         .progress-wrapper { max-width: 400px; margin: 20px auto 30px; text-align: left; }
         .progress-text { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; margin-bottom: 8px; display: flex; justify-content: space-between; }
         .progress-bar { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
@@ -72,68 +79,66 @@
         }
         .search-input:focus { border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
-        /* --- GALLERY GRID --- */
+        /* --- GALLERY --- */
         .gallery-container {
             max-width: 1400px; margin: 0 auto; padding: 0 20px 60px;
             display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;
         }
-
         .img-card {
             background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
             overflow: hidden; cursor: pointer; transition: var(--transition); position: relative;
             display: flex; flex-direction: column; backdrop-filter: blur(10px);
         }
         .img-card:hover { transform: translateY(-8px); border-color: var(--primary); box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); }
-        
-        .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; }
-        .img-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: 0.5s ease; }
+        .img-wrapper { width: 100%; height: 200px; background: rgba(255,255,255,0.02); overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+        .img-card img { width: 100%; max-height: 100%; object-fit: contain; opacity: 0; transition: 0.5s ease; }
         .img-card img.loaded { opacity: 1; }
         .img-card:hover img { transform: scale(1.05); }
-
-        .img-info { padding: 16px; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: space-between; align-items: center; }
+        .img-info { padding: 16px; background: rgba(0, 0, 0, 0.4); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.05); }
         .img-title { font-weight: 700; font-size: 1.1rem; color: var(--text-main); }
         .img-badge { background: var(--primary); color: #000; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; transition: var(--transition); }
-
-        /* Style cho card ĐÃ HỌC */
         .img-card.learned { border-color: var(--accent); background: rgba(16, 185, 129, 0.05); }
         .img-card.learned .img-badge { background: var(--accent); color: white; }
         .img-card.learned .img-badge::before { content: '\f058'; font-family: 'Font Awesome 6 Free'; font-weight: 900; margin-right: 4px; }
-        
-        /* Checkmark to trên ảnh */
-        .learned-overlay {
-            position: absolute; inset: 0; background: rgba(16, 185, 129, 0.2);
-            display: flex; justify-content: center; align-items: center;
-            opacity: 0; transition: var(--transition); pointer-events: none;
-        }
+        .learned-overlay { position: absolute; inset: 0; background: rgba(16, 185, 129, 0.2); display: flex; justify-content: center; align-items: center; opacity: 0; transition: var(--transition); pointer-events: none; }
         .img-card.learned .learned-overlay { opacity: 1; }
         .learned-overlay i { font-size: 3rem; color: rgba(255,255,255,0.8); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
 
-        /* --- MODAL --- */
+        /* --- MODAL LÝ THUYẾT & LUYỆN THI --- */
         .modal {
-            position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.9); backdrop-filter: blur(15px);
+            position: fixed; inset: 0; z-index: 9999; background: rgba(0, 0, 0, 0.95); backdrop-filter: blur(15px);
             display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: 0.3s ease;
         }
         .modal.active { opacity: 1; visibility: visible; }
-        .modal-content { position: relative; max-width: 90%; max-height: 85vh; display: flex; align-items: center; justify-content: center; }
-        .modal-img { max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; }
+        .modal-content { position: relative; max-width: 95%; max-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
+        .modal-img-container { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; margin-bottom: 20px;}
+        .modal-img { max-width: 100%; max-height: 70vh; border-radius: 8px; box-shadow: 0 0 40px rgba(0,0,0,0.5); object-fit: contain; transition: clip-path 0.4s ease; }
         
         .modal-btn {
             position: absolute; top: 50%; transform: translateY(-50%); background: rgba(255,255,255,0.1); border: 1px solid var(--border);
-            color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: var(--transition);
+            color: white; width: 50px; height: 50px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; transition: var(--transition); z-index: 10;
         }
         .modal-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); }
-        .btn-prev { left: -70px; }
-        .btn-next { right: -70px; }
+        .btn-prev { left: 20px; } .btn-next { right: 20px; }
         .btn-close {
             position: absolute; top: 20px; right: 20px; background: rgba(244, 63, 94, 0.2); color: #f43f5e; border: 1px solid rgba(244, 63, 94, 0.3);
-            width: 44px; height: 44px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition);
+            width: 44px; height: 44px; border-radius: 50%; font-size: 1.5rem; cursor: pointer; transition: var(--transition); z-index: 100;
         }
         .btn-close:hover { background: #f43f5e; color: white; transform: rotate(90deg); }
-
-        .modal-footer { position: absolute; bottom: -60px; width: 100%; display: flex; justify-content: space-between; align-items: center; }
+        
+        .modal-footer { display: flex; justify-content: center; align-items: center; gap: 20px; width: 100%; max-width: 600px; flex-wrap: wrap; background: rgba(20,20,25,0.85); padding: 15px 25px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
         .modal-counter { color: var(--text-muted); font-weight: 600; font-size: 1.1rem; letter-spacing: 2px; }
         
-        /* Nút Đánh dấu trong Modal */
+        .quiz-mode-controls { display: none; gap: 10px; }
+        .quiz-mode-controls.active { display: flex; }
+        .btn-option-quiz {
+            
+            width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2);
+            color: white; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: 0.2s;
+        }
+        .btn-option-quiz:hover { border-color: var(--primary); color: var(--primary); transform: scale(1.1); }
+        .btn-option-quiz.selected { background: var(--primary); border-color: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
+
         .btn-mark {
             background: rgba(255,255,255,0.1); border: 1px solid var(--border); color: white;
             padding: 10px 20px; border-radius: 100px; font-weight: 600; cursor: pointer; transition: var(--transition);
@@ -143,12 +148,60 @@
         .btn-mark.active { background: var(--accent); border-color: var(--accent); color: #000; }
         .btn-mark.active:hover { background: #059669; }
 
-        @media (max-width: 768px) {
+        /* --- EXAM MODE (THI THỬ) --- */
+        #examMode { display: none; padding: 20px; max-width: 1400px; margin: 0 auto; }
+        .exam-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 20px; flex-wrap: wrap; gap: 15px;}
+        .exam-layout { display: grid; grid-template-columns: 1fr 350px; gap: 30px; }
+        
+        .exam-question-area { display: flex; flex-direction: column; gap: 20px; align-items: center; width: 100%;}
+        .exam-img { max-width: 100%; max-height: 70vh; border-radius: 8px; border: 1px solid var(--border); object-fit: contain; transition: clip-path 0.4s ease;}
+        
+        .exam-controls { display: flex; gap: 15px; margin-top: 10px; }
+        .exam-nav-btn { padding: 12px 24px; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); color: white; cursor: pointer; transition: var(--transition); }
+        .exam-nav-btn:hover { background: var(--primary); color: #000; border-color: var(--primary); }
+        
+        .exam-sidebar { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 20px; }
+        
+        .answer-options { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; transition: opacity 0.3s;}
+        .opt-btn {
+            width: 50px; height: 50px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px solid var(--border);
+            color: white; font-size: 1.2rem; font-weight: 800; cursor: pointer; transition: var(--transition);
+        }
+        .opt-btn:hover { border-color: var(--primary); }
+        .opt-btn.selected { background: var(--primary); color: #000; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); transform: scale(1.1);}
+
+        /* Khóa thao tác khi xem lại */
+        .review-locked { pointer-events: none; opacity: 0.8; }
+
+        .question-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; max-height: 300px; overflow-y: auto; padding-right: 5px; }
+        .grid-item {
+            aspect-ratio: 1; border-radius: 6px; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+            color: var(--text-muted); display: flex; justify-content: center; align-items: center; font-size: 0.9rem; cursor: pointer; transition: var(--transition);
+        }
+        .grid-item:hover { background: rgba(255,255,255,0.1); }
+        .grid-item.active { border-color: var(--primary); color: var(--primary); font-weight: bold; transform: scale(1.1); box-shadow: 0 0 10px var(--primary-glow);}
+        .grid-item.answered { background: rgba(16, 185, 129, 0.2); border-color: var(--accent); color: var(--accent); }
+
+        /* Review Grid Colors */
+        .grid-item.correct { background: rgba(16, 185, 129, 0.8); border-color: var(--accent); color: #000; font-weight: bold;}
+        .grid-item.wrong { background: rgba(244, 63, 94, 0.8); border-color: #f43f5e; color: #fff; font-weight: bold;}
+
+        .btn-submit-exam {
+            width: 100%; padding: 15px; border-radius: 8px; background: var(--accent); border: none; color: #000; font-weight: 800; font-size: 1.1rem; cursor: pointer; transition: var(--transition); margin-top: auto;
+        }
+        .btn-submit-exam:hover { background: #059669; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+
+        /* Màn hình kết quả */
+        #examResult { display: none; text-align: center; padding: 60px 20px; }
+        .result-box { background: var(--surface); padding: 50px; border-radius: 24px; border: 2px solid var(--primary); display: inline-block; box-shadow: 0 0 50px var(--primary-glow); max-width: 600px; width: 100%;}
+        .score-display { font-size: 4rem; font-weight: 900; color: var(--primary); text-shadow: 0 0 20px var(--primary-glow); margin: 20px 0; }
+
+        @media (max-width: 900px) {
+            .exam-layout { grid-template-columns: 1fr; }
             .btn-prev { left: 10px; } .btn-next { right: 10px; }
-            .modal-img { max-width: 100%; border-radius: 0; }
-            .modal-footer { bottom: 20px; padding: 0 20px; flex-direction: column; gap: 15px; }
-            .modal-counter { order: 2; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; }
-            .btn-mark { order: 1; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+            .modal-footer { border-radius: 20px; width: 95%; padding: 15px; flex-direction: column; gap: 15px; }
+            .quiz-mode-controls { width: 100%; justify-content: center; }
+            .modal-counter { order: -1; }
         }
     </style>
 </head>
@@ -157,40 +210,120 @@
     <div class="ambient-bg"></div>
 
     <div class="top-bar">
-        <a href="index.html" class="btn-glass"><i class="fa-solid fa-arrow-left"></i> Trở về trang chủ</a>
+        <a href="#" class="btn-glass" id="btnBackToLearn" style="display: none;"><i class="fa-solid fa-arrow-left"></i> Trở về Học Tập</a>
+        <div style="flex-grow: 1;" id="spacerTopBar"></div>
+        <button id="btnToggleQuiz" class="btn-glass btn-quiz"><i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span></button>
+        <button class="btn-glass btn-exam" id="btnStartExam"><i class="fa-solid fa-file-signature"></i> Thi thử (50 Câu)</button>
     </div>
 
-    <header class="header-section">
-        <h1 class="super-title">Kho Tài Liệu NWC204</h1>
-        <p style="color: var(--text-muted); font-size: 1.1rem;">Coded by <b style="color: white;">Lữ Chí Vỹ</b> • Chúc AE học tốt 💯</p>
+    <!-- CHẾ ĐỘ HỌC TẬP (MẶC ĐỊNH) -->
+    <div id="learningMode">
+        <header class="header-section">
+            <h1 class="super-title">Kho Tài Liệu CSD201</h1>
+            <p style="color: var(--text-muted); font-size: 1.1rem;">Coded by <b style="color: white;">Lữ Chí Vỹ</b> • Chúc AE học tốt 💯</p>
+            
+            <div class="progress-wrapper">
+                <div class="progress-text">
+                    <span>Tiến độ hoàn thành:</span>
+                    <span id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="number" id="searchInput" class="search-input" placeholder="Nhập số câu để tìm nhanh (VD: 45)...">
+            </div>
+        </header>
+
+        <main class="gallery-container" id="galleryContainer"></main>
+    </div>
+
+    <!-- CHẾ ĐỘ THI THỬ -->
+    <div id="examMode">
+        <div class="exam-header">
+            <h2><i class="fa-solid fa-stopwatch"></i> Thi Thử Trắc Nghiệm CSD201</h2>
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <h3 id="examQuestionCounter" style="color: var(--primary); margin: 0;">Câu 1 / 50</h3>
+                <button id="btnExitReview" class="btn-glass" style="display: none; border-color: #f43f5e; color: #f43f5e;"><i class="fa-solid fa-door-open"></i> Thoát xem lại</button>
+            </div>
+        </div>
         
-        <div class="progress-wrapper">
-            <div class="progress-text">
-                <span>Tiến độ hoàn thành:</span>
-                <span id="progressPercent">0%</span>
+        <div class="exam-layout">
+            <div class="exam-question-area">
+                <img id="examImg" class="exam-img hide-bottom" src="" alt="Câu hỏi thi">
+                
+                <div class="exam-controls">
+                    <button class="exam-nav-btn" id="btnExamPrev"><i class="fa-solid fa-arrow-left"></i> Câu trước</button>
+                    <button class="exam-nav-btn" id="btnExamNext">Câu sau <i class="fa-solid fa-arrow-right"></i></button>
+                </div>
             </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
+
+            <div class="exam-sidebar">
+                <div style="text-align: center;">
+                    <p id="examInstruction" style="color: var(--text-muted); margin-bottom: 10px;">Chọn đáp án (có thể chọn nhiều):</p>
+                    <div class="answer-options" id="examAnswerOptions">
+                        <button class="opt-btn" data-opt="A">A</button>
+                        <button class="opt-btn" data-opt="B">B</button>
+                        <button class="opt-btn" data-opt="C">C</button>
+                        <button class="opt-btn" data-opt="D">D</button>
+                        <button class="opt-btn" data-opt="E">E</button>
+                    </div>
+                </div>
+
+                <hr style="border-color: var(--border); margin: 10px 0;">
+                
+                <p style="text-align: center; font-weight: 600;">Danh sách câu hỏi</p>
+                <div class="question-grid" id="examGrid">
+                    <!-- Sinh tự động 50 ô -->
+                </div>
+
+                <button class="btn-submit-exam" id="btnSubmitExam"><i class="fa-solid fa-paper-plane"></i> NỘP BÀI</button>
             </div>
         </div>
+    </div>
 
-        <div class="search-container">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="number" id="searchInput" class="search-input" placeholder="Nhập số câu để tìm nhanh (VD: 45)...">
+    <!-- MÀN HÌNH KẾT QUẢ THI -->
+    <div id="examResult">
+        <div class="result-box">
+            <h2 style="font-size: 2rem; color: var(--text-main);">Kết Quả Thi Thử</h2>
+            <div class="score-display" id="scoreDisplay">0/50</div>
+            <p id="scoreMessage" style="font-size: 1.2rem; color: var(--text-muted); margin-bottom: 30px;"></p>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <button class="btn-glass" id="btnReviewExam" style="background: var(--accent); color: #000; border: none; font-size: 1.1rem; padding: 15px 30px;">
+                    <i class="fa-solid fa-eye"></i> Xem Lại Bài Làm
+                </button>
+                <button class="btn-glass" id="btnRestartExam" style="background: rgba(255,255,255,0.1); font-size: 1.1rem; padding: 15px 30px;">
+                    <i class="fa-solid fa-rotate-right"></i> Làm Đề Khác
+                </button>
+            </div>
         </div>
-    </header>
+    </div>
 
-    <main class="gallery-container" id="galleryContainer"></main>
-
+    <!-- MODAL HỌC TẬP & LUYỆN THI -->
     <div class="modal" id="imageModal">
         <button class="btn-close" id="btnClose"><i class="fa-solid fa-xmark"></i></button>
         <div class="modal-content">
-            <button class="modal-btn btn-prev" id="btnPrev"><i class="fa-solid fa-chevron-left"></i></button>
-            <img id="modalImg" class="modal-img" src="" alt="NWC204 Document">
-            <button class="modal-btn btn-next" id="btnNext"><i class="fa-solid fa-chevron-right"></i></button>
-            
+            <div class="modal-img-container">
+                <button class="modal-btn btn-prev" id="btnPrev"><i class="fa-solid fa-chevron-left"></i></button>
+                <img id="modalImg" class="modal-img" src="" alt="CSD Document">
+                <button class="modal-btn btn-next" id="btnNext"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+
             <div class="modal-footer">
-                <div class="modal-counter" id="modalCounter">1 / 197</div>
+                <div class="modal-counter" id="modalCounter">1 / 308</div>
+                
+                <div class="quiz-mode-controls" id="quizModeControls">
+                    <button class="btn-option-quiz" data-opt="A">A</button>
+                    <button class="btn-option-quiz" data-opt="B">B</button>
+                    <button class="btn-option-quiz" data-opt="C">C</button>
+                    <button class="btn-option-quiz" data-opt="D">D</button>
+                    <button class="btn-option-quiz" data-opt="E">E</button>
+                </div>
+
                 <button class="btn-mark" id="btnMarkLearned">
                     <i class="fa-solid fa-check"></i> <span>Đánh dấu đã học</span>
                 </button>
@@ -199,100 +332,119 @@
     </div>
 
 <script>
+    // Dữ liệu đáp án gốc
+    const answerData = {
+        8: "Chữa đề FE CSD201 FA25 RE | Mọi người bật slide show rồi xem",
+        9: "Theory CSD [CTDL&GT] Queue", 10: "Theory CSD [CTDL&GT] LinkedList", 11: "Theory CSD [CTDL&GT] SelectionSort", 12: "Theory CSD [CTDL&GT] BubbleSort", 15: "https://youtu.be/1TN7U05c1NU",
+        19: "<strong>B</strong>", 20: "<strong>B</strong>", 21: "<strong>A</strong>", 22: "<strong>B</strong>", 23: "<strong>A</strong>", 24: "<strong>A</strong>", 25: "<strong>B</strong>", 26: "<strong>A</strong>", 27: "<strong>B</strong>", 28: "<strong>B</strong>",
+        30: "<strong>B</strong>", 31: "<strong>A</strong>", 32: "<strong>B</strong>", 33: "<strong>B</strong>", 34: "<strong>E</strong>", 35: "<strong>D</strong>", 36: "<strong>C</strong>", 37: "<strong>A</strong>", 38: "<strong>C</strong>", 39: "<strong>B</strong>",
+        40: "<strong>C</strong>", 41: "<strong>C</strong>", 42: "<strong>D</strong>", 43: "<strong>A</strong>", 44: "<strong>B</strong>", 45: "<strong>C</strong>", 46: "<strong>D</strong>", 47: "<strong>B</strong>", 48: "<strong>B</strong>", 49: "<strong>D</strong>",
+        50: "<strong>A</strong>", 51: "<strong>B</strong>", 52: "<strong>A</strong>", 53: "<strong>B</strong>", 54: "<strong>C</strong>", 55: "<strong>C</strong>", 57: "<strong>D</strong>", 58: "<strong>A</strong>", 59: "<strong>A</strong>", 60: "<strong>D</strong>",
+        61: "<strong>A</strong>", 62: "<strong>D</strong>", 63: "<strong>F</strong>", 64: "<strong>D</strong>", 65: "<strong>A</strong>", 66: "<strong>A</strong>", 67: "<strong>D</strong>", 68: "<strong>A</strong>", 69: "<strong>A</strong>", 70: "<strong>B</strong>",
+        71: "<strong>E</strong>", 72: "<strong>A</strong>", 73: "<strong>D</strong>", 74: "<strong>B</strong>", 75: "<strong>C</strong>", 76: "<strong>A</strong>", 77: "<strong>B</strong>", 78: "<strong>A</strong>", 79: "<strong>A</strong>", 80: "<strong>C</strong>",
+        81: "<strong>A</strong>", 82: "<strong>C</strong>", 83: "<strong>B</strong>", 84: "<strong>B</strong>", 85: "<strong>B</strong>", 86: "<strong>C</strong>", 87: "<strong>B</strong>", 88: "<strong>E</strong>", 89: "<strong>B</strong>", 90: "<strong>C</strong>",
+        91: "<strong>D</strong>", 92: "<strong>B</strong>", 93: "<strong>D</strong>", 94: "<strong>A</strong>", 95: "<strong>C</strong>", 97: "<strong>A</strong>", 98: "<strong>B</strong>", 99: "<strong>B</strong>", 100: "<strong>C</strong>",
+        101: "<strong>D</strong>", 102: "<strong>D</strong>", 103: "<strong>C</strong>", 104: "<strong>D</strong>", 105: "<strong>D</strong>", 106: "<strong>D</strong>", 107: "<strong>A</strong>", 108: "<strong>C</strong>", 109: "<strong>A</strong>", 110: "<strong>C</strong>",
+        111: "<strong>C</strong>", 112: "<strong>B</strong>", 113: "<strong>C</strong>", 114: "<strong>D</strong>", 115: "<strong>C</strong>", 116: "<strong>D</strong>", 117: "<strong>C</strong>", 118: "<strong>A</strong>", 119: "<strong>A</strong>", 120: "<strong>B</strong>",
+        121: "<strong>A</strong>", 122: "<strong>A</strong>", 123: "<strong>A</strong>", 124: "<strong>A</strong>", 125: "<strong>C</strong>", 126: "<strong>A</strong>", 127: "<strong>C</strong>", 128: "<strong>B</strong>", 129: "<strong>C</strong>", 130: "<strong>C</strong>",
+        131: "<strong>C</strong>", 132: "<strong>A</strong>", 133: "<strong>B</strong>", 134: "<strong>A</strong>", 135: "<strong>C</strong>", 137: "<strong>D</strong>", 138: "<strong>D</strong>", 139: "<strong>D</strong>", 140: "<strong>A</strong>", 141: "<strong>E</strong>",
+        142: "<strong>C</strong>", 143: "<strong>A</strong>", 144: "<strong>C</strong>", 145: "<strong>B</strong>", 146: "<strong>C</strong>", 147: "<strong>B</strong>", 148: "<strong>C</strong>", 149: "<strong>B</strong>", 150: "<strong>B</strong>", 151: "<strong>A</strong>",
+        152: "<strong>B</strong>", 153: "<strong>B</strong>", 154: "<strong>A</strong>", 155: "<strong>B</strong>", 156: "<strong>A</strong>", 157: "<strong>A</strong>", 158: "<strong>B</strong>", 159: "<strong>B</strong>", 160: "<strong>A</strong>", 161: "<strong>C</strong>",
+        162: "<strong>C</strong>", 163: "<strong>D</strong>", 164: "<strong>B</strong>", 165: "<strong>C</strong>", 166: "<strong>B</strong>", 168: "<strong>A</strong>", 169: "<strong>D</strong>", 170: "<strong>A</strong>", 171: "<strong>B</strong>", 172: "<strong>A</strong>",
+        173: "<strong>D</strong>", 174: "<strong>D</strong>", 175: "<strong>D</strong>", 176: "<strong>B</strong>", 177: "<strong>C</strong>", 178: "<strong>B</strong>", 179: "<strong>D</strong>", 180: "<strong>D</strong>", 181: "<strong>C</strong>", 182: "<strong>D</strong>",
+        184: "<strong>D</strong>", 186: "<strong>E</strong>", 187: "<strong>B</strong>", 188: "<strong>E</strong>", 189: "<strong>C</strong>", 190: "<strong>D</strong>", 191: "<strong>C</strong>", 192: "<strong>A</strong>", 193: "<strong>B</strong>", 194: "<strong>D</strong>",
+        195: "<strong>A</strong>", 196: "<strong>B</strong>", 197: "<strong>B</strong>", 198: "<strong>E</strong>", 199: "<strong>C</strong>", 200: "<strong>B</strong>", 201: "<strong>B</strong>", 202: "<strong>A</strong>", 203: "<strong>D</strong>", 204: "<strong>B</strong>",
+        205: "<strong>D</strong>", 206: "<strong>D</strong>", 207: "<strong>C</strong>", 208: "<strong>D</strong>", 209: "<strong>B</strong>", 210: "<strong>C</strong>", 211: "<strong>A</strong>", 212: "<strong>B</strong>", 213: "<strong>D</strong>", 214: "<strong>B</strong>",
+        215: "<strong>A</strong>", 216: "<strong>A</strong>", 217: "<strong>B</strong>", 218: "<strong>D</strong>", 219: "<strong>D</strong>", 220: "<strong>A</strong>", 221: "<strong>A</strong>", 222: "<strong>B</strong>", 223: "<strong>B</strong>", 224: "<strong>D</strong>",
+        225: "<strong>B</strong>", 226: "<strong>B</strong>", 227: "<strong>A</strong>", 228: "<strong>C</strong>", 229: "<strong>D</strong>", 230: "<strong>E</strong>", 232: "<strong>C</strong>", 233: "<strong>C</strong>", 234: "<strong>C</strong>", 235: "<strong>D</strong>",
+        236: "<strong>B</strong>", 237: "<strong>B</strong>", 238: "<strong>B</strong>", 239: "<strong>C</strong>", 240: "<strong>C</strong>", 241: "<strong>A</strong>", 242: "<strong>A</strong>", 243: "<strong>B</strong>", 244: "<strong>C</strong>", 245: "<strong>B</strong>",
+        246: "<strong>A</strong>", 247: "<strong>A</strong>", 248: "<strong>B</strong>", 249: "<strong>B</strong>", 250: "<strong>D</strong>", 251: "<strong>C</strong>", 253: "<strong>A</strong>", 254: "<strong>A</strong>", 255: "<strong>D</strong>", 256: "<strong>C</strong>",
+        257: "<strong>B</strong>", 258: "<strong>A</strong>", 259: "<strong>D</strong>", 260: "<strong>A</strong>", 261: "<strong>D</strong>", 262: "<strong>A</strong>", 263: "<strong>A</strong>", 264: "<strong>AB</strong>", 265: "<strong>C</strong>", 266: "<strong>B</strong>",
+        267: "<strong>C</strong>", 269: "<strong>B</strong>", 270: "<strong>ABC</strong>", 271: "<strong>A</strong>", 272: "<strong>B</strong>", 273: "<strong>D</strong>", 274: "<strong>A</strong>", 275: "<strong>C</strong>", 276: "<strong>C</strong>", 278: "<strong>B</strong>",
+        279: "<strong>C</strong>", 280: "<strong>B</strong>", 281: "<strong>C</strong>", 282: "<strong>C</strong>", 283: "<strong>A</strong>", 284: "<strong>A</strong>", 285: "<strong>B</strong>", 287: "<strong>B</strong>", 288: "<strong>A</strong>", 289: "<strong>B</strong>",
+        290: "<strong>B</strong>", 291: "<strong>B</strong>", 292: "<strong>B</strong>", 293: "<strong>B</strong>", 294: "<strong>D</strong>", 295: "<strong>A</strong>", 296: "<strong>D</strong>", 298: "<strong>B</strong>", 299: "<strong>C</strong>", 300: "<strong>D</strong>",
+        301: "<strong>C</strong>", 302: "<strong>B</strong>", 303: "<strong>A</strong>", 304: "<strong>B</strong>", 305: "<strong>A</strong>", 306: "<strong>A</strong>", 307: "<strong>B</strong>"
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
-        const TOTAL_IMAGES = 197;
-        const STORAGE_KEY = 'nwc204_learned_items';
+        // ==========================================
+        // HỆ THỐNG HỌC TẬP (GALLERY & MODAL)
+        // ==========================================
+        const TOTAL_IMAGES = 308;
+        const STORAGE_KEY = 'csd_learned_items';
         const gallery = document.getElementById('galleryContainer');
-        const searchInput = document.getElementById('searchInput');
-        
-        // Khởi tạo Set lưu các câu đã học từ LocalStorage
         let learnedItems = new Set(JSON.parse(localStorage.getItem(STORAGE_KEY)) || []);
 
-        // DOM Elements cho Modal & Progress
         const modal = document.getElementById('imageModal');
         const modalImg = document.getElementById('modalImg');
-        const modalCounter = document.getElementById('modalCounter');
-        const btnMarkLearned = document.getElementById('btnMarkLearned');
-        const progressFill = document.getElementById('progressFill');
-        const progressPercent = document.getElementById('progressPercent');
+        const btnToggleQuiz = document.getElementById('btnToggleQuiz');
+        const quizModeControls = document.getElementById('quizModeControls');
         
         let currentIndex = 1;
+        let isQuizMode = false;
 
-        // 1. CẬP NHẬT TIẾN ĐỘ
-        function updateProgress() {
-            const count = learnedItems.size;
-            const percent = ((count / TOTAL_IMAGES) * 100).toFixed(1);
-            progressPercent.textContent = `${count}/${TOTAL_IMAGES} (${percent}%)`;
-            progressFill.style.width = `${percent}%`;
-        }
-
-        // 2. RENDER KHO ẢNH
+        // Render Gallery
         const fragment = document.createDocumentFragment();
         for (let i = 1; i <= TOTAL_IMAGES; i++) {
             const card = document.createElement('div');
+            const paddedIndex = String(i).padStart(3, '0');
             card.className = `img-card ${learnedItems.has(i) ? 'learned' : ''}`;
             card.dataset.index = i;
-            
             card.innerHTML = `
                 <div class="img-wrapper">
                     <div class="learned-overlay"><i class="fa-solid fa-circle-check"></i></div>
-                    <img src="img-pro/pro (${i}).png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1e293b/fff?text=Loi+Anh+${i}'" alt="Câu ${i}">
+                    <img src="img-csd/csd_${paddedIndex}.png" loading="lazy" onload="this.classList.add('loaded')" onerror="this.src='https://placehold.co/600x400/1e293b/fff?text=Loi+Anh+${i}'">
                 </div>
-                <div class="img-info">
-                    <span class="img-title">Câu ${i}</span>
-                    <span class="img-badge">${learnedItems.has(i) ? 'Đã học' : 'NWC204'}</span>
-                </div>
+                <div class="img-info"><span class="img-title">Câu ${i}</span><span class="img-badge">${learnedItems.has(i) ? 'Đã học' : 'CSD201'}</span></div>
             `;
-            
             card.addEventListener('click', () => openModal(i));
             fragment.appendChild(card);
         }
         gallery.appendChild(fragment);
-        updateProgress(); // Khởi tạo thanh tiến độ ban đầu
 
-        // 3. TÌM KIẾM NHANH
-        searchInput.addEventListener('input', (e) => {
-            const val = e.target.value.trim();
-            document.querySelectorAll('.img-card').forEach(card => {
-                card.style.display = (val === '' || card.dataset.index === val) ? 'flex' : 'none';
+        function updateProgress() {
+            const count = learnedItems.size;
+            document.getElementById('progressPercent').textContent = `${count}/${TOTAL_IMAGES} (${((count/TOTAL_IMAGES)*100).toFixed(1)}%)`;
+            document.getElementById('progressFill').style.width = `${(count/TOTAL_IMAGES)*100}%`;
+        }
+        updateProgress();
+
+        // Nút bật tắt chế độ Luyện Thi
+        btnToggleQuiz.addEventListener('click', () => {
+            isQuizMode = !isQuizMode;
+            if (isQuizMode) {
+                btnToggleQuiz.classList.add('active');
+                btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: BẬT</span>';
+            } else {
+                btnToggleQuiz.classList.remove('active');
+                btnToggleQuiz.innerHTML = '<i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span>';
+                modalImg.classList.remove('hide-bottom');
+            }
+        });
+
+        // Nút chọn đáp án A, B, C, D trong Luyện Thi (Bấm vào thì nhả che đáp án)
+        document.querySelectorAll('.btn-option-quiz').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.btn-option-quiz').forEach(b => b.classList.remove('selected'));
+                e.target.classList.add('selected');
+                modalImg.classList.remove('hide-bottom'); // Mở khóa xem kết quả gốc
+                
+                // Tự động đánh dấu đã học (Xử lý trực tiếp, không gọi click() để tránh bị reset UI)
+                if (!learnedItems.has(currentIndex)) {
+                    learnedItems.add(currentIndex);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems]));
+                    
+                    // Cập nhật màu thẻ bài bên ngoài lưới ảnh
+                    const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`);
+                    if (card) {
+                        card.classList.add('learned');
+                        card.querySelector('.img-badge').textContent = 'Đã học';
+                    }
+                    updateProgress();
+                }
             });
         });
 
-        // 4. LOGIC ĐÁNH DẤU TRONG MODAL
-        function updateMarkButtonUI() {
-            if (learnedItems.has(currentIndex)) {
-                btnMarkLearned.classList.add('active');
-                btnMarkLearned.innerHTML = `<i class="fa-solid fa-check-double"></i> <span>Đã học xong</span>`;
-            } else {
-                btnMarkLearned.classList.remove('active');
-                btnMarkLearned.innerHTML = `<i class="fa-solid fa-check"></i> <span>Đánh dấu đã học</span>`;
-            }
-        }
-
-        btnMarkLearned.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`);
-            const badge = card.querySelector('.img-badge');
-
-            if (learnedItems.has(currentIndex)) {
-                // Bỏ đánh dấu
-                learnedItems.delete(currentIndex);
-                card.classList.remove('learned');
-                badge.textContent = 'NWC204';
-            } else {
-                // Thêm đánh dấu
-                learnedItems.add(currentIndex);
-                card.classList.add('learned');
-                badge.textContent = 'Đã học';
-            }
-            
-            // Lưu lại bộ nhớ & cập nhật UI
-            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems]));
-            updateMarkButtonUI();
-            updateProgress();
-        });
-
-        // 5. LOGIC MODAL
         function openModal(index) {
             currentIndex = index;
             updateModalView();
@@ -300,40 +452,246 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function closeModal() {
-            modal.classList.remove('active');
-            document.body.style.overflow = 'auto';
-            setTimeout(() => modalImg.src = '', 300);
-        }
-
         function updateModalView() {
-            modalImg.src = `img-pro/pro (${currentIndex}).png`;
-            modalCounter.textContent = `${currentIndex} / ${TOTAL_IMAGES}`;
-            updateMarkButtonUI();
+            modalImg.src = `img-csd/csd_${String(currentIndex).padStart(3, '0')}.png`;
+            document.getElementById('modalCounter').textContent = `${currentIndex} / ${TOTAL_IMAGES}`;
+            
+            // Đánh dấu nút
+            const markBtn = document.getElementById('btnMarkLearned');
+            if (learnedItems.has(currentIndex)) {
+                markBtn.className = 'btn-mark active';
+                markBtn.innerHTML = `<i class="fa-solid fa-check-double"></i> <span>Đã học</span>`;
+            } else {
+                markBtn.className = 'btn-mark';
+                markBtn.innerHTML = `<i class="fa-solid fa-check"></i> <span>Đánh dấu đã học</span>`;
+            }
+
+            // Xử lý Luyện Thi Mode
+            document.querySelectorAll('.btn-option-quiz').forEach(b => b.classList.remove('selected'));
+            if (isQuizMode) {
+                modalImg.classList.add('hide-bottom'); // Che phần dưới
+                quizModeControls.classList.add('active');
+                markBtn.style.display = 'none'; // Ẩn nút "Đã học" đi cho gọn
+            } else {
+                modalImg.classList.remove('hide-bottom');
+                quizModeControls.classList.remove('active');
+                markBtn.style.display = 'flex';
+            }
         }
 
-        function prevImage() { currentIndex = currentIndex > 1 ? currentIndex - 1 : TOTAL_IMAGES; updateModalView(); }
-        function nextImage() { currentIndex = currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1; updateModalView(); }
-
-        document.getElementById('btnClose').addEventListener('click', closeModal);
-        document.getElementById('btnPrev').addEventListener('click', (e) => { e.stopPropagation(); prevImage(); });
-        document.getElementById('btnNext').addEventListener('click', (e) => { e.stopPropagation(); nextImage(); });
-        
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal || e.target.closest('.modal-content') === null) closeModal();
+        document.getElementById('btnMarkLearned').addEventListener('click', () => {
+            const card = document.querySelector(`.img-card[data-index="${currentIndex}"]`);
+            if (learnedItems.has(currentIndex)) {
+                learnedItems.delete(currentIndex);
+                card.classList.remove('learned');
+                card.querySelector('.img-badge').textContent = 'CSD201';
+            } else {
+                learnedItems.add(currentIndex);
+                card.classList.add('learned');
+                card.querySelector('.img-badge').textContent = 'Đã học';
+            }
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([...learnedItems]));
+            updateModalView(); updateProgress();
         });
+
+        document.getElementById('btnClose').addEventListener('click', () => { modal.classList.remove('active'); document.body.style.overflow = 'auto'; });
+        document.getElementById('btnPrev').addEventListener('click', () => { currentIndex = currentIndex > 1 ? currentIndex - 1 : TOTAL_IMAGES; updateModalView(); });
+        document.getElementById('btnNext').addEventListener('click', () => { currentIndex = currentIndex < TOTAL_IMAGES ? currentIndex + 1 : 1; updateModalView(); });
 
         document.addEventListener('keydown', (e) => {
             if (!modal.classList.contains('active')) return;
-            if (e.key === 'ArrowLeft') prevImage();
-            if (e.key === 'ArrowRight') nextImage();
-            if (e.key === 'Escape') closeModal();
-            // Shortcut: Bấm phím Space để đánh dấu nhanh
-            if (e.key === ' ') {
+            if (e.key === 'ArrowLeft') document.getElementById('btnPrev').click();
+            if (e.key === 'ArrowRight') document.getElementById('btnNext').click();
+            if (e.key === 'Escape') document.getElementById('btnClose').click();
+            if (e.key === ' ' && !isQuizMode) {
                 e.preventDefault();
-                btnMarkLearned.click();
+                document.getElementById('btnMarkLearned').click();
             }
         });
+
+
+        // ==========================================
+        // HỆ THỐNG THI THỬ (MOCK EXAM) & XEM LẠI BÀI
+        // ==========================================
+        let validExamPool = []; 
+        let currentExamQuestions = []; 
+        let userAnswers = {}; 
+        let currentExamIndex = 0; 
+        let isExamReviewing = false; // Cờ kiểm tra đang làm hay đang xem lại
+
+        // Lọc các câu có trắc nghiệm hợp lệ
+        for (const [id, content] of Object.entries(answerData)) {
+            const match = content.match(/^<strong>([A-Z]+)<\/strong>/);
+            if (match) {
+                validExamPool.push({ id: parseInt(id), correct: match[1].split('') });
+            }
+        }
+
+        const viewLearn = document.getElementById('learningMode');
+        const viewExam = document.getElementById('examMode');
+        const viewResult = document.getElementById('examResult');
+        const btnStartExam = document.getElementById('btnStartExam');
+        const btnBackToLearn = document.getElementById('btnBackToLearn');
+        const examImg = document.getElementById('examImg');
+
+        function toggleViews(showLearn, showExam, showResult) {
+            viewLearn.style.display = showLearn ? 'block' : 'none';
+            viewExam.style.display = showExam ? 'block' : 'none';
+            viewResult.style.display = showResult ? 'block' : 'none';
+            
+            btnStartExam.style.display = showLearn ? 'inline-flex' : 'none';
+            document.getElementById('btnToggleQuiz').style.display = showLearn ? 'inline-flex' : 'none';
+            btnBackToLearn.style.display = showLearn ? 'none' : 'inline-flex';
+        }
+
+        btnBackToLearn.addEventListener('click', () => {
+            if(!isExamReviewing && viewExam.style.display === 'block') {
+                if(!confirm('Đang làm bài thi. Bạn có chắc muốn thoát?')) return;
+            }
+            toggleViews(true, false, false);
+        });
+
+        btnStartExam.addEventListener('click', startNewExam);
+        document.getElementById('btnRestartExam').addEventListener('click', startNewExam);
+
+        function startNewExam() {
+            const shuffled = [...validExamPool].sort(() => 0.5 - Math.random());
+            currentExamQuestions = shuffled.slice(0, 50);
+            userAnswers = {};
+            currentExamIndex = 0;
+            isExamReviewing = false;
+
+            // Khôi phục UI làm bài
+            document.getElementById('btnSubmitExam').style.display = 'block';
+            document.getElementById('btnExitReview').style.display = 'none';
+            document.getElementById('examAnswerOptions').classList.remove('review-locked');
+            document.getElementById('examInstruction').textContent = "Chọn đáp án (có thể chọn nhiều):";
+
+            buildExamGrid();
+            renderExamQuestion();
+            toggleViews(false, true, false);
+        }
+
+        function buildExamGrid() {
+            const grid = document.getElementById('examGrid');
+            grid.innerHTML = '';
+            for (let i = 0; i < 50; i++) {
+                const box = document.createElement('div');
+                box.className = 'grid-item';
+                box.textContent = i + 1;
+                box.dataset.idx = i;
+                box.addEventListener('click', () => { currentExamIndex = i; renderExamQuestion(); });
+                grid.appendChild(box);
+            }
+        }
+
+        function renderExamQuestion() {
+            const qData = currentExamQuestions[currentExamIndex];
+            const qRealId = qData.id;
+            
+            document.getElementById('examQuestionCounter').textContent = `Câu ${currentExamIndex + 1} / 50 (ID gốc: ${qRealId})`;
+            examImg.src = `img-csd/csd_${String(qRealId).padStart(3, '0')}.png`;
+
+            // Nếu ĐANG THI -> Che ảnh. Nếu ĐANG XEM LẠI -> Nhả ảnh.
+            if (!isExamReviewing) {
+                examImg.classList.add('hide-bottom');
+            } else {
+                examImg.classList.remove('hide-bottom');
+            }
+
+            // Sync trạng thái nút A B C D
+            const selectedArr = userAnswers[currentExamIndex] || [];
+            document.querySelectorAll('#examMode .opt-btn').forEach(btn => {
+                if (selectedArr.includes(btn.dataset.opt)) btn.classList.add('selected');
+                else btn.classList.remove('selected');
+            });
+
+            // Update Highlight ở Bảng Grid
+            document.querySelectorAll('#examMode .grid-item').forEach((item, idx) => {
+                item.classList.remove('active');
+                if (idx === currentExamIndex) item.classList.add('active');
+                
+                // Nếu đang thi, chỉ bôi màu báo đã làm
+                if (!isExamReviewing) {
+                    if (userAnswers[idx] && userAnswers[idx].length > 0) item.classList.add('answered');
+                    else item.classList.remove('answered');
+                } 
+                // Nếu đang xem lại, không cập nhật màu đúng sai ở đây nữa vì đã được tô lúc nộp bài
+            });
+        }
+
+        // Click đáp án A B C D lúc thi
+        document.querySelectorAll('#examMode .opt-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (isExamReviewing) return; // Khoá bấm nếu đang xem lại
+
+                const opt = e.target.dataset.opt;
+                if (!userAnswers[currentExamIndex]) userAnswers[currentExamIndex] = [];
+                
+                const currentArr = userAnswers[currentExamIndex];
+                if (currentArr.includes(opt)) currentArr.splice(currentArr.indexOf(opt), 1);
+                else currentArr.push(opt);
+                
+                renderExamQuestion();
+            });
+        });
+
+        document.getElementById('btnExamPrev').addEventListener('click', () => {
+            if (currentExamIndex > 0) { currentExamIndex--; renderExamQuestion(); }
+        });
+        document.getElementById('btnExamNext').addEventListener('click', () => {
+            if (currentExamIndex < 49) { currentExamIndex++; renderExamQuestion(); }
+        });
+
+        // NỘP BÀI VÀ CHẤM ĐIỂM
+        document.getElementById('btnSubmitExam').addEventListener('click', () => {
+            let answeredCount = Object.keys(userAnswers).filter(k => userAnswers[k].length > 0).length;
+            if (answeredCount < 50) {
+                if (!confirm(`Bạn mới làm ${answeredCount}/50 câu. Bạn có chắc chắn muốn nộp bài sớm không?`)) return;
+            }
+
+            let correctCount = 0;
+            currentExamQuestions.forEach((q, idx) => {
+                const userSelected = (userAnswers[idx] || []).sort().join('');
+                const correctAns = q.correct.sort().join('');
+                
+                const gridBox = document.querySelector(`.grid-item[data-idx="${idx}"]`);
+                gridBox.classList.remove('answered'); // Bỏ trạng thái màu xanh lúc nãy đi
+
+                if (userSelected === correctAns && correctAns !== "") {
+                    correctCount++;
+                    gridBox.classList.add('correct'); // Tô xanh lá cây
+                } else {
+                    gridBox.classList.add('wrong'); // Tô màu đỏ
+                }
+            });
+
+            // Hiển thị kết quả
+            const score = (correctCount / 50) * 10;
+            document.getElementById('scoreDisplay').textContent = `${correctCount}/50`;
+            document.getElementById('scoreMessage').textContent = `Điểm của bạn: ${score.toFixed(1)} / 10.0`;
+            toggleViews(false, false, true);
+        });
+
+        // KÍCH HOẠT CHẾ ĐỘ XEM LẠI BÀI LÀM
+        document.getElementById('btnReviewExam').addEventListener('click', () => {
+            isExamReviewing = true;
+            currentExamIndex = 0; // Quay về câu 1
+            
+            document.getElementById('btnSubmitExam').style.display = 'none'; // Ẩn nút Nộp bài
+            document.getElementById('btnExitReview').style.display = 'block'; // Hiện nút thoát
+            document.getElementById('examAnswerOptions').classList.add('review-locked'); // Khoá các nút
+            document.getElementById('examInstruction').textContent = "Đáp án bạn đã đánh:";
+
+            toggleViews(false, true, false);
+            renderExamQuestion(); // Sẽ bỏ .hide-bottom vì isExamReviewing = true
+        });
+
+        // THOÁT CHẾ ĐỘ XEM LẠI
+        document.getElementById('btnExitReview').addEventListener('click', () => {
+            toggleViews(false, false, true); // Quay về màn chấm điểm
+        });
+
     });
 </script>
 </body>
