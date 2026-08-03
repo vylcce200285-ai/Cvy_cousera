@@ -10,7 +10,7 @@
     <style>
         :root {
             --bg-dark: #09090b;
-            --primary: #f97316; /* Cam Java */
+            --primary: #f97316;
             --primary-glow: rgba(249, 115, 22, 0.5);
             --accent: #10b981; 
             --surface: rgba(255, 255, 255, 0.03);
@@ -169,7 +169,6 @@
     <div class="result-overlay" id="resultOverlay">
         <div class="result-box">
             <h2 class="result-title">Hoàn Thành Bài Thi</h2>
-            <!-- Thay đổi phần chấm điểm thành xem lại -->
             <div class="result-detail" id="resultDetailText">Bạn đã trả lời xong các câu hỏi.<br>Hãy xem lại đáp án bạn đã chọn và tự đối chiếu nhé!</div>
             
             <button class="btn-glass" id="btnReviewExam" style="background: var(--accent); color: #000; margin-bottom: 15px;"><i class="fa-solid fa-eye"></i> Xem Lại Bài Làm</button><br>
@@ -183,7 +182,7 @@
     <div class="top-bar">
         <a href="index.html" class="btn-glass"><i class="fa-solid fa-arrow-left"></i> Về trang chủ</a>
         <div class="top-actions">
-            <button id="btnExamMode" class="btn-glass btn-exam"><i class="fa-solid fa-file-signature"></i> <span>Thi Thử (50 Câu)</span></button>
+            <button id="btnExamMode" class="btn-glass btn-exam"><i class="fa-solid fa-file-signature"></i> <span>Thi Thử (Tuỳ Chọn)</span></button>
             <button id="btnToggleQuiz" class="btn-glass btn-quiz"><i class="fa-solid fa-gamepad"></i> <span>Luyện Thi: TẮT</span></button>
             <button id="btnMusic" class="btn-glass btn-music"><i class="fa-solid fa-music"></i> <span>Lo-Fi: TẮT</span></button>
         </div>
@@ -265,7 +264,7 @@
         let currentIndex = 1;
         let isQuizMode = false;
         let isExamMode = false;
-        let isReviewMode = false; // Biến trạng thái mới cho chức năng xem lại
+        let isReviewMode = false; 
         let isAutoNext = false;
         let autoNextTimeout;
 
@@ -336,27 +335,59 @@
             }
         });
 
-        function startExam() {
-            let maxQuestions = TOTAL_IMAGES < 50 ? TOTAL_IMAGES : 50;
-            let arr = Array.from({length: TOTAL_IMAGES}, (_, i) => i + 1).sort(() => Math.random() - 0.5);
-            examSequence = arr.slice(0, maxQuestions);
+        function startExam(start, end) {
+            let arr = [];
+            for (let i = start; i <= end; i++) {
+                arr.push(i);
+            }
+            
+            arr.sort(() => Math.random() - 0.5);
+            
+            examSequence = arr;
             isExamMode = true; 
             isReviewMode = false;
             currentExamStep = 0; 
             userExamAnswers = {};
+            
+            btnExamMode.innerHTML = `<i class="fa-solid fa-file-signature"></i> <span>Đang Thi (${examSequence.length} Câu)</span>`;
+
             btnMarkLearned.style.display = 'none'; 
             btnSubmitExam.style.display = 'block'; 
             document.body.classList.add('quiz-mode-active'); 
             quizModeControls.style.display = 'flex';
+            
             openModal(examSequence[currentExamStep]);
         }
 
-        btnExamMode.addEventListener('click', () => { if(confirm(`Hệ thống sẽ trộn ngẫu nhiên 50 câu. Bạn đã sẵn sàng thi chưa?`)) startExam(); });
+        btnExamMode.addEventListener('click', () => { 
+            if (isExamMode) {
+                alert("Bạn đang trong chế độ thi. Vui lòng nộp bài và thoát trước khi tạo đề mới!");
+                return;
+            }
 
-        // LOGIC MỚI: Bấm Nộp Bài sẽ không chấm điểm nữa
+            let startInput = prompt("Nhập CÂU BẮT ĐẦU bạn muốn làm (VD: 1):", "1");
+            if (startInput === null) return;
+            
+            let endInput = prompt(`Nhập CÂU KẾT THÚC (Tối đa ${TOTAL_IMAGES}):`, TOTAL_IMAGES);
+            if (endInput === null) return;
+
+            let start = parseInt(startInput);
+            let end = parseInt(endInput);
+
+            if (isNaN(start) || isNaN(end) || start < 1 || end > TOTAL_IMAGES || start > end) {
+                alert(`Khoảng câu hỏi không hợp lệ! Vui lòng nhập từ 1 đến ${TOTAL_IMAGES} và câu bắt đầu phải nhỏ hơn hoặc bằng câu kết thúc.`);
+                return;
+            }
+
+            let totalSelected = end - start + 1;
+            if (confirm(`Hệ thống sẽ trộn ngẫu nhiên ${totalSelected} câu (Từ câu ${start} đến ${end}). Bạn đã sẵn sàng?`)) {
+                startExam(start, end);
+            } 
+        });
+
         btnSubmitExam.addEventListener('click', () => {
             let totalQ = examSequence.length;
-            let answeredQ = Object.keys(userExamAnswers).length;
+            let answeredQ = Object.keys(userExamAnswers).filter(k => userExamAnswers[k].length > 0).length;
             
             if(answeredQ < totalQ && !confirm(`Bạn mới làm ${answeredQ}/${totalQ} câu. Chắc chắn muốn nộp bài sớm không?`)) return;
             
@@ -364,17 +395,20 @@
             document.getElementById('resultOverlay').style.display = 'flex';
         });
 
-        // Nút mới: Kích hoạt chế độ Xem Lại sau khi nộp
         document.getElementById('btnReviewExam').addEventListener('click', () => {
             document.getElementById('resultOverlay').style.display = 'none';
-            isReviewMode = true; // Bật cờ Review
+            isReviewMode = true;
             currentExamStep = 0;
             currentIndex = examSequence[currentExamStep];
             updateModalView();
-            btnSubmitExam.style.display = 'none'; // Ẩn nút Nộp bài trong lúc xem lại
+            btnSubmitExam.style.display = 'none';
         });
 
-        document.getElementById('btnCloseResult').addEventListener('click', () => { document.getElementById('resultOverlay').style.display = 'none'; closeModal(); startExam(); });
+        document.getElementById('btnCloseResult').addEventListener('click', () => { 
+            document.getElementById('resultOverlay').style.display = 'none'; 
+            closeModal(); 
+            btnExamMode.click(); 
+        });
         document.getElementById('btnExitResult').addEventListener('click', () => { document.getElementById('resultOverlay').style.display = 'none'; closeModal(); exitExamMode(); });
 
         function exitExamMode() {
@@ -382,7 +416,13 @@
             isReviewMode = false;
             btnMarkLearned.style.display = 'flex'; 
             btnSubmitExam.style.display = 'none'; 
-            if(!isQuizMode) { document.body.classList.remove('quiz-mode-active'); quizModeControls.style.display = 'none'; }
+            
+            btnExamMode.innerHTML = `<i class="fa-solid fa-file-signature"></i> <span>Thi Thử (Tuỳ Chọn)</span>`;
+            
+            if(!isQuizMode) { 
+                document.body.classList.remove('quiz-mode-active'); 
+                quizModeControls.style.display = 'none'; 
+            }
         }
 
         btnToggleQuiz.addEventListener('click', () => {
@@ -405,18 +445,34 @@
 
         document.querySelectorAll('.btn-option').forEach(btn => {
             btn.addEventListener('click', (e) => {
-                if (isReviewMode) return; // Không cho phép đổi đáp án khi đang ở chế độ xem lại
+                if (isReviewMode) return;
 
                 const selectedOpt = e.target.dataset.opt;
 
                 if (isExamMode) {
-                    userExamAnswers[currentIndex] = selectedOpt;
-                    resetQuizButtons(); 
-                    e.target.classList.add('selected');
+                    if (!userExamAnswers[currentIndex]) {
+                        userExamAnswers[currentIndex] = [];
+                    }
+                    
+                    const index = userExamAnswers[currentIndex].indexOf(selectedOpt);
+                    if (index > -1) {
+                        userExamAnswers[currentIndex].splice(index, 1);
+                        e.target.classList.remove('selected');
+                    } else {
+                        userExamAnswers[currentIndex].push(selectedOpt);
+                        e.target.classList.add('selected');
+                    }
                 } else {
+                    if (e.target.classList.contains('selected')) {
+                        e.target.classList.remove('selected');
+                        currentQuizSelections.delete(selectedOpt);
+                    } else {
+                        e.target.classList.add('selected');
+                        currentQuizSelections.add(selectedOpt);
+                    }
+                    
                     if (modalImg.classList.contains('reveal-answer')) return;
-                    resetQuizButtons();
-                    e.target.classList.add('selected');
+                    
                     modalImg.classList.add('reveal-answer'); 
                     
                     if (!learnedItems.has(currentIndex)) { 
@@ -497,7 +553,6 @@
         function openModal(index) { currentIndex = index; updateModalView(true); modal.classList.add('active'); document.body.style.overflow = 'hidden'; }
         
         function closeModal() { 
-            // Nếu đang thi thử nhưng chưa nộp bài, thì cảnh báo
             if(isExamMode && !isReviewMode && !confirm("Đang Thi Thử. Thoát sẽ mất bài làm. Bạn có chắc không?")) return; 
             if(isExamMode) exitExamMode(); 
             resetZoom(); clearTimeout(autoNextTimeout); modal.classList.remove('active'); document.body.style.overflow = 'auto'; setTimeout(() => modalImg.src = '', 300); 
@@ -512,20 +567,18 @@
             if (isExamMode) {
                 modalCounter.textContent = `Câu ${currentExamStep + 1} / ${examSequence.length}`;
                 
-                // NẾU ĐANG LÀ CHẾ ĐỘ XEM LẠI BÀI
                 if (isReviewMode) {
-                    modalImg.classList.add('reveal-answer'); // Mở khóa ảnh để xem phần đáp án bên dưới
-                    if(userExamAnswers[currentIndex]) {
-                        // Sáng nút mà User đã chọn
-                        document.querySelector(`.btn-option[data-opt="${userExamAnswers[currentIndex]}"]`).classList.add('selected');
-                    }
+                    modalImg.classList.add('reveal-answer'); 
                 } 
-                // NẾU ĐANG LÀM BÀI BÌNH THƯỜNG
                 else {
-                    modalImg.classList.remove('reveal-answer'); // Giấu đáp án
-                    if(userExamAnswers[currentIndex]) {
-                        document.querySelector(`.btn-option[data-opt="${userExamAnswers[currentIndex]}"]`).classList.add('selected');
-                    }
+                    modalImg.classList.remove('reveal-answer'); 
+                }
+
+                if(userExamAnswers[currentIndex]) {
+                    userExamAnswers[currentIndex].forEach(opt => {
+                        let btn = document.querySelector(`.btn-option[data-opt="${opt}"]`);
+                        if(btn) btn.classList.add('selected');
+                    });
                 }
             } else {
                 modalCounter.textContent = `Câu ${currentIndex} / ${TOTAL_IMAGES}`; 
@@ -572,7 +625,6 @@
             } 
         });
 
-        // LOGIC PAN & ZOOM (Mobile & PC)
         let touchstartX = 0; let touchstartY = 0;
         let lastTapTime = 0;
 
